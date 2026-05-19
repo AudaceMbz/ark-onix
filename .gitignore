@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.log
+public/uploads/
+public/videos/
+public/images/team/
+public/images/projects/
