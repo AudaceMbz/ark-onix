@@ -122,47 +122,30 @@ async function seedAdmin() {
   }
 }
 
-// ─── Multer ───────────────────────────────────────────────────────────────────
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const typeMap = { project: 'public/images/projects', team: 'public/images/team', video: 'public/videos', logo: 'public/images' };
-    const dest = typeMap[req.body.upload_type] || 'public/uploads';
-    fs.mkdirSync(dest, { recursive: true });
-    cb(null, dest);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `${Date.now()}-${Math.round(Math.random() * 1000)}${ext}`);
+// ─── Cloudinary Setup ─────────────────────────────────────────────────────────
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    const typeMap = { project: 'projects', team: 'team', video: 'videos', logo: 'images' };
+    const folder = 'onix/' + (typeMap[req.body.upload_type] || 'uploads');
+    
+    return {
+      folder: folder,
+      resource_type: 'auto',
+      public_id: `${Date.now()}-${Math.round(Math.random() * 1000)}`
+    };
   }
 });
 const upload = multer({ storage });
-
-// ─── Image Optimizer Helper (Jimp v1 compatible) ─────────────────────────────
-async function optimizeUploadedImage(relativeFilePath) {
-  if (!relativeFilePath) return;
-  const fullPath = path.join(__dirname, 'public', relativeFilePath);
-  if (!fs.existsSync(fullPath)) return;
-  try {
-    const ext = path.extname(fullPath).toLowerCase();
-    if (!['.jpg', '.jpeg', '.png'].includes(ext)) return;
-
-    const image = await Jimp.read(fullPath);
-
-    let resized = false;
-    if (image.bitmap.width > 1200) {
-      image.resize({ w: 1200 });
-      resized = true;
-    }
-
-    const mimeType = ext === '.png' ? 'image/png' : 'image/jpeg';
-    const buffer = await image.getBuffer(mimeType, { quality: 75 });
-    
-    fs.writeFileSync(fullPath, buffer);
-    console.log(`[IMAGE OPTIMIZER] Successfully compressed ${relativeFilePath} (Resized: ${resized})`);
-  } catch (err) {
-    console.error(`[IMAGE OPTIMIZER ERROR] Failed to compress ${relativeFilePath}:`, err.message);
-  }
-}
 
 function requireAuth(req, res, next) {
   if (req.session && req.session.adminId) return next();
@@ -220,12 +203,7 @@ app.post('/api/admin/settings', requireAuth, requireDB, upload.single('file'), a
     const { setting_key, setting_value, upload_type } = req.body;
     let value = setting_value;
     if (req.file) {
-      const pathMap = { video: '/videos/' + req.file.filename, logo: '/images/' + req.file.filename };
-      value = pathMap[upload_type] || '/uploads/' + req.file.filename;
-
-      if (upload_type === 'logo') {
-        optimizeUploadedImage(value).catch(err => console.error(err));
-      }
+      value = req.file.path;
 
       // Clean up the old file if it exists
       try {
@@ -287,11 +265,7 @@ app.get('/api/projects', requireDB, async (req, res) => {
 app.post('/api/admin/projects', requireAuth, requireDB, upload.single('image'), async (req, res) => {
   try {
     const { title, category, description, display_order, target_page } = req.body;
-    const img = req.file ? '/images/projects/' + req.file.filename : '';
-    
-    if (img) {
-      optimizeUploadedImage(img).catch(err => console.error(err));
-    }
+    const img = req.file ? req.file.path : '';
 
     const [reslt] = await query(
       'INSERT INTO projects (title, category, description, image_path, display_order, target_page) VALUES (?,?,?,?,?,?)',
@@ -308,9 +282,7 @@ app.put('/api/admin/projects/:id', requireAuth, requireDB, upload.single('image'
     if (display_order !== undefined) updates.display_order = parseInt(display_order) || 0;
     if (is_active !== undefined) updates.is_active = (is_active === 'true' || is_active === true || is_active === '1' || is_active === 1);
     if (req.file) {
-      const imgPath = '/images/projects/' + req.file.filename;
-      updates.image_path = imgPath;
-      optimizeUploadedImage(imgPath).catch(err => console.error(err));
+      updates.image_path = req.file.path;
     }
 
     const keys = Object.keys(updates).filter(k => updates[k] !== undefined);
@@ -371,11 +343,7 @@ app.get('/api/team', requireDB, async (req, res) => {
 app.post('/api/admin/team', requireAuth, requireDB, upload.single('image'), async (req, res) => {
   try {
     const { name, role, display_order } = req.body;
-    const img = req.file ? '/images/team/' + req.file.filename : '';
-    
-    if (img) {
-      optimizeUploadedImage(img).catch(err => console.error(err));
-    }
+    const img = req.file ? req.file.path : '';
 
     const [r] = await query('INSERT INTO team_photos (name, role, image_path, display_order) VALUES (?,?,?,?)', [name || '', role || '', img, parseInt(display_order) || 0]);
     res.status(201).json({ success: true, id: dbType === 'mysql' ? r.insertId : null });
@@ -388,9 +356,7 @@ app.put('/api/admin/team/:id', requireAuth, requireDB, upload.single('image'), a
     if (display_order !== undefined) updates.display_order = parseInt(display_order) || 0;
     if (is_active !== undefined) updates.is_active = (is_active === 'true' || is_active === true || is_active === '1' || is_active === 1);
     if (req.file) {
-      const imgPath = '/images/team/' + req.file.filename;
-      updates.image_path = imgPath;
-      optimizeUploadedImage(imgPath).catch(err => console.error(err));
+      updates.image_path = req.file.path;
     }
     const keys = Object.keys(updates).filter(k => updates[k] !== undefined);
     const values = keys.map(k => updates[k]);
