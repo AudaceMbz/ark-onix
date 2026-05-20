@@ -440,9 +440,14 @@ app.get(['/contact', '/contact.html'], pub('contact.html'));
 app.get(['/', '/home.html', '/index.html', '/{*splat}'], pub('index.html'));
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`\n🚀  Onix server  →  http://localhost:${PORT}`);
-    console.log(`📡  Mode         →  ${dbType.toUpperCase()}`);
-  });
+  if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+      console.log(`\n🚀  Onix server  →  http://localhost:${PORT}`);
+      console.log(`📡  Mode         →  ${dbType.toUpperCase()}`);
+    });
+  }
 });
+
+// Export the Express API for Vercel Serverless Functions
+module.exports = app;
 
