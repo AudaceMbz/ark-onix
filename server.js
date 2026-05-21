@@ -8,13 +8,13 @@ require('dotenv').config();
 
 const express = require('express');
 const multer = require('multer');
-const session = require('express-session');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
-const JimpModule = require('jimp');
-const Jimp = JimpModule.Jimp || JimpModule;
+
+const JWT_SECRET = process.env.JWT_SECRET || process.env.SESSION_SECRET || 'onix_jwt_secret_2026';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,7 +23,12 @@ const PORT = process.env.PORT || 3000;
 app.set('trust proxy', 1);
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || origin.startsWith('http://localhost') || origin.includes('infinityfreeapp.com') || origin.includes('onrender.com')) {
+    if (!origin ||
+        origin.startsWith('http://localhost') ||
+        origin.includes('infinityfreeapp.com') ||
+        origin.includes('onrender.com') ||
+        origin.includes('vercel.app') ||
+        origin.includes('koyeb.app')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -35,16 +40,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
-
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'onix_secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}));
 
 // ─── Database Connection (Hybrid: MySQL/PostgreSQL) ───────────────────────────
 let db;
@@ -148,8 +143,16 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 function requireAuth(req, res, next) {
-  if (req.session && req.session.adminId) return next();
-  res.status(401).json({ error: 'Unauthorized' });
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.adminId = decoded.adminId;
+    next();
+  } catch (e) {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
 }
 function requireDB(req, res, next) {
   if (!db) {
@@ -177,17 +180,25 @@ app.post('/api/admin/login', requireDB, async (req, res) => {
       console.log('❌ Login failed: Incorrect password');
       return res.status(401).json({ error: 'Invalid credentials' });
     }
-    req.session.adminId = rows[0].id;
+    const token = jwt.sign({ adminId: rows[0].id }, JWT_SECRET, { expiresIn: '24h' });
     console.log('✅ Login successful');
-    res.json({ success: true });
+    res.json({ success: true, token });
   } catch (err) {
     console.error('❌ Login error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-app.post('/api/admin/logout', (req, res) => { req.session.destroy(); res.json({ success: true }); });
-app.get('/api/admin/check', (req, res) => res.json({ loggedIn: !!(req.session && req.session.adminId) }));
+app.post('/api/admin/logout', (req, res) => { res.json({ success: true }); });
+app.get('/api/admin/check', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.json({ loggedIn: false });
+  try {
+    jwt.verify(token, JWT_SECRET);
+    res.json({ loggedIn: true });
+  } catch { res.json({ loggedIn: false }); }
+});
 
 app.get('/api/settings', requireDB, async (req, res) => {
   try {

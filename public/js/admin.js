@@ -23,8 +23,12 @@
 
   // ─── Auth ────────────────────────────────────────────────
   async function checkAuth() {
-    const res = await api('GET', '/api/admin/check');
-    if (res.loggedIn) showShell();
+    const token = localStorage.getItem('adminToken');
+    if (!token) return;
+    try {
+      const res = await api('GET', '/api/admin/check');
+      if (res.loggedIn) showShell();
+    } catch(e) {}
   }
 
   function initLogin() {
@@ -65,7 +69,8 @@
       }
       
       try {
-        await api('POST', '/api/admin/login', { username: u, password: p });
+        const res = await api('POST', '/api/admin/login', { username: u, password: p });
+        localStorage.setItem('adminToken', res.token);
         showShell();
       } catch (er) {
         errEl.textContent = 'Invalid username or password.';
@@ -87,7 +92,8 @@
 
   function initLogout() {
     document.getElementById('logout-btn').addEventListener('click', async () => {
-      await api('POST', '/api/admin/logout');
+      try { await api('POST', '/api/admin/logout'); } catch(e){}
+      localStorage.removeItem('adminToken');
       location.reload();
     });
   }
@@ -182,7 +188,8 @@
       fd.append('file', file);
       try {
         showFeedback('fb-logo', 'Uploading logo...', 'success');
-        const res = await fetch('/api/admin/settings', { method: 'POST', body: fd });
+        const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
+        const res = await fetch('/api/admin/settings', { method: 'POST', headers, body: fd });
         const data = await res.json();
         if (data.success) {
           showFeedback('fb-logo', '✓ Logo updated successfully.', 'success');
@@ -203,7 +210,8 @@
       fd.append('file', file);
       try {
         showFeedback('fb-video', 'Uploading video... please wait.', 'success');
-        const res = await fetch('/api/admin/settings', { method: 'POST', body: fd });
+        const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
+        const res = await fetch('/api/admin/settings', { method: 'POST', headers, body: fd });
         const data = await res.json();
         if (data.success) {
           showFeedback('fb-video', '✓ Video uploaded successfully.', 'success');
@@ -467,7 +475,7 @@
     const hasFile = fields.some(f => f.type === 'file');
 
     let body;
-    let headers = {};
+    let headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
 
     if (hasFile) {
       body = new FormData();
@@ -533,7 +541,8 @@
     const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops' };
     const ep = endpointMap[entity];
     try {
-      await fetch(`/api/admin/${ep}/${id}`, { method: 'DELETE' });
+      const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
+      await fetch(`/api/admin/${ep}/${id}`, { method: 'DELETE', headers });
       loadPanel(currentPanel);
       loadDashboard();
     } catch (e) { alert('Delete failed.'); }
@@ -546,6 +555,8 @@
       headers: data ? { 'Content-Type': 'application/json' } : {},
       body: data ? JSON.stringify(data) : undefined
     };
+    const token = localStorage.getItem('adminToken');
+    if (token) opts.headers['Authorization'] = 'Bearer ' + token;
     const res = await fetch(url, opts);
     if (!res.ok) {
       const txt = await res.text();
