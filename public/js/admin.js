@@ -183,10 +183,12 @@
       const file = document.getElementById('site-logo-file').files[0];
       if (!file) return showFeedback('fb-logo', 'Please select a logo file.', 'error');
       setBtnLoader('btn-save-logo', true, 'Uploading...');
+      
+      const compressedFile = await compressImage(file);
       const fd = new FormData();
       fd.append('setting_key', 'logo_path');
       fd.append('upload_type', 'logo');
-      fd.append('file', file);
+      fd.append('file', compressedFile);
       try {
         showFeedback('fb-logo', 'Uploading logo...', 'success');
         const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
@@ -487,16 +489,19 @@
 
     if (hasFile) {
       body = new FormData();
-      fields.forEach(f => {
+      for (const f of fields) {
         const el = document.getElementById(f.id);
-        if (!el) return;
+        if (!el) continue;
         if (f.type === 'file') {
           body.append('upload_type', modalEntity);
-          if (el.files[0]) body.append('image', el.files[0]);
+          if (el.files[0]) {
+            const compressedFile = await compressImage(el.files[0]);
+            body.append('image', compressedFile);
+          }
         } else {
           body.append(f.key, el.value);
         }
-      });
+      }
     } else {
       const obj = {};
       fields.forEach(f => {
@@ -599,6 +604,39 @@
   function setText(id, val) {
     const el = document.getElementById(id);
     if (el) el.textContent = val;
+  }
+
+  async function compressImage(file) {
+    if (!file || !file.type.startsWith('image/')) return file;
+    if (file.type === 'image/svg+xml' || file.type === 'image/gif') return file;
+    if (file.size < 500 * 1024) return file; // Skip if smaller than 500KB
+
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          const max = 1920;
+          if (w > max) { h = Math.round((max / w) * h); w = max; }
+          
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          
+          const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          canvas.toBlob(blob => {
+            resolve(blob ? new File([blob], file.name, { type: mime }) : file);
+          }, mime, 0.85);
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
   }
 
   function setBtnLoader(id, loading, txt) {
