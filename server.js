@@ -44,10 +44,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 // ─── Database Connection (Hybrid: MySQL/PostgreSQL) ───────────────────────────
 let db;
 let dbType = 'mysql'; // Default to MySQL
+let dbInitPromise = null;
 
-async function connectDB() {
+async function initDB() {
   // If DATABASE_URL or RENDER exists, we assume PostgreSQL (Production/Render)
-  if (process.env.DATABASE_URL || process.env.RENDER) {
+  if (process.env.DATABASE_URL || process.env.RENDER || process.env.VERCEL) {
     dbType = 'postgres';
     const { Pool } = require('pg');
     try {
@@ -83,8 +84,16 @@ async function connectDB() {
   if (db) await seedAdmin();
 }
 
+function connectDB() {
+  if (!dbInitPromise) {
+    dbInitPromise = initDB();
+  }
+  return dbInitPromise;
+}
+
 // Wrapper to handle differences between MySQL (?) and PostgreSQL ($1)
 async function query(sql, params = []) {
+  if (!db) await connectDB();
   if (!db) throw new Error('Database not connected');
 
   if (dbType === 'postgres') {
@@ -154,7 +163,8 @@ function requireAuth(req, res, next) {
     res.status(401).json({ error: 'Unauthorized' });
   }
 }
-function requireDB(req, res, next) {
+async function requireDB(req, res, next) {
+  await connectDB();
   if (!db) {
     console.log('❌ DB Guard: No database connection');
     return res.status(503).json({ error: 'Database not connected' });
