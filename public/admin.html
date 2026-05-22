@@ -300,7 +300,12 @@
               <div class="upload-text" id="logo-upload-text"><strong>Click to upload</strong> logo<br /><small>PNG, SVG, JPG — max 5MB</small></div>
             </div>
             <div style="display:flex;gap:12px;margin-top:16px">
-              <button class="btn-save" id="btn-save-logo">Upload Logo</button>
+              <button class="btn-save" id="btn-save-logo">
+                <span class="btn-text">Upload Logo</span>
+                <span class="btn-loader" style="display: none;">
+                  <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+                </span>
+              </button>
             </div>
             <div class="admin-feedback" id="fb-logo"></div>
           </div>
@@ -322,7 +327,12 @@
                   WebM, MOV — max 100MB</small></div>
             </div>
             <div style="display:flex;gap:12px;margin-top:16px">
-              <button class="btn-save" id="btn-save-video">Upload Video</button>
+              <button class="btn-save" id="btn-save-video">
+                <span class="btn-text">Upload Video</span>
+                <span class="btn-loader" style="display: none;">
+                  <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+                </span>
+              </button>
               <button class="btn-del" id="btn-del-video">Delete Video</button>
             </div>
             <div class="admin-feedback" id="fb-video"></div>
@@ -350,7 +360,12 @@
                 <input type="text" id="set-footer-text" value="© 2026 Onix Architecture. All rights reserved." />
               </div>
             </div>
-            <button class="btn-save" style="margin-top:16px" id="btn-save-text">Save Text Settings</button>
+            <button class="btn-save" style="margin-top:16px" id="btn-save-text">
+              <span class="btn-text">Save Text Settings</span>
+              <span class="btn-loader" style="display: none;">
+                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              </span>
+            </button>
             <div class="admin-feedback" id="fb-text"></div>
           </div>
         </div>
@@ -452,7 +467,12 @@
                 <textarea id="about-mission-input" rows="3"></textarea>
               </div>
             </div>
-            <button class="btn-save" style="margin-top:16px" id="btn-save-about">Save About Content</button>
+            <button class="btn-save" style="margin-top:16px" id="btn-save-about">
+              <span class="btn-text">Save About Content</span>
+              <span class="btn-loader" style="display: none;">
+                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              </span>
+            </button>
             <div class="admin-feedback" id="fb-about"></div>
           </div>
         </div>
@@ -471,7 +491,12 @@
       <form id="modal-form">
         <div class="form-grid" id="modal-fields"></div>
         <div style="display:flex;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
-          <button type="submit" class="btn-save" id="modal-submit">Save</button>
+          <button type="submit" class="btn-save" id="modal-submit">
+            <span class="btn-text">Save</span>
+            <span class="btn-loader" style="display: none;">
+              <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+            </span>
+          </button>
           <button type="button" class="btn-edit" id="modal-cancel">Cancel</button>
         </div>
         <div class="admin-feedback" id="modal-feedback"></div>

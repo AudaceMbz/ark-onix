@@ -340,12 +340,11 @@
 
   // ─── Brand Video ─────────────────────────────────────────
   function loadBrandVideo() {
-    const vidSrc = document.getElementById('about-brand-video-src');
     const vid = document.getElementById('about-brand-video');
     const path = window._onixVideoPath;
-    if (vidSrc && vid && path) {
-      if (vidSrc.src !== location.origin + path && vidSrc.src !== path) {
-        vidSrc.src = path;
+    if (vid && path) {
+      if (!vid.src.includes(path) && document.querySelector('#about-brand-video-src')?.src !== path) {
+        vid.src = path;
         vid.load();
       }
     }

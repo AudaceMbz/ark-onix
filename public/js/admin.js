@@ -182,6 +182,7 @@
     document.getElementById('btn-save-logo').addEventListener('click', async () => {
       const file = document.getElementById('site-logo-file').files[0];
       if (!file) return showFeedback('fb-logo', 'Please select a logo file.', 'error');
+      setBtnLoader('btn-save-logo', true, 'Uploading...');
       const fd = new FormData();
       fd.append('setting_key', 'logo_path');
       fd.append('upload_type', 'logo');
@@ -198,12 +199,14 @@
           showFeedback('fb-logo', 'Upload error: ' + (data.error || 'Unknown'), 'error');
         }
       } catch (e) { showFeedback('fb-logo', 'Upload failed.', 'error'); }
+      finally { setBtnLoader('btn-save-logo', false, 'Upload Logo'); }
     });
 
     // Video save
     document.getElementById('btn-save-video').addEventListener('click', async () => {
       const file = document.getElementById('hero-video-file').files[0];
       if (!file) return showFeedback('fb-video', 'Please select a video file.', 'error');
+      setBtnLoader('btn-save-video', true, 'Uploading...');
       const fd = new FormData();
       fd.append('setting_key', 'hero_video_path');
       fd.append('upload_type', 'video');
@@ -220,6 +223,7 @@
           showFeedback('fb-video', 'Upload error: ' + (data.error || 'Unknown'), 'error');
         }
       } catch (e) { showFeedback('fb-video', 'Upload failed.', 'error'); }
+      finally { setBtnLoader('btn-save-video', false, 'Upload Video'); }
     });
 
     // Delete Video
@@ -235,6 +239,7 @@
 
     // Text settings save
     document.getElementById('btn-save-text').addEventListener('click', async () => {
+      setBtnLoader('btn-save-text', true, 'Saving...');
       try {
         await Promise.all([
           api('POST', '/api/admin/settings', { setting_key: 'site_name', setting_value: getValue('set-site-name') }),
@@ -244,6 +249,7 @@
         ]);
         showFeedback('fb-text', '✓ Text settings saved.', 'success');
       } catch (e) { showFeedback('fb-text', 'Save failed.', 'error'); }
+      finally { setBtnLoader('btn-save-text', false, 'Save Text Settings'); }
     });
   }
 
@@ -365,6 +371,7 @@
       setValue('about-mission-input', data.mission || '');
     } catch (e) { }
     document.getElementById('btn-save-about').onclick = async () => {
+      setBtnLoader('btn-save-about', true, 'Saving...');
       try {
         await Promise.all([
           api('POST', '/api/admin/about', { content_key: 'narrative', content_value: getValue('about-narrative-input') }),
@@ -372,6 +379,7 @@
         ]);
         showFeedback('fb-about', '✓ About content saved.', 'success');
       } catch (e) { showFeedback('fb-about', 'Save failed.', 'error'); }
+      finally { setBtnLoader('btn-save-about', false, 'Save About Content'); }
     };
   }
 
@@ -506,10 +514,13 @@
     const url = modalMode === 'edit' ? `/api/admin/${ep}/${editingId}` : `/api/admin/${ep}`;
     const method = modalMode === 'edit' ? 'PUT' : 'POST';
 
+    setBtnLoader('modal-submit', true, 'Saving...');
+
     try {
       const res = await fetch(url, { method, headers, body });
       if (!res.ok) throw new Error(await res.text());
-      fb.textContent = '✓ Saved successfully.';
+      const successMsg = hasFile && modalEntity === 'project' ? '✓ Image uploaded successfully.' : '✓ Post saved successfully.';
+      fb.textContent = successMsg;
       fb.className = 'admin-feedback success';
       fb.style.display = 'block';
       setTimeout(() => {
@@ -521,6 +532,8 @@
       fb.textContent = 'Error: ' + e.message;
       fb.className = 'admin-feedback error';
       fb.style.display = 'block';
+    } finally {
+      setBtnLoader('modal-submit', false, 'Save');
     }
   }
 
@@ -586,6 +599,21 @@
   function setText(id, val) {
     const el = document.getElementById(id);
     if (el) el.textContent = val;
+  }
+
+  function setBtnLoader(id, loading, txt) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    const txtSpan = btn.querySelector('.btn-text');
+    const loader = btn.querySelector('.btn-loader');
+    btn.disabled = loading;
+    if (loading) {
+      if (txtSpan) txtSpan.textContent = txt || 'Saving...';
+      if (loader) loader.style.display = 'block';
+    } else {
+      if (txtSpan) txtSpan.textContent = txt || 'Save';
+      if (loader) loader.style.display = 'none';
+    }
   }
 
 })();

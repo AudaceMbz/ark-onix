@@ -142,9 +142,10 @@ const storage = new CloudinaryStorage({
     const typeMap = { project: 'projects', team: 'team', video: 'videos', logo: 'images' };
     const folder = 'onix/' + (typeMap[req.body.upload_type] || 'uploads');
     
+    const rType = req.body.upload_type === 'video' ? 'video' : 'auto';
     return {
       folder: folder,
-      resource_type: 'auto',
+      resource_type: rType,
       public_id: `${Date.now()}-${Math.round(Math.random() * 1000)}`
     };
   }
@@ -288,9 +289,10 @@ app.post('/api/admin/projects', requireAuth, requireDB, upload.single('image'), 
     const { title, category, description, display_order, target_page } = req.body;
     const img = req.file ? req.file.path : '';
 
+    const active = (dbType === 'mysql' ? 1 : true);
     const [reslt] = await query(
-      'INSERT INTO projects (title, category, description, image_path, display_order, target_page) VALUES (?,?,?,?,?,?)',
-      [title, category || 'Architecture', description || '', img, parseInt(display_order) || 0, target_page || 'both']
+      'INSERT INTO projects (title, category, description, image_path, display_order, target_page, is_active) VALUES (?,?,?,?,?,?,?)',
+      [title, category || 'Architecture', description || '', img, parseInt(display_order) || 0, target_page || 'both', active]
     );
     res.status(201).json({ success: true, id: dbType === 'mysql' ? reslt.insertId : null });
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -339,7 +341,8 @@ app.get('/api/services', requireDB, async (req, res) => {
 app.post('/api/admin/services', requireAuth, requireDB, async (req, res) => {
   try {
     const { title, description, icon, display_order } = req.body;
-    const [r] = await query('INSERT INTO services (title, description, icon, display_order) VALUES (?,?,?,?)', [title, description || '', icon || 'building', parseInt(display_order) || 0]);
+    const active = (dbType === 'mysql' ? 1 : true);
+    const [r] = await query('INSERT INTO services (title, description, icon, display_order, is_active) VALUES (?,?,?,?,?)', [title, description || '', icon || 'building', parseInt(display_order) || 0, active]);
     res.status(201).json({ success: true, id: dbType === 'mysql' ? r.insertId : null });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -366,7 +369,8 @@ app.post('/api/admin/team', requireAuth, requireDB, upload.single('image'), asyn
     const { name, role, display_order } = req.body;
     const img = req.file ? req.file.path : '';
 
-    const [r] = await query('INSERT INTO team_photos (name, role, image_path, display_order) VALUES (?,?,?,?)', [name || '', role || '', img, parseInt(display_order) || 0]);
+    const active = (dbType === 'mysql' ? 1 : true);
+    const [r] = await query('INSERT INTO team_photos (name, role, image_path, display_order, is_active) VALUES (?,?,?,?,?)', [name || '', role || '', img, parseInt(display_order) || 0, active]);
     res.status(201).json({ success: true, id: dbType === 'mysql' ? r.insertId : null });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -411,7 +415,8 @@ app.get('/api/workshops', requireDB, async (req, res) => {
 app.post('/api/admin/workshops', requireAuth, requireDB, async (req, res) => {
   try {
     const { title, description, learn_more, our_speakers, business_knowledge, date_label, display_order } = req.body;
-    const [r] = await query('INSERT INTO workshops (title, description, learn_more, our_speakers, business_knowledge, date_label, display_order) VALUES (?,?,?,?,?,?,?)', [title, description || '', learn_more || '', our_speakers || '', business_knowledge || '', date_label || '', parseInt(display_order) || 0]);
+    const active = (dbType === 'mysql' ? 1 : true);
+    const [r] = await query('INSERT INTO workshops (title, description, learn_more, our_speakers, business_knowledge, date_label, display_order, is_active) VALUES (?,?,?,?,?,?,?,?)', [title, description || '', learn_more || '', our_speakers || '', business_knowledge || '', date_label || '', parseInt(display_order) || 0, active]);
     res.status(201).json({ success: true, id: dbType === 'mysql' ? r.insertId : null });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
