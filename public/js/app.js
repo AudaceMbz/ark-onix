@@ -264,28 +264,28 @@
 
   function loadPageData(page) {
     if (page === 'home') {
-      const el = document.getElementById('home-gallery');
-      if (el && !el.dataset.loaded) renderHomeGallerySkeleton();
+      // Always fetch fresh so new admin posts appear immediately
       loadHomeGallery();
     }
     if (page === 'about') {
+      // Clear cache so team always refreshes
       const teamEl = document.getElementById('team-row');
-      if (teamEl && !teamEl.dataset.loaded) renderTeamSkeleton();
+      if (teamEl) { teamEl.dataset.loaded = ''; renderTeamSkeleton(); }
       loadAbout(); loadTeam(); loadBrandVideo();
     }
     if (page === 'services') {
       const el = document.getElementById('services-list');
-      if (el && !el.dataset.loaded) renderServicesSkeleton();
+      if (el) { el.dataset.loaded = ''; renderServicesSkeleton(); }
       loadServices();
     }
     if (page === 'training') {
       const el = document.getElementById('workshops-list');
-      if (el && !el.dataset.loaded) renderWorkshopsSkeleton();
+      if (el) { el.dataset.loaded = ''; renderWorkshopsSkeleton(); }
       loadWorkshops();
     }
     if (page === 'work') {
       const el = document.getElementById('work-gallery');
-      if (el && !el.dataset.loaded) renderWorkGallerySkeleton();
+      if (el) { el.dataset.loaded = ''; renderWorkGallerySkeleton(); }
       loadWorkGallery();
     }
   }
@@ -354,12 +354,16 @@
   async function loadHomeGallery() {
     const el = document.getElementById('home-gallery');
     if (!el) return;
-    if (el.dataset.loaded) return;
 
     try {
       projects = await fetchJSON('/api/projects?page=home');
-      const slice = projects.slice(0, 12); // Display at least 10 (12 for grid symmetry) on homepage 
+      const slice = projects.slice(0, 12);
       el.innerHTML = '';
+
+      if (!slice.length) {
+        el.innerHTML = fallbackGallery();
+        return;
+      }
 
       slice.forEach((p, i) => {
         const item = createGalleryItem(p, i, slice);
@@ -368,7 +372,6 @@
       });
 
       lightboxImages = slice;
-      el.dataset.loaded = '1';
     } catch (e) {
       el.innerHTML = fallbackGallery();
     }
@@ -561,6 +564,7 @@
   async function loadServices() {
     const el = document.getElementById('services-list');
     if (el.dataset.loaded) return;
+    el.dataset.loaded = '1';
 
     try {
       const services = await fetchJSON('/api/services');
@@ -591,6 +595,7 @@
   async function loadWorkshops() {
     const el = document.getElementById('workshops-list');
     if (el.dataset.loaded) return;
+    el.dataset.loaded = '1';
 
     try {
       const workshops = await fetchJSON('/api/workshops');

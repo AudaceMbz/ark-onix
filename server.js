@@ -267,7 +267,7 @@ app.delete('/api/admin/settings/:key', requireAuth, requireDB, async (req, res) 
     }
 
     // 3. Clear database value
-    await query('UPDATE settings SET setting_value = "" WHERE setting_key = ?', [key]);
+    await query("UPDATE settings SET setting_value = '' WHERE setting_key = ?", [key]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -276,8 +276,8 @@ app.get('/api/projects', requireDB, async (req, res) => {
   try {
     const { page } = req.query;
     let sql = 'SELECT * FROM projects WHERE is_active = ' + (dbType === 'mysql' ? '1' : 'true');
-    if (page === 'home') sql += ' AND (target_page = "home" OR target_page = "both" OR target_page IS NULL)';
-    else if (page === 'work') sql += ' AND (target_page = "work" OR target_page = "both" OR target_page IS NULL)';
+    if (page === 'home') sql += " AND (target_page = 'home' OR target_page = 'both' OR target_page IS NULL)";
+    else if (page === 'work') sql += " AND (target_page = 'work' OR target_page = 'both' OR target_page IS NULL)";
     sql += ' ORDER BY display_order ASC, created_at DESC LIMIT 60';
     const [rows] = await query(sql);
     res.json(rows);
