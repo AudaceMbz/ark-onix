@@ -19,6 +19,11 @@
     initLogout();
     initModal();
     initSettingsForms();
+    // Apply favicon theme immediately on load (no login needed)
+    fetch('/api/settings')
+      .then(r => r.json())
+      .then(s => { if (s && s.site_color_theme) updateFaviconTheme(s.site_color_theme); })
+      .catch(() => {});
   });
 
   // ─── Auth ────────────────────────────────────────────────
@@ -130,6 +135,7 @@
     if (name === 'workshops') loadWorkshopsAdmin();
     if (name === 'about') loadAboutAdmin();
     if (name === 'settings') loadSettingsAdmin();
+    if (name === 'whatsapp') loadWhatsappAdmin();
   }
 
   // ─── Dashboard ───────────────────────────────────────────
@@ -155,6 +161,15 @@
       setValue('set-hero-sub', s.hero_subtitle || '');
       setValue('set-footer-text', s.footer_text || '');
 
+      // Load Color Theme
+      const currColor = s.site_color_theme || 'gold';
+      document.querySelectorAll('.theme-color-btn').forEach(b => {
+        if(b.dataset.color === currColor) b.style.borderColor = 'white';
+        else b.style.borderColor = 'transparent';
+      });
+      document.documentElement.setAttribute('data-theme-color', currColor);
+      updateFaviconTheme(currColor);
+
       // Show video info if exists
       if (s.hero_video_path) {
         document.getElementById('video-upload-text').innerHTML = `<strong>Current:</strong> ${s.hero_video_path.split('/').pop()}<br/><small>Ready to be replaced</small>`;
@@ -172,6 +187,25 @@
   }
 
   function initSettingsForms() {
+    // Theme Color Selection
+    document.querySelectorAll('.theme-color-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const color = btn.dataset.color;
+        // Update UI
+        document.querySelectorAll('.theme-color-btn').forEach(b => b.style.borderColor = 'transparent');
+        btn.style.borderColor = 'white';
+        document.documentElement.setAttribute('data-theme-color', color);
+        updateFaviconTheme(color);
+        // Save to DB
+        try {
+          await api('POST', '/api/admin/settings', { setting_key: 'site_color_theme', setting_value: color });
+          showFeedback('fb-theme', '✓ Theme color updated globally.', 'success');
+        } catch (e) {
+          showFeedback('fb-theme', 'Failed to save theme color.', 'error');
+        }
+      });
+    });
+
     // Video filename display
     document.getElementById('hero-video-file').addEventListener('change', e => {
       const f = e.target.files[0];
@@ -326,7 +360,7 @@
           <img class="item-thumb" src="${m.image_path}" alt="${m.name}" style="border-radius:50%;object-fit:cover" onerror="this.style.display='none'" />
           <div class="item-info">
             <h4>${m.name}</h4>
-            <span>${m.role || ''}</span>
+            <span>${m.role || ''}${m.phone ? ' · ' + m.phone : ''}${m.email ? ' · ' + m.email : ''}</span>
           </div>
           <div class="item-actions">
             <button class="btn-edit" onclick="adminEdit('team',${m.id})">Edit</button>
@@ -385,6 +419,36 @@
     };
   }
 
+  // ─── WhatsApp ────────────────────────────────────────────
+  async function loadWhatsappAdmin() {
+    const el = document.getElementById('whatsapp-list-admin');
+    if (!el) return;
+    el.innerHTML = '';
+    try {
+      const items = await api('GET', '/api/whatsapp_teammates');
+      if (!items.length) { el.innerHTML = '<div style="color:var(--text-3);padding:20px">No team members yet. Add one to show on public widget.</div>'; return; }
+      items.forEach(m => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        const imgPath = m.image_path && m.image_path.startsWith('http') ? m.image_path : (m.image_path ? `/${m.image_path.replace(/\\\\/g, '/')}` : '/images/default-avatar.png');
+        row.innerHTML = `
+          <img class="item-thumb" src="${imgPath}" alt="${m.name}" style="border-radius:50%;object-fit:cover" onerror="this.style.display='none'" />
+          <div class="item-info">
+            <h4>${m.name} <span style="font-size:12px;font-weight:normal;color:#999">(${m.phone_number})</span></h4>
+            <span>${m.role || ''} - ${m.reply_status || ''}</span>
+          </div>
+          <div class="item-actions">
+            <button class="btn-edit" onclick="adminEdit('whatsapp_teammates',${m.id})">Edit</button>
+            <button class="btn-del" onclick="adminDel('whatsapp_teammates',${m.id})">Delete</button>
+          </div>`;
+        el.appendChild(row);
+      });
+    } catch (e) { }
+  }
+
+  const btnAddWhatsapp = document.getElementById('btn-add-whatsapp');
+  if (btnAddWhatsapp) btnAddWhatsapp.addEventListener('click', () => openModal('add', 'whatsapp_teammates'));
+
   // ─── Modal ───────────────────────────────────────────────
   function initModal() {
     document.getElementById('modal-close').addEventListener('click', closeModal);
@@ -415,10 +479,15 @@
       { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
     ],
     team: [
-      { id: 'f-name', label: 'Full Name', type: 'text', required: true, key: 'name' },
-      { id: 'f-role', label: 'Role / Title', type: 'text', key: 'role' },
-      { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
-      { id: 'f-img', label: 'Portrait Photo', type: 'file', key: 'image' },
+      { id: 'f-name',     label: 'Full Name',             type: 'text',     required: true, key: 'name' },
+      { id: 'f-role',     label: 'Position / Role',        type: 'text',     key: 'role',           placeholder: 'e.g. CEO, Architect' },
+      { id: 'f-phone',    label: 'Phone Number',           type: 'text',     key: 'phone',          placeholder: '+230 5258 4240' },
+      { id: 'f-email',    label: 'Email Address',          type: 'text',     key: 'email',          placeholder: 'name@company.com' },
+      { id: 'f-cal',      label: 'Meeting Schedule Link',  type: 'text',     key: 'calendar_link',  placeholder: 'https://calendly.com/...' },
+      { id: 'f-wa',       label: 'WhatsApp Link',          type: 'text',     key: 'whatsapp_link',  placeholder: 'https://wa.me/...' },
+      { id: 'f-desc',     label: 'Short Description',      type: 'textarea', key: 'description',    placeholder: 'Brief bio or expertise summary...' },
+      { id: 'f-order',    label: 'Display Order',          type: 'number',   key: 'display_order' },
+      { id: 'f-img',      label: 'Team Member Photo',      type: 'file',     key: 'image' },
     ],
     workshop: [
       { id: 'f-title', label: 'Workshop Title', type: 'text', required: true, key: 'title' },
@@ -428,6 +497,15 @@
       { id: 'f-speakers', label: '"Our Speakers" Content', type: 'textarea', key: 'our_speakers' },
       { id: 'f-biz', label: '"Improve your business" Content', type: 'textarea', key: 'business_knowledge' },
       { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
+    ],
+    whatsapp_teammates: [
+      { id: 'f-name', label: 'Full Name', type: 'text', required: true, key: 'name' },
+      { id: 'f-role', label: 'Role / Title', type: 'text', key: 'role', placeholder: 'e.g. Senior Consultant' },
+      { id: 'f-phone', label: 'WhatsApp Number', type: 'text', required: true, key: 'phone_number', placeholder: '+250 790 128 174' },
+      { id: 'f-reply', label: 'Reply Status', type: 'text', key: 'reply_status', placeholder: 'Typically replies within 1 hour' },
+      { id: 'f-welcome', label: 'Welcome Message', type: 'textarea', key: 'welcome_msg', placeholder: "Hi! I'm interested in your properties." },
+      { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
+      { id: 'f-img', label: 'Profile Image', type: 'file', key: 'image' },
     ],
   };
 
@@ -514,7 +592,7 @@
 
     console.log('Admin: Sending project data:', hasFile ? Object.fromEntries(body) : JSON.parse(body));
 
-    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops' };
+    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates' };
     const ep = endpointMap[modalEntity];
     const url = modalMode === 'edit' ? `/api/admin/${ep}/${editingId}` : `/api/admin/${ep}`;
     const method = modalMode === 'edit' ? 'PUT' : 'POST';
@@ -544,7 +622,7 @@
 
   // ─── Global edit/delete (called from inline onclick) ────
   window.adminEdit = async (entity, id) => {
-    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops' };
+    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates' };
     const ep = endpointMap[entity];
     try {
       // Fetch all, find by id
@@ -556,7 +634,7 @@
 
   window.adminDel = async (entity, id) => {
     if (!confirm(`Delete this ${entity}? This cannot be undone.`)) return;
-    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops' };
+    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates' };
     const ep = endpointMap[entity];
     try {
       const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
@@ -652,6 +730,18 @@
       if (txtSpan) txtSpan.textContent = txt || 'Save';
       if (loader) loader.style.display = 'none';
     }
+  }
+
+  // ─── Dynamic Favicon Updater ──────────────────────────────────
+  function updateFaviconTheme(theme) {
+    const themeMap = { neon: '#00ff00', emerald: '#10B981', gold: '#C9A96E', teal: '#0D9488', terracotta: '#D97757' };
+    const hex = themeMap[theme] || '#C9A96E';
+    fetch('/images/favicon.svg').then(r => r.text()).then(svg => {
+      let link = document.querySelector('link[rel="icon"]');
+      if (!link) return;
+      const newSvg = svg.replace(/stroke="#[0-9a-fA-F]{3,6}"/g, 'stroke="' + hex + '"');
+      link.href = 'data:image/svg+xml;base64,' + btoa(newSvg);
+    }).catch(e => console.log('Favicon update error:', e));
   }
 
 })();

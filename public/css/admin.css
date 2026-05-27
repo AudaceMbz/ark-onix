@@ -11,13 +11,25 @@
   --text: #f0ece4;
   --text-2: #8a8480;
   --text-3: #555;
-  --accent: #00ff00;
-  --accent-2: #33ff33;
+  --accent: #C9A96E;
+  --accent-2: #D4B87E;
   --danger: #e05a5a;
   --success: #5ac98a;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Inter', sans-serif;
 }
+
+/* ─── Dynamic Color Themes Configuration ────────────────────────── */
+/* 1. Neon Green */
+:root[data-theme-color="neon"] { --accent: #00ff00; --accent-2: #33ff33; --accent-dark: #00cc00; }
+/* 2. Emerald Green */
+:root[data-theme-color="emerald"] { --accent: #10B981; --accent-2: #34D399; --accent-dark: #059669; }
+/* 3. Warm Gold (Default) */
+:root[data-theme-color="gold"] { --accent: #C9A96E; --accent-2: #D4B87E; --accent-dark: #A8885A; }
+/* 4. Deep Teal */
+:root[data-theme-color="teal"] { --accent: #0D9488; --accent-2: #14B8A6; --accent-dark: #0F766E; }
+/* 5. Terracotta */
+:root[data-theme-color="terracotta"] { --accent: #D97757; --accent-2: #E29379; --accent-dark: #C05636; }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
@@ -736,7 +748,7 @@ a { color: inherit; text-decoration: none; }
   .admin-content { padding: 24px; }
   .admin-topbar { padding: 0 24px; justify-content: flex-start; gap: 15px; }
   .topbar-actions { margin-left: auto; }
-  .form-grid-2 { grid-template-columns: 1fr; }
+  .form-grid, .form-grid-2 { grid-template-columns: 1fr !important; }
   .dashboard-stats { grid-template-columns: 1fr 1fr; }
   .quick-links { grid-template-columns: 1fr; }
   
