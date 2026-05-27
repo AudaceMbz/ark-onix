@@ -33,7 +33,7 @@
 
     // Page-specific loaders with instant skeletons
     if (document.getElementById('about-narrative')) loadAbout();
-    if (document.getElementById('team-row')) {
+    if (document.getElementById('team-row') || document.getElementById('home-team-row') || document.getElementById('contact-team-row')) {
       renderTeamSkeleton();
       loadTeam();
     }
@@ -55,21 +55,23 @@
 
   // ─── SKELETON PRELOADER RENDERERS ───
   function renderTeamSkeleton() {
-    const el = document.getElementById('team-row');
-    if (!el) return;
+    const ids = ['team-row', 'home-team-row', 'contact-team-row'];
     let html = '';
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 2; i++) {
       html += `
-        <div class="team-card skeleton-card">
+        <div class="team-card-premium skeleton-card">
           <div class="skeleton skeleton-img"></div>
-          <div class="team-card-info">
+          <div class="team-front-info">
             <div class="skeleton skeleton-name"></div>
             <div class="skeleton skeleton-role"></div>
           </div>
         </div>
       `;
     }
-    el.innerHTML = html;
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    });
   }
 
   function renderServicesSkeleton() {
@@ -209,6 +211,9 @@
   async function loadSettings() {
     try {
       const s = await fetchJSON('/api/settings');
+      if (!s) return;
+      document.documentElement.setAttribute('data-theme-color', s.site_color_theme || 'gold');
+      updateFaviconTheme(s.site_color_theme || 'gold');
 
       // Update Site Name / Branding
       if (s.site_name) {
@@ -249,6 +254,18 @@
     } catch (e) { }
   }
 
+  // ─── Dynamic Favicon Updater ──────────────────────────────────
+  function updateFaviconTheme(theme) {
+    const themeMap = { neon: '#00ff00', emerald: '#10B981', gold: '#C9A96E', teal: '#0D9488', terracotta: '#D97757' };
+    const hex = themeMap[theme] || '#C9A96E';
+    fetch('/images/favicon.svg').then(r => r.text()).then(svg => {
+      let link = document.querySelector('link[rel="icon"]');
+      if (!link) return;
+      const newSvg = svg.replace(/stroke="#[0-9a-fA-F]{3,6}"/g, 'stroke="' + hex + '"');
+      link.href = 'data:image/svg+xml;base64,' + btoa(newSvg);
+    }).catch(e => console.log('Favicon update error:', e));
+  }
+
   // ─── About ───────────────────────────────────────────────────
   async function loadAbout() {
     try {
@@ -260,30 +277,127 @@
 
   // ─── Team ────────────────────────────────────────────────────
   async function loadTeam() {
-    const el = document.getElementById('team-row');
-    if (!el) return;
+    const aboutEl = document.getElementById('team-row');
+    const homeEl = document.getElementById('home-team-row');
+    const contactEl = document.getElementById('contact-team-row');
+
+    // Roles that appear on the Home page
+    const HOME_ROLES = ['ceo', 'manager', 'c.e.o', 'director', 'managing director'];
+
     try {
       const team = await fetchJSON('/api/team');
-      el.innerHTML = '';
-      if (!team.length) {
-        el.innerHTML = '<div class="team-empty">Team photos will appear here once uploaded from the admin panel.</div>';
-        return;
-      }
-      team.forEach((m, i) => {
+
+      // Helper: build a single team card element
+      function buildCard(m, i) {
+        const firstName = m.name ? m.name.split(' ')[0] : 'Expert';
         const card = document.createElement('div');
-        card.className = 'team-card reveal';
+        card.className = 'team-card-premium reveal';
         card.style.transitionDelay = `${(i % 4) * 100}ms`;
+
+        const desc = m.description || '';
+        const phone = m.phone || '';
+        const rawEmail = m.email || '';
+        const calLink = m.calendar_link || '';
+        const waLink = m.whatsapp_link || '';
+
+        let actionCards = '';
+        if (phone) {
+          actionCards += `
+            <a href="tel:${phone.replace(/\s+/g, '')}" class="team-action-card call-card">
+              <div class="team-action-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+              <div class="team-action-text"><strong>Call</strong><span>${phone}</span></div>
+            </a>`;
+        }
+        if (rawEmail) {
+          actionCards += `
+            <a href="mailto:${rawEmail}" class="team-action-card email-card">
+              <div class="team-action-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
+              <div class="team-action-text"><strong>Email</strong><span>${rawEmail}</span></div>
+            </a>`;
+        }
+        if (calLink) {
+          actionCards += `
+            <a href="${calLink}" target="_blank" rel="noopener noreferrer" class="team-action-card schedule-card">
+              <div class="team-action-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+              <div class="team-action-text"><strong>Schedule Meeting</strong><span>Book a time that works for you</span></div>
+            </a>`;
+        }
+        if (waLink) {
+          actionCards += `
+            <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="team-action-card whatsapp-card">
+              <div class="team-action-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"></path><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"></path></svg></div>
+              <div class="team-action-text"><strong>WhatsApp</strong><span>Send a message</span></div>
+            </a>`;
+        }
+
         card.innerHTML = `
-          <img src="${m.image_path}" alt="${m.name}" loading="lazy" />
-          <div class="team-card-info">
-            <h4>${m.name}</h4>
-            <span>${m.role || ''}</span>
+          <div class="team-front">
+            <button class="team-contact-btn" aria-label="Contact ${m.name}">Contact</button>
+            <div class="team-bg-text">${firstName}</div>
+            <img class="team-agent-img" src="${m.image_path}" alt="${m.name}" loading="lazy" />
+            <div class="team-front-info">
+              <h4>${m.name}</h4>
+              <span class="team-role">${m.role || ''}</span>
+              ${desc ? `<p class="team-desc">${desc}</p>` : ''}
+            </div>
+          </div>
+          <div class="team-back">
+            <div class="team-back-header">
+              <button class="team-back-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Profile
+              </button>
+              <img class="team-avatar" src="${m.image_path}" alt="${m.name}" onerror="this.style.display='none'" />
+            </div>
+            <div class="team-back-info">
+              <h4>${m.name}</h4>
+              <span>${m.role || ''}</span>
+            </div>
+            <div class="team-action-cards">${actionCards || '<p style="color:#888;text-align:center;padding:20px">No contact info available.</p>'}</div>
           </div>`;
-        el.appendChild(card);
-        if (revealObserver) revealObserver.observe(card);
-      });
+
+        card.querySelector('.team-contact-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          card.classList.add('flipped');
+        });
+        card.querySelector('.team-back-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          card.classList.remove('flipped');
+        });
+
+        return card;
+      }
+
+      // Render helper for a given container with a filtered subset
+      function renderInto(el, members) {
+        if (!el) return;
+        el.innerHTML = '';
+        if (!members.length) {
+          el.innerHTML = '<div class="team-empty">Team photos will appear here once uploaded from the admin panel.</div>';
+          return;
+        }
+        members.forEach((m, i) => {
+          const card = buildCard(m, i);
+          el.appendChild(card);
+          if (revealObserver) revealObserver.observe(card);
+        });
+        el.dataset.loaded = '1';
+      }
+
+      // Home page: CEO + Manager only
+      const homeTeam = team.filter(m =>
+        HOME_ROLES.includes((m.role || '').toLowerCase().trim())
+      );
+      renderInto(homeEl, homeTeam);
+
+      // About & Contact: all members
+      renderInto(aboutEl, team);
+      renderInto(contactEl, team);
+
     } catch (e) {
-      el.innerHTML = '<div class="team-empty">Team photos coming soon.</div>';
+      [aboutEl, homeEl, contactEl].forEach(el => {
+        if (el) el.innerHTML = '<div class="team-empty">Team photos coming soon.</div>';
+      });
     }
   }
 

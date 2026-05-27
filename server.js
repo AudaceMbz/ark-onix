@@ -81,7 +81,7 @@ async function initDB() {
       db = null;
     }
   }
-  if (db) await seedAdmin();
+  if (db) { await seedAdmin(); await migrateTeamTable(); }
 }
 
 function connectDB() {
@@ -124,6 +124,33 @@ async function seedAdmin() {
   } catch (err) {
     console.error('Seed admin error:', err.message);
   }
+}
+
+// ─── Migrate team_photos table (add contact fields if missing) ────────────────
+async function migrateTeamTable() {
+  const newCols = [
+    { name: 'description',    type: 'TEXT' },
+    { name: 'phone',          type: 'VARCHAR(60)' },
+    { name: 'email',          type: 'VARCHAR(120)' },
+    { name: 'whatsapp_link',  type: 'VARCHAR(255)' },
+    { name: 'calendar_link',  type: 'VARCHAR(255)' },
+  ];
+  for (const col of newCols) {
+    try {
+      if (dbType === 'postgres') {
+        await query(`ALTER TABLE team_photos ADD COLUMN IF NOT EXISTS ${col.name} ${col.type}`);
+      } else {
+        // MySQL: check first, then alter
+        const [cols] = await query(`SHOW COLUMNS FROM team_photos LIKE ?`, [col.name]);
+        if (!cols.length) {
+          await query(`ALTER TABLE team_photos ADD COLUMN ${col.name} ${col.type}`);
+        }
+      }
+    } catch (e) {
+      console.error(`Migration warning for ${col.name}:`, e.message);
+    }
+  }
+  console.log('✅  team_photos table migration complete');
 }
 
 // ─── Cloudinary Setup ─────────────────────────────────────────────────────────
@@ -366,23 +393,23 @@ app.get('/api/team', requireDB, async (req, res) => {
 });
 app.post('/api/admin/team', requireAuth, requireDB, upload.single('image'), async (req, res) => {
   try {
-    const { name, role, display_order } = req.body;
+    const { name, role, description, phone, email, whatsapp_link, calendar_link, display_order } = req.body;
     const img = req.file ? req.file.path : '';
-
     const active = (dbType === 'mysql' ? 1 : true);
-    const [r] = await query('INSERT INTO team_photos (name, role, image_path, display_order, is_active) VALUES (?,?,?,?,?)', [name || '', role || '', img, parseInt(display_order) || 0, active]);
+    const [r] = await query(
+      'INSERT INTO team_photos (name, role, description, phone, email, whatsapp_link, calendar_link, image_path, display_order, is_active) VALUES (?,?,?,?,?,?,?,?,?,?)',
+      [name || '', role || '', description || '', phone || '', email || '', whatsapp_link || '', calendar_link || '', img, parseInt(display_order) || 0, active]
+    );
     res.status(201).json({ success: true, id: dbType === 'mysql' ? r.insertId : null });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 app.put('/api/admin/team/:id', requireAuth, requireDB, upload.single('image'), async (req, res) => {
   try {
-    const { name, role, display_order, is_active } = req.body;
-    const updates = { name, role };
+    const { name, role, description, phone, email, whatsapp_link, calendar_link, display_order, is_active } = req.body;
+    const updates = { name, role, description, phone, email, whatsapp_link, calendar_link };
     if (display_order !== undefined) updates.display_order = parseInt(display_order) || 0;
     if (is_active !== undefined) updates.is_active = (is_active === 'true' || is_active === true || is_active === '1' || is_active === 1);
-    if (req.file) {
-      updates.image_path = req.file.path;
-    }
+    if (req.file) updates.image_path = req.file.path;
     const keys = Object.keys(updates).filter(k => updates[k] !== undefined);
     const values = keys.map(k => updates[k]);
     values.push(req.params.id);
@@ -450,6 +477,60 @@ app.post('/api/admin/about', requireAuth, requireDB, async (req, res) => {
       : 'INSERT INTO about_content (content_key, content_value) VALUES (?,?) ON CONFLICT (content_key) DO UPDATE SET content_value = EXCLUDED.content_value';
     const params = dbType === 'mysql' ? [content_key, content_value, content_value] : [content_key, content_value];
     await query(sql, params);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// WHATSAPP TEAMMATES
+app.get('/api/whatsapp_teammates', requireDB, async (req, res) => {
+  try {
+    const [rows] = await query('SELECT * FROM whatsapp_teammates WHERE is_active = ' + (dbType === 'mysql' ? '1' : 'true') + ' ORDER BY display_order ASC');
+    res.json(rows);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/admin/whatsapp_teammates', requireAuth, requireDB, upload.single('image'), async (req, res) => {
+  try {
+    const { name, role, reply_status, phone_number, welcome_msg, display_order } = req.body;
+    const img = req.file ? req.file.path : '';
+    const active = (dbType === 'mysql' ? 1 : true);
+    
+    const [r] = await query(
+      'INSERT INTO whatsapp_teammates (name, role, reply_status, phone_number, welcome_msg, image_path, display_order, is_active) VALUES (?,?,?,?,?,?,?,?)',
+      [name || '', role || '', reply_status || '', phone_number || '', welcome_msg || '', img, parseInt(display_order) || 0, active]
+    );
+    res.status(201).json({ success: true, id: dbType === 'mysql' ? r.insertId : null });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.put('/api/admin/whatsapp_teammates/:id', requireAuth, requireDB, upload.single('image'), async (req, res) => {
+  try {
+    const { name, role, reply_status, phone_number, welcome_msg, display_order, is_active } = req.body;
+    const updates = { name, role, reply_status, phone_number, welcome_msg };
+    if (display_order !== undefined) updates.display_order = parseInt(display_order) || 0;
+    if (is_active !== undefined) updates.is_active = (is_active === 'true' || is_active === true || is_active === '1' || is_active === 1);
+    if (req.file) updates.image_path = req.file.path;
+    
+    const keys = Object.keys(updates).filter(k => updates[k] !== undefined);
+    const values = keys.map(k => updates[k]);
+    values.push(req.params.id);
+    const setClause = keys.map(k => `${k}=?`).join(', ');
+    
+    await query(`UPDATE whatsapp_teammates SET ${setClause} WHERE id=?`, values);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.delete('/api/admin/whatsapp_teammates/:id', requireAuth, requireDB, async (req, res) => {
+  try {
+    const [rows] = await query('SELECT image_path FROM whatsapp_teammates WHERE id = ?', [req.params.id]);
+    if (rows.length > 0 && rows[0].image_path) {
+      const filePath = path.join(__dirname, 'public', rows[0].image_path);
+      if (fs.existsSync(filePath)) {
+        try { fs.unlinkSync(filePath); } catch (e) { console.error('Whatsapp teammate image deletion error:', e.message); }
+      }
+    }
+    await query('DELETE FROM whatsapp_teammates WHERE id = ?', [req.params.id]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

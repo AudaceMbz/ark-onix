@@ -29,11 +29,14 @@
           <label for="login-password">Password</label>
           <div class="password-wrapper">
             <input type="password" id="login-password" autocomplete="current-password" required />
-            <button type="button" id="toggle-password" class="toggle-password-btn" aria-label="Toggle password visibility">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" class="eye-icon" viewBox="0 0 24 24">
-                <path class="eye-open" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle class="eye-open" cx="12" cy="12" r="3"/>
-                <path class="eye-closed" style="display: none;" d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/>
+            <button type="button" id="toggle-password" class="toggle-password-btn"
+              aria-label="Toggle password visibility">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+                stroke-width="1.8" class="eye-icon" viewBox="0 0 24 24">
+                <path class="eye-open" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle class="eye-open" cx="12" cy="12" r="3" />
+                <path class="eye-closed" style="display: none;"
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22" />
               </svg>
             </button>
           </div>
@@ -53,7 +56,8 @@
 
   <!-- ─── ADMIN SHELL ────────────────────────────────────────────────── -->
   <div id="admin-shell">
-    <div class="sidebar-overlay" id="sidebar-overlay" onclick="document.getElementById('admin-sidebar').classList.remove('open'); this.classList.remove('open')"></div>
+    <div class="sidebar-overlay" id="sidebar-overlay"
+      onclick="document.getElementById('admin-sidebar').classList.remove('open'); this.classList.remove('open')"></div>
 
     <!-- Sidebar -->
     <aside class="admin-sidebar" id="admin-sidebar">
@@ -61,14 +65,16 @@
         <div class="brand-lockup">
           <div class="brand-logo">
             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="16,2 28,8 28,24 16,30 4,24 4,8" stroke="#00ff00" stroke-width="2" stroke-linejoin="round" fill="rgba(0, 255, 0, 0.04)" />
+              <polygon points="16,2 28,8 28,24 16,30 4,24 4,8" stroke="#00ff00" stroke-width="2" stroke-linejoin="round"
+                fill="rgba(0, 255, 0, 0.04)" />
               <circle cx="16" cy="12" r="4.5" stroke="#00ff00" stroke-width="2" />
-              <path d="M8.5 24C9 20 12 18 16 18C20 18 23 20 23.5 24" stroke="#00ff00" stroke-width="2" stroke-linecap="round" />
+              <path d="M8.5 24C9 20 12 18 16 18C20 18 23 20 23.5 24" stroke="#00ff00" stroke-width="2"
+                stroke-linecap="round" />
             </svg>
           </div>
           <div class="brand-info">
             <h1 class="brand-name">ONIX</h1>
-            <span class="brand-label">Content Management</span>
+            <span class="brand-label">Admin Pannel</span>
           </div>
         </div>
       </div>
@@ -139,6 +145,14 @@
           </svg>
           About Content
         </div>
+        <div class="sidebar-link" data-panel="whatsapp">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9l-5.05.9"></path>
+            <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"></path>
+          </svg>
+          WhatsApp Widget
+        </div>
       </nav>
       <div class="sidebar-footer">
         <button class="logout-btn" id="logout-btn">
@@ -156,8 +170,14 @@
     <!-- Main -->
     <div class="admin-main">
       <div class="admin-topbar">
-        <button id="admin-menu-toggle" class="admin-menu-toggle" aria-label="Toggle menu" onclick="document.getElementById('admin-sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('open')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <button id="admin-menu-toggle" class="admin-menu-toggle" aria-label="Toggle menu"
+          onclick="document.getElementById('admin-sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('open')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
+            stroke-width="2" viewBox="0 0 24 24">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
         </button>
         <div class="topbar-title" id="topbar-title">Dashboard</div>
         <div class="topbar-actions">
@@ -285,25 +305,58 @@
         <!-- ══ SETTINGS ══════════════════════════════════════════════════════ -->
         <div class="admin-panel" id="panel-settings">
           <div class="panel-title">Site Settings</div>
-          <div class="panel-desc">Update global site information, branding, and hero media.</div>          <!-- Logo Branding -->
+          <div class="panel-desc">Update global site information, branding, and hero media.</div>
+
+          <!-- Color Theme Selection -->
+          <div class="admin-form-section">
+            <h3>Color Theme</h3>
+            <p style="font-size:0.83rem;color:var(--text-2);margin-bottom:18px">Choose the global accent color for the
+              entire website. This instantly updates buttons, icons, hover states, and borders in both Dark and Light
+              mode.</p>
+            <div class="theme-colors-container" style="display:flex; gap:16px; margin-bottom:16px;">
+              <button class="theme-color-btn" data-color="neon"
+                style="width:40px; height:40px; border-radius:50%; background:#00ff00; border:2px solid transparent; cursor:pointer;"
+                title="Neon Green"></button>
+              <button class="theme-color-btn" data-color="emerald"
+                style="width:40px; height:40px; border-radius:50%; background:#10B981; border:2px solid transparent; cursor:pointer;"
+                title="Emerald Green"></button>
+              <button class="theme-color-btn" data-color="gold"
+                style="width:40px; height:40px; border-radius:50%; background:#C9A96E; border:2px solid transparent; cursor:pointer;"
+                title="Warm Gold"></button>
+              <button class="theme-color-btn" data-color="teal"
+                style="width:40px; height:40px; border-radius:50%; background:#0D9488; border:2px solid transparent; cursor:pointer;"
+                title="Deep Teal"></button>
+              <button class="theme-color-btn" data-color="terracotta"
+                style="width:40px; height:40px; border-radius:50%; background:#D97757; border:2px solid transparent; cursor:pointer;"
+                title="Terracotta"></button>
+            </div>
+            <div id="fb-theme" class="feedback"></div>
+          </div>
+
+          <!-- Logo Branding -->
           <div class="admin-form-section">
             <h3>Logo Branding</h3>
-            <p style="font-size:0.83rem;color:var(--text-2);margin-bottom:18px">Upload the site logo. Recommended: PNG or SVG with transparent background.</p>
+            <p style="font-size:0.83rem;color:var(--text-2);margin-bottom:18px">Upload the site logo. Recommended: PNG
+              or SVG with transparent background.</p>
             <div class="upload-zone" id="logo-upload-zone">
               <input type="file" id="site-logo-file" accept="image/*" />
               <div class="upload-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="1">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
               </div>
-              <div class="upload-text" id="logo-upload-text"><strong>Click to upload</strong> logo<br /><small>PNG, SVG, JPG — max 5MB</small></div>
+              <div class="upload-text" id="logo-upload-text"><strong>Click to upload</strong> logo<br /><small>PNG, SVG,
+                  JPG — max 5MB</small></div>
             </div>
             <div style="display:flex;gap:12px;margin-top:16px">
               <button class="btn-save" id="btn-save-logo">
                 <span class="btn-text">Upload Logo</span>
                 <span class="btn-loader" style="display: none;">
-                  <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+                  <svg class="spinner" viewBox="0 0 50 50">
+                    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                  </svg>
                 </span>
               </button>
             </div>
@@ -330,7 +383,9 @@
               <button class="btn-save" id="btn-save-video">
                 <span class="btn-text">Upload Video</span>
                 <span class="btn-loader" style="display: none;">
-                  <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+                  <svg class="spinner" viewBox="0 0 50 50">
+                    <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                  </svg>
                 </span>
               </button>
               <button class="btn-del" id="btn-del-video">Delete Video</button>
@@ -363,7 +418,9 @@
             <button class="btn-save" style="margin-top:16px" id="btn-save-text">
               <span class="btn-text">Save Text Settings</span>
               <span class="btn-loader" style="display: none;">
-                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+                <svg class="spinner" viewBox="0 0 50 50">
+                  <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                </svg>
               </span>
             </button>
             <div class="admin-feedback" id="fb-text"></div>
@@ -470,11 +527,32 @@
             <button class="btn-save" style="margin-top:16px" id="btn-save-about">
               <span class="btn-text">Save About Content</span>
               <span class="btn-loader" style="display: none;">
-                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+                <svg class="spinner" viewBox="0 0 50 50">
+                  <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                </svg>
               </span>
             </button>
             <div class="admin-feedback" id="fb-about"></div>
           </div>
+        </div>
+
+        <!-- ══ WHATSAPP TEAMMATES ═════════════════════════════════════════════ -->
+        <div class="admin-panel" id="panel-whatsapp">
+          <div class="panel-title">WhatsApp Widget</div>
+          <div class="panel-desc">Manage the floating WhatsApp support popup team members.</div>
+
+          <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+            <button class="btn-add" id="btn-add-whatsapp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Teammate
+            </button>
+          </div>
+
+          <div class="items-list" id="whatsapp-list-admin"></div>
         </div>
 
       </div><!-- /admin-content -->
@@ -494,7 +572,9 @@
           <button type="submit" class="btn-save" id="modal-submit">
             <span class="btn-text">Save</span>
             <span class="btn-loader" style="display: none;">
-              <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              <svg class="spinner" viewBox="0 0 50 50">
+                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+              </svg>
             </span>
           </button>
           <button type="button" class="btn-edit" id="modal-cancel">Cancel</button>

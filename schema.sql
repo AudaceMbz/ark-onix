@@ -87,6 +87,19 @@ CREATE TABLE IF NOT EXISTS about_content (
   updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- ─── TABLE: whatsapp_teammates ───────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS whatsapp_teammates (
+  id            INT AUTO_INCREMENT PRIMARY KEY,
+  name          VARCHAR(255) NOT NULL,
+  role          VARCHAR(255),
+  reply_status  VARCHAR(255) DEFAULT 'Typically replies within 1 hour',
+  phone_number  VARCHAR(50) NOT NULL,
+  welcome_msg   TEXT,
+  image_path    VARCHAR(500),
+  display_order INT DEFAULT 0,
+  is_active     TINYINT(1) DEFAULT 1
+) ENGINE=InnoDB;
+
 -- ═══════════════════════════════════════════════════════════════
 --  DEFAULT SEED DATA
 -- ═══════════════════════════════════════════════════════════════

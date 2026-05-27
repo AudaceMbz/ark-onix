@@ -1,0 +1,31 @@
+﻿diff --git a/public/contact.html b/public/contact.html
+index b11f0f3..9081360 100644
+--- a/public/contact.html
++++ b/public/contact.html
+@@ -268,6 +268,16 @@
+         <div class="form-feedback" id="form-feedback"></div>
+       </form>
+     </div>
++    <!-- Team Section on Contact Page -->
++    <section class="team-section reveal" style="padding-top: 80px; max-width: 1400px; margin: 0 auto; padding-bottom: 80px;">
++      <div class="section-intro" style="padding: 0 4%;">
++        <div class="intro-label">The People</div>
++        <h2 class="section-heading">Meet the team<br /><em>behind the vision</em></h2>
++      </div>
++      <div class="team-row" id="contact-team-row">
++        <div class="team-empty">Team photos will appear here once uploaded from the admin panel.</div>
++      </div>
++    </section>
+   </main>
+ 
+   <!-- Footer -->
+@@ -336,6 +346,7 @@
+   </footer>
+ 
+   <script src="/js/page.js"></script>
++<script src="/js/whatsapp-widget.js"></script>
+ </body>
+ 
+-</html>
+\ No newline at end of file
++</html>

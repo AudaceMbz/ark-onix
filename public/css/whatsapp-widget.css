@@ -1,0 +1,331 @@
+/* ═══════════════════════════════════════════════════════════════
+   WHATSAPP WIDGET — Uses site CSS variables for full theme sync
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Floating Button ─────────────────────────────────────────── */
+.whatsapp-widget-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+}
+
+.whatsapp-floating-btn {
+  width: 60px;
+  height: 60px;
+  background-color: transparent;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  position: relative;
+}
+
+.whatsapp-floating-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Pulse ring: always WhatsApp brand green */
+.whatsapp-floating-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  animation: pulse-ring 2.2s infinite;
+  opacity: 0;
+  box-sizing: border-box;
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.7; border-width: 2px; }
+  100% { transform: scale(1.6); opacity: 0;   border-width: 0;   }
+}
+
+/* ─── Popup ───────────────────────────────────────────────────── */
+.whatsapp-popup {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 380px;
+  background: var(--surface, #1c1c1c);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg, 0 20px 80px rgba(0, 0, 0, 0.5));
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.95);
+  transform-origin: bottom right;
+  transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  color: var(--text);
+  border: 1px solid var(--border);
+  z-index: 99999;
+}
+
+.whatsapp-popup.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* ─── Header ──────────────────────────────────────────────────── */
+.whatsapp-popup-header {
+  background: #25D366;
+  color: #ffffff;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative radial glow in header */
+.whatsapp-popup-header::after {
+  content: '';
+  position: absolute;
+  top: -40%; right: -15%;
+  width: 130px; height: 130px;
+  background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.whatsapp-popup-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Glassmorphism icon in the header */
+.header-icon-wrapper {
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.whatsapp-popup-close {
+  background: rgba(0, 0, 0, 0.12);
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease, transform 0.3s ease;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.whatsapp-popup-close:hover {
+  background: rgba(0, 0, 0, 0.22);
+  transform: rotate(90deg);
+}
+
+/* ─── Body ────────────────────────────────────────────────────── */
+.whatsapp-popup-body {
+  padding: 20px 18px;
+  background: var(--bg-2, #111);
+}
+
+.whatsapp-popup-subtitle {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+
+/* ─── Scrollable teammates list ───────────────────────────────── */
+.whatsapp-teammates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+  padding-bottom: 4px;
+}
+
+.whatsapp-teammates-list::-webkit-scrollbar { width: 3px; }
+.whatsapp-teammates-list::-webkit-scrollbar-thumb {
+  background: var(--border-2);
+  border-radius: 10px;
+}
+
+/* ─── Teammate Card ───────────────────────────────────────────── */
+.whatsapp-teammate-card {
+  display: flex;
+  align-items: center;
+  background: var(--surface, #1c1c1c);
+  padding: 14px 16px;
+  border-radius: var(--radius, 4px);
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Accent left-edge bar on hover */
+.whatsapp-teammate-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+  transform-origin: bottom;
+}
+
+.whatsapp-teammate-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  border-color: var(--border-2);
+  background: var(--bg-3, #181818);
+}
+
+.whatsapp-teammate-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* ─── Profile Image ───────────────────────────────────────────── */
+.whatsapp-teammate-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 14px;
+  flex-shrink: 0;
+  border: 2px solid var(--border-2);
+  transition: border-color 0.3s ease;
+}
+
+.whatsapp-teammate-card:hover .whatsapp-teammate-img {
+  border-color: var(--accent);
+}
+
+/* ─── Info Text ───────────────────────────────────────────────── */
+.whatsapp-teammate-info { flex-grow: 1; }
+
+.whatsapp-teammate-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 1px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  font-family: var(--font-sans);
+}
+
+.whatsapp-teammate-role {
+  font-size: 0.72rem;
+  color: var(--text-2);
+  margin-bottom: 2px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.whatsapp-teammate-status {
+  font-size: 0.66rem;
+  color: #25D366;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.03em;
+}
+
+/* Online indicator dot */
+.whatsapp-teammate-status::before {
+  content: '';
+  width: 5px; height: 5px;
+  background: #25D366;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+  flex-shrink: 0;
+}
+
+/* ─── Icon Wrapper (Minimalist line style matching footer) ────────── */
+.whatsapp-teammate-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius, 4px);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  margin-left: 10px;
+  border: 1px solid var(--border-2);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.whatsapp-teammate-icon-svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  color: var(--text-2);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.whatsapp-teammate-card:hover .whatsapp-teammate-icon-wrapper {
+  border-color: var(--accent);
+  background: rgba(201, 169, 110, 0.08);
+  transform: scale(1.08);
+  box-shadow: none;
+}
+
+.whatsapp-teammate-card:hover .whatsapp-teammate-icon-svg {
+  color: var(--accent);
+  transform: scale(1.05);
+}
+
+/* ─── Footer ──────────────────────────────────────────────────── */
+.whatsapp-popup-footer {
+  text-align: center;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding-top: 10px;
+  font-weight: 500;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .whatsapp-popup {
+    width: 270px;
+    right: -6px;
+  }
+  .whatsapp-widget-container {
+    bottom: 18px;
+    right: 16px;
+  }
+}
