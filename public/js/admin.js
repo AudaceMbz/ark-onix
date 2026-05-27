@@ -696,7 +696,7 @@
         img.onload = () => {
           let w = img.width;
           let h = img.height;
-          const max = 1920;
+          const max = 1600; // Shrink slightly more to guarantee small payload
           if (w > max) { h = Math.round((max / w) * h); w = max; }
           
           const canvas = document.createElement('canvas');
@@ -704,10 +704,12 @@
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h);
           
-          const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          // Use WebP format for massive file size savings (supports transparency)
+          const mime = 'image/webp';
           canvas.toBlob(blob => {
-            resolve(blob ? new File([blob], file.name, { type: mime }) : file);
-          }, mime, 0.85);
+            const newName = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+            resolve(blob ? new File([blob], newName, { type: mime }) : file);
+          }, mime, 0.80); // 80% quality
         };
         img.onerror = () => resolve(file);
         img.src = e.target.result;
