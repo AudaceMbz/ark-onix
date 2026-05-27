@@ -551,7 +551,7 @@
     const contactEl = document.getElementById('contact-team-row');
 
     // Roles shown on Home page only
-    const HOME_ROLES = ['ceo', 'manager', 'c.e.o', 'director', 'managing director'];
+    const HOME_ROLES = ['ceo', 'manager', 'c.e.o', 'director', 'managing director', 'ceo/architect', 'managing director/str.engineer'];
 
     function buildCard(m, i) {
       const firstName = m.name ? m.name.split(' ')[0] : 'Expert';
