@@ -22,169 +22,64 @@
     initScrollReveal();
     initScrollNav();
     loadSettings();
-    initPreloader();
     initCounters();
   });
 
-  // ─── Pre-loader ──────────────────────────────────────────
-  function initPreloader() {
-    const loader = document.getElementById('site-loader');
-    if (!loader) return;
 
-    const startTime = Date.now();
-    const minDuration = 2000; // 2 seconds
-
-    // Hide when everything is loaded, but wait at least 2 seconds
-    window.addEventListener('load', () => {
-      const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, minDuration - elapsed);
-      setTimeout(hideLoader, remaining);
-    });
-
-    // Safety timeout (hide after 5s anyway)
-    setTimeout(hideLoader, 5000);
-
-    function hideLoader() {
-      if (loader.classList.contains('fade-out')) return;
-      loader.classList.add('fade-out');
-      setTimeout(() => {
-        loader.style.display = 'none';
-      }, 600);
-    }
-  }
-
-  // ─── SKELETON PRELOADER RENDERERS ───
-  function renderHomeGallerySkeleton() {
-    const el = document.getElementById('home-gallery');
-    if (!el) return;
-    let html = '';
-    for (let i = 0; i < 6; i++) {
-      html += `
-        <div class="gallery-item skeleton-card ${i === 0 ? 'featured' : ''}">
-          <div class="skeleton skeleton-img"></div>
-        </div>
-      `;
-    }
-    el.innerHTML = html;
-  }
-
-  function renderTeamSkeleton() {
-    const ids = ['team-row', 'home-team-row', 'contact-team-row'];
-    let html = '';
-    for (let i = 0; i < 4; i++) {
-      html += `
-        <div class="team-card skeleton-card">
-          <div class="skeleton skeleton-img"></div>
-          <div class="team-card-info">
-            <div class="skeleton skeleton-name"></div>
-            <div class="skeleton skeleton-role"></div>
-          </div>
-        </div>
-      `;
-    }
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerHTML = html;
-    });
-  }
-
-  function renderServicesSkeleton() {
-    const el = document.getElementById('services-list');
-    if (!el) return;
-    let html = '';
-    for (let i = 0; i < 3; i++) {
-      html += `
-        <div class="service-item skeleton-card">
-          <div class="skeleton skeleton-num"></div>
-          <div class="service-body">
-            <div class="skeleton skeleton-title"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-text-short"></div>
-          </div>
-          <div class="skeleton skeleton-icon"></div>
-        </div>
-      `;
-    }
-    el.innerHTML = html;
-  }
-
-  function renderWorkshopsSkeleton() {
-    const el = document.getElementById('workshops-list');
-    if (!el) return;
-    let html = '';
-    for (let i = 0; i < 3; i++) {
-      html += `
-        <div class="workshop-item skeleton-card">
-          <div class="workshop-header">
-            <div class="workshop-left">
-              <div class="skeleton skeleton-date"></div>
-              <div class="skeleton skeleton-title"></div>
-              <div class="skeleton skeleton-text"></div>
-            </div>
-            <div class="skeleton skeleton-toggle"></div>
-          </div>
-        </div>
-      `;
-    }
-    el.innerHTML = html;
-  }
-
-  function renderWorkGallerySkeleton() {
-    const el = document.getElementById('work-gallery');
-    if (!el) return;
-    let html = '';
-    for (let i = 0; i < 8; i++) {
-      html += `
-        <div class="gallery-item skeleton-card ${i === 0 ? 'featured' : ''}">
-          <div class="skeleton skeleton-img"></div>
-        </div>
-      `;
-    }
-    el.innerHTML = html;
-  }
 
   // ─── Theme ──────────────────────────────────────────────
   function initTheme() {
-    const saved = localStorage.getItem('onix-theme') || 'dark';
+    let saved = 'dark';
+    try { saved = localStorage.getItem('onix-theme') || 'dark'; } catch(e) {}
     setTheme(saved);
 
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      setTheme(current === 'dark' ? 'light' : 'dark');
-    });
+    const toggle = document.getElementById('theme-toggle');
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    }
   }
 
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('onix-theme', theme);
+    try { localStorage.setItem('onix-theme', theme); } catch(e) {}
     const moon = document.getElementById('icon-moon');
     const sun = document.getElementById('icon-sun');
-    if (theme === 'dark') {
-      moon.style.display = 'block';
-      sun.style.display = 'none';
-    } else {
-      moon.style.display = 'none';
-      sun.style.display = 'block';
+    if (moon && sun) {
+      if (theme === 'dark') {
+        moon.style.display = 'block';
+        sun.style.display = 'none';
+      } else {
+        moon.style.display = 'none';
+        sun.style.display = 'block';
+      }
     }
   }
 
   // ─── Nav ────────────────────────────────────────────────
   function initNav() {
     const toggle = document.getElementById('nav-toggle');
-    const links = document.getElementById('nav-links');
+    const menu = document.getElementById('fullscreen-menu');
     const header = document.getElementById('nav-header');
+    
+    if (!toggle || !menu) return;
+
     toggle.addEventListener('click', () => {
-      toggle.classList.toggle('open');
-      links.classList.toggle('open');
-      header.classList.toggle('nav-open');
+      const isOpen = toggle.classList.toggle('open');
+      menu.classList.toggle('open', isOpen);
+      header.classList.toggle('nav-open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
     });
 
     // Close on link click
-    document.querySelectorAll('.nav-links .nav-link, .nav-links .nav-cta').forEach(a => {
+    document.querySelectorAll('.menu-link').forEach(a => {
       a.addEventListener('click', () => {
         toggle.classList.remove('open');
-        links.classList.remove('open');
+        menu.classList.remove('open');
         header.classList.remove('nav-open');
+        document.body.style.overflow = '';
       });
     });
   }
@@ -267,31 +162,31 @@
   function loadPageData(page) {
     if (page === 'home') {
       // Always fetch fresh so new admin posts appear immediately
+      loadHeroSlider();
       loadHomeGallery();
-      
+
       const homeTeam = document.getElementById('home-team-row');
       if (homeTeam) { homeTeam.dataset.loaded = ''; }
       loadTeam();
     }
     if (page === 'about') {
       // Clear cache so team always refreshes
-      const teamEl = document.getElementById('team-row');
-      if (teamEl) { teamEl.dataset.loaded = ''; renderTeamSkeleton(); }
+      renderInto(aboutEl, team);
       loadAbout(); loadTeam(); loadBrandVideo();
     }
     if (page === 'services') {
       const el = document.getElementById('services-list');
-      if (el) { el.dataset.loaded = ''; renderServicesSkeleton(); }
+      if (el) { el.dataset.loaded = ''; }
       loadServices();
     }
     if (page === 'training') {
       const el = document.getElementById('workshops-list');
-      if (el) { el.dataset.loaded = ''; renderWorkshopsSkeleton(); }
+      if (el) { el.dataset.loaded = ''; }
       loadWorkshops();
     }
     if (page === 'work') {
       const el = document.getElementById('work-gallery');
-      if (el) { el.dataset.loaded = ''; renderWorkGallerySkeleton(); }
+      if (el) { el.dataset.loaded = ''; }
       loadWorkGallery();
     }
     if (page === 'contact') {
@@ -311,11 +206,15 @@
 
       // Update Site Name / Branding
       if (s.site_name) {
-        document.querySelectorAll('.logo-text, .footer-logo-text').forEach(txt => {
+        const logoOnix = document.querySelector('.logo-onix');
+        const logoStudio = document.querySelector('.logo-studio');
+        if (logoOnix && logoStudio) {
+          const parts = s.site_name.split(' ');
+          logoOnix.textContent = parts[0] || 'ONIX';
+          logoStudio.textContent = parts.slice(1).join(' ') || 'S T U D I O';
+        }
+        document.querySelectorAll('.footer-logo-text').forEach(txt => {
           txt.textContent = s.site_name;
-        });
-        document.querySelectorAll('.logo-img, .footer-logo-img').forEach(img => {
-          img.alt = s.site_name + ' Logo';
         });
         if (document.title.includes('ONIX STUDIO')) {
           document.title = document.title.replace('ONIX STUDIO', s.site_name);
@@ -335,13 +234,50 @@
 
       // Hero
       if (s.hero_title) {
-        const parts = s.hero_title.split(' ');
-        const first = parts.slice(0, -2).join(' ');
-        const last = parts.slice(-2).join(' ');
-        document.getElementById('hero-title').innerHTML = `${first}<br/><em>${last}</em>`;
+        document.getElementById('hero-title').textContent = s.hero_title;
       }
-      if (s.hero_subtitle) document.getElementById('hero-sub').textContent = s.hero_subtitle;
+      if (s.hero_subtitle) {
+        // Handle city/number splitting for the new layout
+        const sub = s.hero_subtitle;
+        if (sub.includes('|')) {
+           const parts = sub.split('|');
+           document.querySelector('.project-number').textContent = parts[0].trim();
+           document.getElementById('hero-location').textContent = parts[1].trim();
+           document.getElementById('hero-sub').textContent = parts[2] || '';
+        } else {
+           document.getElementById('hero-sub').textContent = sub;
+        }
+      }
       if (s.footer_text) document.getElementById('footer-text').textContent = s.footer_text;
+
+      // About Section Home
+      if (s.about_home_title) document.getElementById('home-about-label').textContent = s.about_home_title;
+      if (s.about_home_desc_1) document.getElementById('home-about-desc-1').textContent = s.about_home_desc_1;
+      if (s.about_home_desc_2) document.getElementById('home-about-desc-2').textContent = s.about_home_desc_2;
+      if (s.about_home_studio_name) document.getElementById('home-about-studio-name').textContent = s.about_home_studio_name;
+
+      if (s.about_home_img_main) document.getElementById('home-about-img-main').src = s.about_home_img_main;
+      if (s.about_home_img_top) document.getElementById('home-about-img-top').src = s.about_home_img_top;
+      if (s.about_home_img_bottom) document.getElementById('home-about-img-bottom').src = s.about_home_img_bottom;
+
+      // Why Choose Section
+      if (s.why_choose_heading) document.getElementById('wc-heading').textContent = s.why_choose_heading;
+
+      const setWcFeature = (n, title, desc, iconPath) => {
+        if (title) document.getElementById(`wc-title-${n}`).textContent = title;
+        if (desc) document.getElementById(`wc-desc-${n}`).textContent = desc;
+        if (iconPath) {
+          const img = document.getElementById(`wc-icon-${n}`);
+          const svg = document.getElementById(`wc-svg-${n}`);
+          img.src = iconPath;
+          img.style.display = 'block';
+          if (svg) svg.style.display = 'none';
+        }
+      };
+
+      setWcFeature(1, s.feature1_title, s.feature1_description, s.feature1_icon);
+      setWcFeature(2, s.feature2_title, s.feature2_description, s.feature2_icon);
+      setWcFeature(3, s.feature3_title, s.feature3_description, s.feature3_icon);
 
       // Store video path globally so loadBrandVideo() can use it
       if (s.hero_video_path) window._onixVideoPath = s.hero_video_path;
@@ -371,7 +307,7 @@
 
     try {
       projects = await fetchJSON('/api/projects?page=home');
-      const slice = projects.slice(0, 12);
+      const slice = projects.slice(0, 8);
       el.innerHTML = '';
 
       if (!slice.length) {
@@ -380,22 +316,233 @@
       }
 
       slice.forEach((p, i) => {
-        const item = createGalleryItem(p, i, slice);
+        const item = createGalleryItem(p, i, slice, true);
         el.appendChild(item);
         if (revealObserver) revealObserver.observe(item);
       });
 
       lightboxImages = slice;
+      initFeaturedSlider(slice);
     } catch (e) {
       el.innerHTML = fallbackGallery();
     }
   }
 
+  // ─── Hero Main Slider ────────────────────────────────────
+  let heroAutoplayDelay = null;
+  async function loadHeroSlider() {
+    const container = document.getElementById('hero-image-container');
+    const titleEl = document.getElementById('hero-title');
+    const subEl = document.getElementById('hero-sub');
+    const locationEl = document.getElementById('hero-location');
+    const currentSlideEl = document.getElementById('hero-current-slide');
+    const totalSlidesEl = document.getElementById('hero-total-slides');
+    
+    if (!container) return;
+
+    try {
+      const slides = await fetchJSON('/api/hero_slides');
+      
+      container.innerHTML = '';
+      if (heroAutoplayDelay) clearInterval(heroAutoplayDelay);
+
+      if (!slides || !slides.length) {
+        container.innerHTML = '<img src="images/hero-featured.jpg" alt="Featured Architecture" class="hero-img-main" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover;" />';
+        return;
+      }
+
+      if (totalSlidesEl) totalSlidesEl.textContent = slides.length.toString().padStart(2, '0');
+
+      slides.forEach((s, i) => {
+        const imgPath = s.image_path && s.image_path.startsWith('http') ? s.image_path : (s.image_path ? `/${s.image_path.replace(/\\\\/g, '/')}` : 'images/hero-featured.jpg');
+        const img = document.createElement('img');
+        img.className = 'hero-slide-item' + (i === 0 ? ' active' : '');
+        img.src = imgPath;
+        img.alt = s.title || 'Hero Architecture';
+        container.appendChild(img);
+      });
+
+      const slideEls = container.querySelectorAll('.hero-slide-item');
+      const progressBar = document.getElementById('hero-progress-bar');
+      let currentIndex = 0;
+
+      function updateSlideText(index) {
+        const s = slides[index];
+        if (!s) return;
+        
+        if (titleEl) {
+          titleEl.style.opacity = '0';
+          titleEl.style.transform = 'translateY(10px)';
+          setTimeout(() => {
+            titleEl.textContent = s.title || 'Minimal Architecture';
+            titleEl.style.opacity = '1';
+            titleEl.style.transform = 'translateY(0)';
+          }, 200);
+        }
+        if (subEl) {
+          subEl.style.opacity = '0';
+          setTimeout(() => {
+            subEl.textContent = s.description || s.subtitle || 'We craft spaces that transcend the ordinary — balancing material, light, and proportion into living art.';
+            subEl.style.opacity = '1';
+          }, 200);
+        }
+        if (locationEl) locationEl.textContent = s.location || 'Kigali';
+        if (currentSlideEl) currentSlideEl.textContent = (index + 1).toString().padStart(2, '0');
+        
+        if (progressBar && slides.length) {
+          const pct = ((index + 1) / slides.length) * 100;
+          progressBar.style.width = pct + '%';
+        }
+      }
+
+      function goToSlide(index) {
+        if (!slideEls[currentIndex]) return;
+        slideEls[currentIndex].classList.remove('active');
+        currentIndex = index;
+        if (currentIndex >= slideEls.length) currentIndex = 0;
+        if (currentIndex < 0) currentIndex = slideEls.length - 1;
+        slideEls[currentIndex].classList.add('active');
+        updateSlideText(currentIndex);
+      }
+
+      function nextSlide() { goToSlide(currentIndex + 1); }
+      function prevSlide() { goToSlide(currentIndex - 1); }
+
+      const prevBtn = document.getElementById('hero-prev');
+      const nextBtn = document.getElementById('hero-next');
+
+      if (prevBtn) {
+        const newPrev = prevBtn.cloneNode(true);
+        prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+        newPrev.addEventListener('click', prevSlide);
+      }
+      if (nextBtn) {
+        const newNext = nextBtn.cloneNode(true);
+        nextBtn.parentNode.replaceChild(newNext, nextBtn);
+        newNext.addEventListener('click', nextSlide);
+      }
+
+      updateSlideText(0);
+
+      heroAutoplayDelay = setInterval(nextSlide, 5000);
+      
+      const controlsWrap = document.getElementById('hero-navigation-controls');
+      const hoverTargets = controlsWrap ? [container, controlsWrap] : [container];
+      
+      hoverTargets.forEach(tgt => {
+        tgt.addEventListener('mouseenter', () => clearInterval(heroAutoplayDelay));
+        tgt.addEventListener('mouseleave', () => {
+          clearInterval(heroAutoplayDelay);
+          heroAutoplayDelay = setInterval(nextSlide, 5000);
+        });
+      });
+
+    } catch (e) {
+       console.error('Hero Slider load failed:', e);
+    }
+  }
+
+  // ─── Featured Slider Logic ────────────────────────────────────
+  function initFeaturedSlider(projects) {
+    const track = document.getElementById('featured-slider-track');
+    const pagination = document.getElementById('featured-pagination');
+    const prevBtn = document.getElementById('featured-prev');
+    const nextBtn = document.getElementById('featured-next');
+    const fullscreenBtn = document.getElementById('featured-fullscreen');
+    const container = document.getElementById('featured-slider-container');
+
+    if (!track || projects.length === 0) return;
+
+    track.innerHTML = '';
+    pagination.innerHTML = '';
+    let currentSlide = 0;
+
+    projects.forEach(function(p, i) {
+      const slide = document.createElement('div');
+      slide.className = 'featured-slide' + (i === 0 ? ' active' : '');
+      const imgSrc = p.image_path || '/images/projects/project_0' + ((i % 5) + 1) + '.jpg';
+      const desc = p.description ? '<p style="margin-bottom:25px;opacity:0.9;max-width:90%;font-weight:300;">' + p.description.substring(0, 120) + (p.description.length > 120 ? '...' : '') + '</p>' : '';
+
+      slide.innerHTML =
+        '<div class="featured-slide-img-wrapper">' +
+          '<img src="' + imgSrc + '" class="featured-slide-img" alt="' + p.title + '" />' +
+        '</div>' +
+        '<div class="featured-slide-content">' +
+          '<span class="featured-slide-category">' + (p.category || 'Architecture') + '</span>' +
+          '<h2 class="featured-slide-title">' + p.title + '</h2>' +
+          '<div class="featured-slide-meta">' +
+            '<span>' +
+              '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+              (p.location || 'Kigali') +
+            '</span>' +
+          '</div>' +
+          desc +
+          '<a href="project-detail.html?id=' + p.id + '" class="featured-btn">' +
+            'View Project ' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+          '</a>' +
+        '</div>';
+
+      track.appendChild(slide);
+
+      const dot = document.createElement('div');
+      dot.className = 'pagination-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', (function(idx) { return function() { goToSlide(idx); }; })(i));
+      pagination.appendChild(dot);
+    });
+
+    const slides = track.querySelectorAll('.featured-slide');
+    const dots = pagination.querySelectorAll('.pagination-dot');
+
+    function goToSlide(index) {
+      if (!slides.length) return;
+      slides[currentSlide].classList.remove('active');
+      dots[currentSlide].classList.remove('active');
+      currentSlide = index;
+      if (currentSlide >= slides.length) currentSlide = 0;
+      if (currentSlide < 0) currentSlide = slides.length - 1;
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function prevSlide() { goToSlide(currentSlide - 1); }
+
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+    let autoplay = setInterval(nextSlide, 5000);
+    
+    if (container) {
+      container.addEventListener('mouseenter', () => clearInterval(autoplay));
+      container.addEventListener('mouseleave', () => {
+        autoplay = setInterval(nextSlide, 5000);
+      });
+      
+      let startX = 0;
+      container.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX);
+      container.addEventListener('touchend', e => {
+        let endX = e.changedTouches[0].screenX;
+        if (startX - endX > 50) nextSlide();
+        else if (endX - startX > 50) prevSlide();
+      });
+    }
+    
+    if (fullscreenBtn && container) {
+      fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          container.requestFullscreen().catch(e => console.log(e));
+        } else {
+          document.exitFullscreen();
+        }
+      });
+    }
+  }
+
   // ─── Work Gallery ────────────────────────────────────────
-  let workPageSize = 10;
+  let workPageSize = 12;
   let workVisibleCount = 0;
   let filteredProjects = [];
-  let scrollObserver = null;
 
   async function loadWorkGallery() {
     const el = document.getElementById('work-gallery');
@@ -421,6 +568,13 @@
         filterEl.dataset.filtersInited = '1';
       }
 
+      // Initialize Load More button
+      const btnLoadMore = document.getElementById('btn-load-more');
+      if (btnLoadMore && !btnLoadMore.dataset.inited) {
+        btnLoadMore.addEventListener('click', () => renderNextWorkBatch());
+        btnLoadMore.dataset.inited = '1';
+      }
+
       filterWork('all');
     } catch (e) {
       el.innerHTML = fallbackGallery();
@@ -435,25 +589,24 @@
     lightboxImages = filteredProjects;
     lightboxIndex = 0;
 
-    // Reset infinite scroll
+    // Reset pagination
     workVisibleCount = 0;
     renderNextWorkBatch(true);
-    initWorkInfiniteScroll();
   }
 
   function renderNextWorkBatch(reset = false) {
     const el = document.getElementById('work-gallery');
+    const loadMoreContainer = document.getElementById('load-more-container');
     if (reset) el.innerHTML = '';
 
-    // Strictly cap at 60
-    const remaining = 60 - workVisibleCount;
+    const remaining = filteredProjects.length - workVisibleCount;
     if (remaining <= 0) return;
 
     const countToLoad = Math.min(workPageSize, remaining);
     const nextBatch = filteredProjects.slice(workVisibleCount, workVisibleCount + countToLoad);
 
     nextBatch.forEach((p, i) => {
-      const idx = workVisibleCount + i;
+      const idx = workVisibleCount + i; // absolute index for perfect rhythm!
       const item = createGalleryItem(p, idx, filteredProjects);
       el.appendChild(item);
       if (revealObserver) revealObserver.observe(item);
@@ -462,59 +615,74 @@
     workVisibleCount += nextBatch.length;
     triggerReveal();
 
-    // Hide sentinel if all loaded or reached 60
-    if (workVisibleCount >= filteredProjects.length || workVisibleCount >= 60) {
-      if (scrollObserver) {
-        const sentinel = document.getElementById('work-sentinel');
-        if (sentinel) scrollObserver.unobserve(sentinel);
+    if (loadMoreContainer) {
+      if (workVisibleCount >= filteredProjects.length) {
+        loadMoreContainer.style.display = 'none';
+      } else {
+        loadMoreContainer.style.display = 'flex';
       }
     }
   }
 
-  function initWorkInfiniteScroll() {
-    const el = document.getElementById('work-gallery');
-    if (!el) return;
 
-    let sentinel = document.getElementById('work-sentinel');
-    if (!sentinel) {
-      sentinel = document.createElement('div');
-      sentinel.id = 'work-sentinel';
-      sentinel.style.height = '20px';
-      sentinel.style.gridColumn = '1/-1';
-      el.parentElement.appendChild(sentinel);
-    }
-
-    if (scrollObserver) scrollObserver.disconnect();
-
-    scrollObserver = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        if (workVisibleCount < filteredProjects.length && workVisibleCount < 60) {
-          renderNextWorkBatch();
-        }
-      }
-    }, { threshold: 0.1 });
-
-    scrollObserver.observe(sentinel);
-  }
-
-
-  function createGalleryItem(p, i, arr) {
+  function createGalleryItem(p, i, arr, isHome = false) {
     const div = document.createElement('div');
-    div.className = 'gallery-item reveal' + (i === 0 && arr.length > 3 ? ' featured' : '');
-    div.style.transitionDelay = `${(i % 3) * 100}ms`;
+    const imgSrc = p.image_path || `/images/projects/project_0${(i % 5) + 1}.jpg`;
+    const location = p.location || 'Kigali, Rwanda';
+    const category = p.category || 'Architecture';
+
+    if (isHome) {
+      // Home page: uniform 3-col grid, existing style
+      div.className = `gallery-item reveal span-1`;
+      div.style.transitionDelay = `${(i % 3) * 100}ms`;
+      div.dataset.index = i;
+      const status = p.project_status || 'Completed';
+      div.innerHTML = `
+        <div class="gallery-item-frame">
+          <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
+          <div class="gallery-item-overlay">
+            <button class="btn-view-project">View Project</button>
+          </div>
+        </div>
+        <div class="gallery-item-info">
+          <h3 class="gallery-item-name">${p.title}</h3>
+          <span class="gallery-item-location">${location}</span>
+          <span class="gallery-item-status">${status}</span>
+        </div>`;
+      div.addEventListener('click', () => { window.location.href = `project-detail.html?id=${p.id}`; });
+      return div;
+    }
+
+    // ── Work page: masonry layout ──────────────────────────────
+    // Slot pattern per 6 items: hero, medium, medium, small, small, full
+    const MASONRY_SLOTS = ['masonry-hero', 'masonry-medium', 'masonry-medium', 'masonry-small', 'masonry-small', 'masonry-full'];
+    const slotClass = MASONRY_SLOTS[i % MASONRY_SLOTS.length];
+
+    div.className = `masonry-item ${slotClass} reveal`;
+    div.style.transitionDelay = `${(i % 4) * 80}ms`;
     div.dataset.index = i;
 
-    const imgSrc = p.image_path || `/images/projects/project_0${(i % 5) + 1}.jpg`;
     div.innerHTML = `
-      <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-info">
-          <h3>${p.title}</h3>
-          <span>${p.category || 'Architecture'}</span>
+      <div class="masonry-card-inner">
+        <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
+        <div class="masonry-overlay">
+          <div class="masonry-overlay-content">
+            <span class="masonry-category">${category}</span>
+            <h3 class="masonry-title">${p.title}</h3>
+            <span class="masonry-location">${location}</span>
+            <a href="project-detail.html?id=${p.id}" class="masonry-btn">
+              View project
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
         </div>
       </div>`;
 
-    div.addEventListener('click', () => openLightbox(i));
+    div.addEventListener('click', (e) => {
+      if (!e.target.closest('.masonry-btn')) {
+        window.location.href = `project-detail.html?id=${p.id}`;
+      }
+    });
     return div;
   }
 

@@ -1,0 +1,567 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ARK-ONIX STUDIO — MASTER RESPONSIVE STYLESHEET
+   Coverage: 320px -> 1920px+  |  All pages, all sections
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── 0. GLOBAL OVERFLOW PROTECTION ─────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box !important;
+}
+
+html, body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+main, section, header, footer, article, aside, nav {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+img, video, iframe, embed, object {
+  max-width: 100% !important;
+}
+
+table {
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: collapse !important;
+}
+
+/* ─── 1. ULTRA-WIDE >= 1600px ────────────────────────────────────── */
+@media (min-width: 1600px) {
+  .nav-container {
+    max-width: 1800px !important;
+    margin: 0 auto !important;
+    padding: 0 4% !important;
+  }
+  .hero-premium .hero-container { max-width: 1800px !important; }
+  .home-about-container, .why-choose-container, .contact-layout,
+  .contact-map-section, .about-layout, .pd-container,
+  .footer-grid, .gallery-grid.full-gallery, .stats-grid,
+  .work-filter-row, .work-approach-grid {
+    max-width: 1600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* ─── 2. DESKTOP <= 1280px ───────────────────────────────────────── */
+@media (max-width: 1280px) {
+  .logo-onix { font-size: 2.2rem !important; }
+  .hero-title { font-size: clamp(3rem, 5.2vw, 5.2rem) !important; margin-bottom: 24px !important; }
+  .hero-left { max-width: 580px !important; }
+  .hero-description { font-size: 0.95rem !important; }
+  .page-hero { padding: 130px 6% 70px !important; }
+  .page-title { font-size: clamp(2.6rem, 5vw, 4.8rem) !important; }
+  .home-about-section { padding: 80px 5% !important; }
+  .why-choose-section { padding: 90px 5% !important; }
+  .why-choose-grid { gap: 40px 24px !important; }
+  .contact-section { padding: 80px 5% !important; }
+  .contact-layout { gap: 50px !important; grid-template-columns: 320px 1fr !important; }
+  .footer-grid { padding: 70px 5% !important; gap: 40px !important; }
+  .stats-section { padding: 80px 5% 40px !important; }
+}
+
+/* ─── 3. TABLET LANDSCAPE <= 1024px ─────────────────────────────── */
+@media (max-width: 1024px) {
+  .logo-onix { font-size: 1.9rem !important; }
+  .logo-studio { font-size: 0.72rem !important; }
+  .nav-header { height: 74px !important; }
+  .menu-content { grid-template-columns: 1fr 1fr !important; }
+  .menu-left { padding: 100px 5% 40px !important; }
+  .menu-right { padding: 100px 5% 40px !important; }
+  .menu-link { font-size: clamp(1.8rem, 3.5vw, 3rem) !important; }
+
+  .hero-premium.hero-fullbleed { min-height: 100vh !important; height: auto !important; }
+  .hero-premium .hero-container { padding: 30px 5% !important; }
+  .hero-title { font-size: clamp(2.6rem, 5vw, 4.4rem) !important; }
+  .hero-social-sidebar { right: 20px !important; }
+
+  .home-about-section { padding: 70px 5% !important; }
+  .home-about-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 40px !important;
+    padding: 0 !important;
+  }
+  .about-collage-col {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 460px !important;
+    height: 320px !important;
+    aspect-ratio: unset !important;
+    max-height: unset !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  .collage-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+  .collage-item.main {
+    width: 80% !important;
+    height: 88% !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+  .collage-item.secondary {
+    width: 42% !important;
+    height: 58% !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    aspect-ratio: unset !important;
+  }
+  .collage-item.tertiary { display: none !important; }
+  .about-content-col {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    border-left: none !important;
+  }
+  .about-editorial-wrapper {
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  .about-editorial-text { font-size: clamp(1.4rem, 4.5vw, 2.2rem) !important; }
+  .about-editorial-para { font-size: 0.95rem !important; }
+
+  .why-choose-section { padding: 80px 5% !important; }
+  .why-choose-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 30px 18px !important; }
+  .feature-icon-wrap { width: 110px !important; height: 110px !important; }
+  .feature-icon-wrap svg, .feature-icon-wrap .feature-icon-svg { width: 55px !important; height: 55px !important; }
+
+  /* Gallery - Tablet Landscape */
+  .gallery-grid.showcase-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  .gallery-grid.full-gallery {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-auto-rows: auto !important;
+    gap: 20px !important;
+    padding: 40px 4% 80px !important;
+  }
+  .masonry-item.masonry-hero {
+    grid-column: span 2 !important;
+    aspect-ratio: 21 / 10 !important;
+    min-height: 290px !important;
+  }
+  .masonry-item.masonry-medium,
+  .masonry-item.masonry-small,
+  .masonry-item.masonry-full {
+    grid-column: span 1 !important;
+    aspect-ratio: 16 / 11 !important;
+    min-height: 250px !important;
+  }
+
+  .work-approach-grid { grid-template-columns: repeat(3, 1fr) !important; padding: 50px 4% !important; }
+
+  .contact-layout { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .contact-map-section { padding: 0 4% 40px !important; display: block !important; width: 100% !important; }
+  .contact-map-container { height: 380px !important; width: 100% !important; }
+
+  .about-layout { grid-template-columns: 1fr !important; }
+  .about-label-col { display: none !important; }
+  .philosophy-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+  .pd-main-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .pd-sidebar { position: static !important; order: -1 !important; padding: 28px !important; }
+  .pd-masonry { columns: 2 !important; }
+
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 36px !important; padding: 60px 5% !important; }
+  .footer-brand { grid-column: 1 / -1 !important; }
+}
+
+/* ─── 4. TABLET PORTRAIT <= 820px ───────────────────────────────── */
+@media (max-width: 820px) {
+  .logo-onix { font-size: 1.7rem !important; }
+  .logo-studio { font-size: 0.68rem !important; }
+  .menu-content { grid-template-columns: 1fr !important; }
+  .menu-left {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 100px 7% 36px !important;
+    justify-content: flex-start !important;
+  }
+  .menu-right { padding: 28px 7% 48px !important; justify-content: flex-start !important; }
+  .menu-link { font-size: clamp(2rem, 5.5vw, 3rem) !important; grid-template-columns: 40px 1fr 30px !important; }
+  .page-hero { padding: 110px 5% 45px !important; min-height: 38vh !important; }
+  .page-title { font-size: clamp(2rem, 6.5vw, 3.6rem) !important; }
+  .about-collage-col { max-width: 380px !important; height: 260px !important; }
+  .why-choose-section { padding: 70px 5% !important; }
+  .why-choose-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
+
+  /* Gallery - Tablet Portrait */
+  .gallery-grid.full-gallery {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-auto-rows: auto !important;
+    gap: 16px !important;
+    padding: 30px 4% 60px !important;
+  }
+  .masonry-item.masonry-hero {
+    grid-column: span 2 !important;
+    aspect-ratio: 21 / 10 !important;
+    min-height: 270px !important;
+  }
+  .masonry-item.masonry-medium,
+  .masonry-item.masonry-small,
+  .masonry-item.masonry-full {
+    grid-column: span 1 !important;
+    aspect-ratio: 16 / 11 !important;
+    min-height: 240px !important;
+  }
+
+  .masonry-overlay {
+    opacity: 1 !important;
+    padding: 18px 20px !important;
+  }
+  .masonry-overlay-content {
+    transform: none !important;
+  }
+
+  .work-approach-grid { grid-template-columns: 1fr !important; padding: 40px 4% !important; }
+  .philosophy-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+  .philosophy-item { padding: 20px 0 !important; border-bottom: 1px solid var(--border) !important; }
+  .philosophy-item:last-child { border-bottom: none !important; }
+  .services-intro { padding: 40px 5% !important; }
+  .cta-heading { font-size: clamp(1.8rem, 5.5vw, 3rem) !important; }
+  .stats-section { padding: 60px 4% 30px !important; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; padding: 0 4% !important; }
+  .team-section { padding: 60px 0 !important; }
+  .team-row { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; padding: 0 4% !important; }
+  .pd-hero { height: 48vh !important; padding: 0 10px !important; }
+  .pd-container { padding: 45px 4% !important; }
+  .pd-masonry { columns: 2 !important; }
+}
+
+/* ─── 5. MOBILE <= 640px ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .logo-onix { font-size: 1.45rem !important; letter-spacing: 0.1em !important; }
+  .logo-studio { font-size: 0.6rem !important; }
+  .nav-header { height: 66px !important; }
+  .nav-container { padding: 0 4% !important; }
+
+  .hero-premium.hero-fullbleed { min-height: 100svh !important; height: auto !important; }
+  .hero-premium .hero-container { padding: 16px 5% !important; width: 100% !important; }
+  .hero-left { max-width: 100% !important; }
+  .hero-title { font-size: clamp(2.1rem, 7.5vw, 3.4rem) !important; margin-bottom: 16px !important; line-height: 1.05 !important; }
+  .hero-subtitle-block { margin-bottom: 22px !important; max-width: 100% !important; }
+  .hero-description { font-size: 0.9rem !important; max-width: 100% !important; }
+  .hero-actions { flex-direction: column !important; width: 100% !important; gap: 12px !important; }
+  .hero-btn-primary, .hero-btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 13px 18px !important;
+    font-size: 0.76rem !important;
+  }
+  .hero-social-sidebar { display: none !important; }
+  .hero-frame-meta { right: 14px !important; bottom: 14px !important; font-size: 0.6rem !important; }
+  .hero-selectors { margin-top: 18px !important; padding-top: 12px !important; }
+
+  .page-hero { padding: 90px 5% 36px !important; min-height: 32vh !important; }
+  .page-title { font-size: clamp(1.8rem, 8vw, 2.8rem) !important; line-height: 1.1 !important; }
+  .hero-eyebrow { font-size: 0.65rem !important; letter-spacing: 0.15em !important; margin-bottom: 14px !important; }
+
+  /* Home About collage */
+  .home-about-section { padding: 50px 5% !important; }
+  .home-about-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 28px !important;
+    padding: 0 !important;
+  }
+  .about-collage-col {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 240px !important;
+    aspect-ratio: unset !important;
+    max-height: unset !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  .collage-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+  .collage-item {
+    position: absolute !important;
+    overflow: hidden !important;
+  }
+  .collage-item img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+  .collage-item.main {
+    width: 78% !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+  }
+  .collage-item.secondary {
+    width: 40% !important;
+    height: 62% !important;
+    top: auto !important;
+    left: auto !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    aspect-ratio: unset !important;
+    border: 3px solid var(--bg) !important;
+    z-index: 2 !important;
+  }
+  .collage-item.tertiary { display: none !important; }
+  .about-content-col {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    border-left: none !important;
+  }
+  .about-editorial-wrapper { padding: 0 !important; gap: 16px !important; }
+  .about-editorial-text { font-size: clamp(1.3rem, 5vw, 1.8rem) !important; }
+  .about-editorial-para { font-size: 0.9rem !important; }
+
+  .why-choose-section { padding: 50px 5% !important; }
+  .why-choose-title { font-size: clamp(1.7rem, 6.5vw, 2.4rem) !important; }
+  .why-choose-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
+  .feature-icon-wrap { width: 95px !important; height: 95px !important; }
+  .feature-icon-wrap svg, .feature-icon-wrap .feature-icon-svg { width: 48px !important; height: 48px !important; }
+
+  .featured-slider-section { padding: 40px 0 !important; }
+  .featured-slider-container { padding: 0 4% !important; }
+  .featured-slide-img-wrapper { height: 60vw !important; min-height: 190px !important; }
+  .featured-slide-title { font-size: clamp(1.3rem, 5vw, 1.8rem) !important; }
+  .featured-slide-content { padding: 16px !important; }
+
+  /* ─── Projects Gallery — Fixed Mobile Stacking & Card Heights ─── */
+  .gallery-grid.full-gallery {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    padding: 20px 4% 50px !important;
+  }
+  .masonry-item,
+  .masonry-item.masonry-hero,
+  .masonry-item.masonry-medium,
+  .masonry-item.masonry-small,
+  .masonry-item.masonry-full {
+    width: 100% !important;
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+    aspect-ratio: 16 / 11 !important;
+    min-height: 270px !important;
+    max-height: 380px !important;
+    height: auto !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 4px !important;
+  }
+  .masonry-card-inner {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .masonry-card-inner img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  .masonry-overlay {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 100%) !important;
+    padding: 18px 20px !important;
+    display: flex !important;
+    align-items: flex-end !important;
+    position: absolute !important;
+    inset: 0 !important;
+  }
+  .masonry-overlay-content {
+    transform: none !important;
+    opacity: 1 !important;
+    gap: 4px !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .masonry-category {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.16em !important;
+    color: var(--accent, #C9A96E) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+  }
+  .masonry-title {
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    color: #ffffff !important;
+    margin: 2px 0 !important;
+    line-height: 1.2 !important;
+  }
+  .masonry-location {
+    font-size: 0.78rem !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    margin-bottom: 4px !important;
+  }
+  .masonry-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 8px 16px !important;
+    font-size: 0.65rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    margin-top: 4px !important;
+    width: fit-content !important;
+  }
+
+  .gallery-grid.showcase-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+
+  .work-filter { gap: 8px !important; flex-wrap: wrap !important; }
+  .filter-btn { padding: 9px 12px !important; font-size: 0.6rem !important; min-width: 70px !important; }
+  .work-featured-project { margin: 0 4% 24px !important; }
+  .featured-image-container { aspect-ratio: 16/9 !important; height: auto !important; }
+  .featured-overlay-content { padding: 16px !important; }
+  .featured-description { display: none !important; }
+
+  .service-item { flex-direction: column !important; gap: 12px !important; padding: 22px 5% !important; }
+  .service-title { font-size: clamp(1.3rem, 5vw, 1.7rem) !important; }
+
+  .contact-section { padding: 50px 5% !important; }
+  .contact-layout { grid-template-columns: 1fr !important; gap: 32px !important; padding: 0 !important; }
+  .contact-info-card { padding-right: 0 !important; }
+  .contact-info-card h2 { font-size: clamp(1.7rem, 6.5vw, 2.4rem) !important; }
+  .form-row { display: flex !important; flex-direction: column !important; gap: 0 !important; }
+  .form-group { margin-bottom: 16px !important; width: 100% !important; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 12px 14px !important;
+    font-size: 0.92rem !important;
+    width: 100% !important;
+  }
+  .btn-contact-submit, .btn-primary { width: 100% !important; justify-content: center !important; }
+  .contact-map-section { padding: 0 4% 36px !important; display: block !important; width: 100% !important; }
+  .contact-map-container { height: 280px !important; width: 100% !important; }
+
+  .stats-section { padding: 45px 4% 24px !important; }
+  .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+  .stat-number { font-size: clamp(1.8rem, 7vw, 2.8rem) !important; }
+
+  .team-section { padding: 40px 0 !important; }
+  .team-row { grid-template-columns: 1fr 1fr !important; gap: 12px !important; padding: 0 4% !important; }
+
+  .pd-hero { height: 38vh !important; min-height: 190px !important; padding: 0 6px !important; }
+  .pd-container { padding: 32px 4% !important; }
+  .pd-sidebar { padding: 18px !important; }
+  .pd-masonry { columns: 1 !important; }
+  .pd-nav-bar { flex-direction: column !important; gap: 12px !important; }
+  .pd-nav-btn { width: 100% !important; justify-content: center !important; }
+
+  .lightbox-inner { padding: 0 24px !important; }
+  .lightbox-close { top: 12px !important; right: 12px !important; }
+
+  .footer-grid { grid-template-columns: 1fr !important; gap: 28px !important; padding: 40px 5% !important; }
+  .footer-bottom { flex-direction: column !important; gap: 8px !important; text-align: center !important; }
+}
+
+/* ─── 6. SMALL MOBILE <= 480px ──────────────────────────────────── */
+@media (max-width: 480px) {
+  .logo-onix { font-size: 1.3rem !important; letter-spacing: 0.08em !important; }
+  .logo-studio { font-size: 0.52rem !important; }
+  .hero-title { font-size: clamp(1.9rem, 8.5vw, 2.8rem) !important; line-height: 1.05 !important; }
+  .hero-description { font-size: 0.86rem !important; line-height: 1.55 !important; }
+  .page-title { font-size: clamp(1.6rem, 8.5vw, 2.4rem) !important; }
+  .page-hero { padding: 80px 4% 30px !important; }
+  .about-collage-col { height: 210px !important; }
+
+  /* Small Mobile Gallery Cards */
+  .masonry-item,
+  .masonry-item.masonry-hero,
+  .masonry-item.masonry-medium,
+  .masonry-item.masonry-small,
+  .masonry-item.masonry-full {
+    aspect-ratio: 4 / 3 !important;
+    min-height: 250px !important;
+  }
+  .masonry-overlay { padding: 14px 16px !important; }
+  .masonry-title { font-size: 1.15rem !important; }
+  .masonry-btn { padding: 7px 14px !important; font-size: 0.62rem !important; margin-top: 2px !important; }
+
+  .philosophy-number { font-size: 2.2rem !important; }
+  .philosophy-item h3 { font-size: 1rem !important; }
+  .btn-load-more { width: 100% !important; padding: 12px 18px !important; font-size: 0.68rem !important; }
+  .whatsapp-widget-container { bottom: 16px !important; right: 16px !important; }
+  .whatsapp-popup { width: min(320px, calc(100vw - 32px)) !important; right: 0 !important; bottom: 75px !important; max-height: 80vh !important; }
+}
+
+/* ─── 7. TINY MOBILE <= 375px ────────────────────────────────────── */
+@media (max-width: 375px) {
+  .logo-onix { font-size: 1.15rem !important; letter-spacing: 0.04em !important; }
+  .logo-studio { display: none !important; }
+  .hero-title { font-size: clamp(1.7rem, 9vw, 2.2rem) !important; }
+  .hero-btn-primary, .hero-btn-secondary { font-size: 0.66rem !important; padding: 11px 12px !important; }
+  .menu-link { font-size: 1.45rem !important; }
+  .menu-left { padding: 80px 4% 28px !important; }
+  .filter-btn { padding: 8px 8px !important; font-size: 0.54rem !important; min-width: 55px !important; }
+  .about-collage-col { height: 185px !important; }
+  .about-editorial-text { font-size: 1.25rem !important; }
+  .about-editorial-para { font-size: 0.88rem !important; }
+
+  .masonry-item,
+  .masonry-item.masonry-hero,
+  .masonry-item.masonry-medium,
+  .masonry-item.masonry-small,
+  .masonry-item.masonry-full {
+    aspect-ratio: 4 / 3 !important;
+    min-height: 230px !important;
+  }
+  .masonry-overlay { padding: 12px 12px !important; }
+  .masonry-title { font-size: 1.05rem !important; }
+  .masonry-btn { padding: 6px 12px !important; font-size: 0.58rem !important; }
+
+  .stats-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .team-row { grid-template-columns: 1fr !important; }
+  .contact-section { padding: 36px 4% !important; }
+  .contact-info-card h2 { font-size: 1.4rem !important; }
+  .why-choose-section { padding: 40px 4% !important; }
+  .contact-map-container { height: 220px !important; }
+  .pd-masonry { columns: 1 !important; }
+}
+
+/* ─── 8. MINIMUM SCREEN <= 320px ─────────────────────────────────── */
+@media (max-width: 320px) {
+  body { font-size: 0.85rem !important; }
+  .hero-title { font-size: 1.6rem !important; }
+  .page-title { font-size: 1.4rem !important; }
+  .hero-selectors { gap: 6px !important; }
+  .hero-nav-btn { width: 32px !important; height: 32px !important; }
+  .slide-progress { width: 44px !important; }
+  .about-collage-col { height: 160px !important; }
+  .collage-item.secondary { width: 38% !important; height: 55% !important; }
+  .footer-grid { padding: 30px 4% !important; }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "id": 2,
+    "title": "residentional",
+    "subtitle": "my its the time to choose the onix studio ",
+    "location": "kigali",
+    "description": "my its the time to choose the onix studiomy its the time to choose the onix studio",
+    "image_path": "https://res.cloudinary.com/dxfkaldut/image/upload/v1782629606/onix/uploads/1782629602635-129.webp",
+    "display_order": 1,
+    "is_active": true
+  },
+  {
+    "id": 1,
+    "title": "onix",
+    "subtitle": "my its the time to choose the onix studio ",
+    "location": "kigali",
+    "description": "wee",
+    "image_path": "https://res.cloudinary.com/dxfkaldut/image/upload/v1782629499/onix/uploads/1782629495096-229.webp",
+    "display_order": 2,
+    "is_active": true
+  }
+]

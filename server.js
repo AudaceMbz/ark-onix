@@ -24,11 +24,11 @@ app.set('trust proxy', 1);
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin ||
-        origin.startsWith('http://localhost') ||
-        origin.includes('infinityfreeapp.com') ||
-        origin.includes('onrender.com') ||
-        origin.includes('vercel.app') ||
-        origin.includes('koyeb.app')) {
+      origin.startsWith('http://localhost') ||
+      origin.includes('infinityfreeapp.com') ||
+      origin.includes('onrender.com') ||
+      origin.includes('vercel.app') ||
+      origin.includes('koyeb.app')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -81,7 +81,7 @@ async function initDB() {
       db = null;
     }
   }
-  if (db) { await seedAdmin(); await migrateTeamTable(); }
+  if (db) { await seedAdmin(); await migrateTeamTable(); await migrateHeroTable(); }
 }
 
 function connectDB() {
@@ -129,11 +129,11 @@ async function seedAdmin() {
 // ─── Migrate team_photos table (add contact fields if missing) ────────────────
 async function migrateTeamTable() {
   const newCols = [
-    { name: 'description',    type: 'TEXT' },
-    { name: 'phone',          type: 'VARCHAR(60)' },
-    { name: 'email',          type: 'VARCHAR(120)' },
-    { name: 'whatsapp_link',  type: 'VARCHAR(255)' },
-    { name: 'calendar_link',  type: 'VARCHAR(255)' },
+    { name: 'description', type: 'TEXT' },
+    { name: 'phone', type: 'VARCHAR(60)' },
+    { name: 'email', type: 'VARCHAR(120)' },
+    { name: 'whatsapp_link', type: 'VARCHAR(255)' },
+    { name: 'calendar_link', type: 'VARCHAR(255)' },
   ];
   for (const col of newCols) {
     try {
@@ -153,6 +153,37 @@ async function migrateTeamTable() {
   console.log('✅  team_photos table migration complete');
 }
 
+// ─── Migrate Hero Slides Table ──────────────────────────────────────────────────
+async function migrateHeroTable() {
+  try {
+    const pgSql = `CREATE TABLE IF NOT EXISTS hero_slides (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255),
+      subtitle VARCHAR(255),
+      location VARCHAR(255),
+      description TEXT,
+      image_path VARCHAR(500),
+      display_order INT DEFAULT 0,
+      is_active BOOLEAN DEFAULT true
+    )`;
+    const mySql = `CREATE TABLE IF NOT EXISTS hero_slides (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      title VARCHAR(255),
+      subtitle VARCHAR(255),
+      location VARCHAR(255),
+      description TEXT,
+      image_path VARCHAR(500),
+      display_order INT DEFAULT 0,
+      is_active TINYINT(1) DEFAULT 1
+    ) ENGINE=InnoDB`;
+
+    await query(dbType === 'postgres' ? pgSql : mySql);
+    console.log('✅  hero_slides table migration complete');
+  } catch (e) {
+    console.error('Migration error for hero_slides:', e.message);
+  }
+}
+
 // ─── Cloudinary Setup ─────────────────────────────────────────────────────────
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -168,7 +199,7 @@ const storage = new CloudinaryStorage({
   params: async (req, file) => {
     const typeMap = { project: 'projects', team: 'team', video: 'videos', logo: 'images' };
     const folder = 'onix/' + (typeMap[req.body.upload_type] || 'uploads');
-    
+
     const rType = req.body.upload_type === 'video' ? 'video' : 'auto';
     return {
       folder: folder,
@@ -301,11 +332,23 @@ app.delete('/api/admin/settings/:key', requireAuth, requireDB, async (req, res) 
 
 app.get('/api/projects', requireDB, async (req, res) => {
   try {
-    const { page } = req.query;
+    const { page, id } = req.query;
+    
+    // If specific ID is requested, return project + its images
+    if (id) {
+      const [projects] = await query('SELECT * FROM projects WHERE id = ?', [id]);
+      if (!projects.length) return res.status(404).json({ error: 'Project not found' });
+      
+      const [images] = await query('SELECT * FROM project_images WHERE project_id = ? ORDER BY display_order ASC, created_at DESC', [id]);
+      const project = projects[0];
+      project.images = images;
+      return res.json(project);
+    }
+
     let sql = 'SELECT * FROM projects WHERE is_active = ' + (dbType === 'mysql' ? '1' : 'true');
     if (page === 'home') sql += " AND (target_page = 'home' OR target_page = 'both' OR target_page IS NULL)";
     else if (page === 'work') sql += " AND (target_page = 'work' OR target_page = 'both' OR target_page IS NULL)";
-    sql += ' ORDER BY display_order ASC, created_at DESC LIMIT 60';
+    sql += ' ORDER BY display_order ASC, created_at DESC LIMIT 100';
     const [rows] = await query(sql);
     res.json(rows);
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -313,33 +356,116 @@ app.get('/api/projects', requireDB, async (req, res) => {
 
 app.post('/api/admin/projects', requireAuth, requireDB, upload.single('image'), async (req, res) => {
   try {
-    const { title, category, description, display_order, target_page } = req.body;
-    const img = req.file ? req.file.path : '';
+    // Helper to sanitize: treat 'null'/'undefined' strings as empty
+    const clean = (v, fallback = '') => (!v || v === 'null' || v === 'undefined') ? fallback : v;
+    const cleanInt = (v, fallback = 0) => { const n = parseInt(v, 10); return isNaN(n) ? fallback : n; };
 
+    const img = req.file ? req.file.path : '';
     const active = (dbType === 'mysql' ? 1 : true);
-    const [reslt] = await query(
-      'INSERT INTO projects (title, category, description, image_path, display_order, target_page, is_active) VALUES (?,?,?,?,?,?,?)',
-      [title, category || 'Architecture', description || '', img, parseInt(display_order) || 0, target_page || 'both', active]
-    );
-    res.status(201).json({ success: true, id: dbType === 'mysql' ? reslt.insertId : null });
+    
+    const sql = `
+      INSERT INTO projects (
+        title, category, description, image_path, display_order, target_page, is_active,
+        location, client, project_type, project_status, area, budget,
+        start_date, completion_date, lead_architect,
+        story_overview, story_concept, story_challenges, story_progress,
+        story_sustainability, story_materials, story_achievements,
+        stat_floors, stat_height, stat_duration, stat_team
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    `;
+    
+    const { 
+      title, category, description, display_order, target_page,
+      location, client, project_type, project_status, area, budget,
+      start_date, completion_date, lead_architect,
+      story_overview, story_concept, story_challenges, story_progress,
+      story_sustainability, story_materials, story_achievements,
+      stat_floors, stat_height, stat_duration, stat_team
+    } = req.body;
+
+    const params = [
+      clean(title, 'Untitled'), clean(category, 'Architecture'), clean(description), img, cleanInt(display_order), clean(target_page, 'both'), active,
+      clean(location), clean(client), clean(project_type, 'Residential'), clean(project_status, 'Completed'), clean(area), clean(budget),
+      clean(start_date), clean(completion_date), clean(lead_architect),
+      clean(story_overview), clean(story_concept), clean(story_challenges), clean(story_progress),
+      clean(story_sustainability), clean(story_materials), clean(story_achievements),
+      clean(stat_floors), clean(stat_height), clean(stat_duration), clean(stat_team)
+    ];
+
+    const [reslt] = await query(sql, params);
+    const newId = dbType === 'mysql' ? reslt.insertId : reslt[0].id;
+    res.status(201).json({ success: true, id: newId });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 app.put('/api/admin/projects/:id', requireAuth, requireDB, upload.single('image'), async (req, res) => {
   try {
-    const { title, category, description, display_order, is_active, target_page } = req.body;
-    const updates = { title, category, description, target_page };
-    if (display_order !== undefined) updates.display_order = parseInt(display_order) || 0;
-    if (is_active !== undefined) updates.is_active = (is_active === 'true' || is_active === true || is_active === '1' || is_active === 1);
-    if (req.file) {
-      updates.image_path = req.file.path;
+    const fields = [
+      'title', 'category', 'description', 'display_order', 'target_page', 'is_active',
+      'location', 'client', 'project_type', 'project_status', 'area', 'budget',
+      'start_date', 'completion_date', 'lead_architect',
+      'story_overview', 'story_concept', 'story_challenges', 'story_progress',
+      'story_sustainability', 'story_materials', 'story_achievements',
+      'stat_floors', 'stat_height', 'stat_duration', 'stat_team'
+    ];
+
+    const updates = {};
+    fields.forEach(f => {
+      if (req.body[f] !== undefined) {
+        // Skip any field that was sent as the string "null" or "undefined"
+        const val = req.body[f];
+        if (val === 'null' || val === 'undefined') return;
+        updates[f] = val;
+      }
+    });
+
+    // Strict integer conversion for display_order — prevent "null" string from reaching PG
+    if (updates.display_order !== undefined) {
+      const parsed = parseInt(updates.display_order, 10);
+      updates.display_order = isNaN(parsed) ? 0 : parsed;
     }
 
-    const keys = Object.keys(updates).filter(k => updates[k] !== undefined);
+    if (updates.is_active !== undefined) {
+      updates.is_active = (updates.is_active === 'true' || updates.is_active === true || updates.is_active === '1' || updates.is_active === 1);
+    }
+    if (req.file) updates.image_path = req.file.path;
+
+    const keys = Object.keys(updates);
+    if (keys.length === 0) return res.json({ success: true, message: 'No fields to update' });
+
     const values = keys.map(k => updates[k]);
     values.push(req.params.id);
     const setClause = keys.map(k => `${k}=?`).join(', ');
+
     await query(`UPDATE projects SET ${setClause} WHERE id=?`, values);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// MULTI-IMAGE MANAGEMENT
+app.post('/api/admin/projects/:id/images', requireAuth, requireDB, upload.array('images', 20), async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const files = req.files || [];
+    if (files.length === 0) return res.status(400).json({ error: 'No images uploaded' });
+
+    for (const file of files) {
+      await query(
+        'INSERT INTO project_images (project_id, image_path, display_order) VALUES (?,?,?)',
+        [projectId, file.path, 0]
+      );
+    }
+    res.json({ success: true, count: files.length });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.delete('/api/admin/project_images/:id', requireAuth, requireDB, async (req, res) => {
+  try {
+    const [rows] = await query('SELECT image_path FROM project_images WHERE id = ?', [req.params.id]);
+    if (rows.length > 0 && rows[0].image_path) {
+      // Cloudinary paths don't necessarily need local unlink if we are only deleting from DB
+    }
+    await query('DELETE FROM project_images WHERE id = ?', [req.params.id]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -494,7 +620,7 @@ app.post('/api/admin/whatsapp_teammates', requireAuth, requireDB, upload.single(
     const { name, role, reply_status, phone_number, welcome_msg, display_order } = req.body;
     const img = req.file ? req.file.path : '';
     const active = (dbType === 'mysql' ? 1 : true);
-    
+
     const [r] = await query(
       'INSERT INTO whatsapp_teammates (name, role, reply_status, phone_number, welcome_msg, image_path, display_order, is_active) VALUES (?,?,?,?,?,?,?,?)',
       [name || '', role || '', reply_status || '', phone_number || '', welcome_msg || '', img, parseInt(display_order) || 0, active]
@@ -510,12 +636,12 @@ app.put('/api/admin/whatsapp_teammates/:id', requireAuth, requireDB, upload.sing
     if (display_order !== undefined) updates.display_order = parseInt(display_order) || 0;
     if (is_active !== undefined) updates.is_active = (is_active === 'true' || is_active === true || is_active === '1' || is_active === 1);
     if (req.file) updates.image_path = req.file.path;
-    
+
     const keys = Object.keys(updates).filter(k => updates[k] !== undefined);
     const values = keys.map(k => updates[k]);
     values.push(req.params.id);
     const setClause = keys.map(k => `${k}=?`).join(', ');
-    
+
     await query(`UPDATE whatsapp_teammates SET ${setClause} WHERE id=?`, values);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -531,6 +657,68 @@ app.delete('/api/admin/whatsapp_teammates/:id', requireAuth, requireDB, async (r
       }
     }
     await query('DELETE FROM whatsapp_teammates WHERE id = ?', [req.params.id]);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ─── HERO SLIDER ──────────────────────────────────────────────────────────
+app.get('/api/hero_slides', requireDB, async (req, res) => {
+  try {
+    const [rows] = await query('SELECT * FROM hero_slides WHERE is_active = ' + (dbType === 'mysql' ? '1' : 'true') + ' ORDER BY display_order ASC');
+    res.json(rows);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.get('/api/admin/hero_slides', requireAuth, requireDB, async (req, res) => {
+  try {
+    const [rows] = await query('SELECT * FROM hero_slides ORDER BY display_order ASC');
+    res.json(rows);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.post('/api/admin/hero_slides', requireAuth, requireDB, upload.single('image'), async (req, res) => {
+  try {
+    const { title, subtitle, location, description, display_order } = req.body;
+    const img = req.file ? req.file.path : '';
+    const active = (dbType === 'mysql' ? 1 : true);
+    const [r] = await query(
+      'INSERT INTO hero_slides (title, subtitle, location, description, image_path, display_order, is_active) VALUES (?,?,?,?,?,?,?)',
+      [title || '', subtitle || '', location || '', description || '', img, parseInt(display_order) || 0, active]
+    );
+    res.status(201).json({ success: true, id: dbType === 'mysql' ? r.insertId : null });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.put('/api/admin/hero_slides/:id', requireAuth, requireDB, upload.single('image'), async (req, res) => {
+  try {
+    const { title, subtitle, location, description, display_order, is_active } = req.body;
+    const updates = { title, subtitle, location, description };
+    if (display_order !== undefined) updates.display_order = parseInt(display_order) || 0;
+    if (is_active !== undefined) updates.is_active = (is_active === 'true' || is_active === true || is_active === '1' || is_active === 1);
+    if (req.file) updates.image_path = req.file.path;
+
+    const keys = Object.keys(updates).filter(k => updates[k] !== undefined);
+    if (keys.length === 0) return res.json({ success: true });
+
+    const values = keys.map(k => updates[k]);
+    values.push(req.params.id);
+    const setClause = keys.map(k => `${k}=?`).join(', ');
+
+    await query(`UPDATE hero_slides SET ${setClause} WHERE id=?`, values);
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+app.delete('/api/admin/hero_slides/:id', requireAuth, requireDB, async (req, res) => {
+  try {
+    const [rows] = await query('SELECT image_path FROM hero_slides WHERE id = ?', [req.params.id]);
+    if (rows.length > 0 && rows[0].image_path) {
+      const filePath = path.join(__dirname, 'public', rows[0].image_path);
+      if (fs.existsSync(filePath)) {
+        try { fs.unlinkSync(filePath); } catch (e) { console.error('Hero slide image deletion error:', e.message); }
+      }
+    }
+    await query('DELETE FROM hero_slides WHERE id = ?', [req.params.id]);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

@@ -92,6 +92,14 @@
         </div>
 
         <div class="sidebar-section-label">Site Content</div>
+        <div class="sidebar-link" data-panel="hero_slides">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <line x1="3" y1="9" x2="21" y2="9"/>
+          </svg>
+          Hero Slider
+        </div>
         <div class="sidebar-link" data-panel="settings">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.5">
@@ -181,6 +189,22 @@
         </button>
         <div class="topbar-title" id="topbar-title">Dashboard</div>
         <div class="topbar-actions">
+          <button class="admin-view-btn" id="admin-theme-toggle" aria-label="Toggle theme" style="padding: 8px;">
+            <svg id="admin-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg id="admin-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display: none;">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
           <a href="/" target="_blank" class="admin-view-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="1.5">
@@ -393,7 +417,7 @@
             <div class="admin-feedback" id="fb-video"></div>
           </div>
 
-          <!-- Text Settings -->
+          <!-- Hero Text -->
           <div class="admin-form-section">
             <h3>Hero Text</h3>
             <div class="form-grid">
@@ -407,8 +431,7 @@
               </div>
               <div class="admin-field">
                 <label>Hero Subtitle</label>
-                <textarea id="set-hero-sub"
-                  rows="2">We craft spaces that transcend the ordinary — balancing material, light, and proportion into living art.</textarea>
+                <textarea id="set-hero-sub" rows="2">We craft spaces that transcend the ordinary — balancing material, light, and proportion into living art.</textarea>
               </div>
               <div class="admin-field">
                 <label>Footer Text</label>
@@ -425,6 +448,184 @@
             </button>
             <div class="admin-feedback" id="fb-text"></div>
           </div>
+
+          <!-- About ArkiOnix Studio (Home Page Settings) -->
+          <div class="admin-form-section">
+            <h3>About ArkiOnix Studio</h3>
+            <p style="font-size:0.83rem;color:var(--text-2);margin-bottom:18px">This section appears between the Hero and Project Gallery on the Home Page.</p>
+            
+            <div class="form-grid">
+              <div class="admin-field">
+                <label>Section Title</label>
+                <input type="text" id="set-about-title" placeholder="ABOUT ARKIONIX STUDIO" />
+              </div>
+              <div class="admin-field">
+                <label>Highlighted Studio Name</label>
+                <input type="text" id="set-about-studio-name" placeholder="ArkiOnix Studio" />
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Description Paragraph 1</label>
+                <textarea id="set-about-desc-1" rows="3"></textarea>
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Description Paragraph 2</label>
+                <textarea id="set-about-desc-2" rows="3"></textarea>
+              </div>
+            </div>
+
+            <h4 style="margin: 24px 0 12px; font-size: 0.9rem;">Studio Collage Images</h4>
+            <div class="form-grid" style="grid-template-columns: repeat(3, 1fr) !important; gap: 15px;">
+              <!-- Main Image -->
+              <div class="admin-field">
+                <label>Main Large Image</label>
+                <div class="upload-zone compact" id="about-img-main-zone" style="height: 120px;">
+                  <input type="file" id="about-img-main-file" accept="image/*" />
+                  <div class="upload-text" id="about-img-main-text" style="font-size: 10px;">Click to upload</div>
+                </div>
+                <button class="btn-save btn-xs" id="btn-save-about-img-main" style="width:100%; margin-top:8px; padding: 6px;">Upload</button>
+              </div>
+              <!-- Secondary Image -->
+              <div class="admin-field">
+                <label>Top Right Image</label>
+                <div class="upload-zone compact" id="about-img-top-zone" style="height: 120px;">
+                  <input type="file" id="about-img-top-file" accept="image/*" />
+                  <div class="upload-text" id="about-img-top-text" style="font-size: 10px;">Click to upload</div>
+                </div>
+                <button class="btn-save btn-xs" id="btn-save-about-img-top" style="width:100%; margin-top:8px; padding: 6px;">Upload</button>
+              </div>
+              <!-- Third Image -->
+              <div class="admin-field">
+                <label>Bottom Wide Image</label>
+                <div class="upload-zone compact" id="about-img-bottom-zone" style="height: 120px;">
+                  <input type="file" id="about-img-bottom-file" accept="image/*" />
+                  <div class="upload-text" id="about-img-bottom-text" style="font-size: 10px;">Click to upload</div>
+                </div>
+                <button class="btn-save btn-xs" id="btn-save-about-img-bottom" style="width:100%; margin-top:8px; padding: 6px;">Upload</button>
+              </div>
+            </div>
+
+            <button class="btn-save" style="margin-top:24px" id="btn-save-about-text">
+              <span class="btn-text">Save About Section Text</span>
+              <span class="btn-loader" style="display: none;">
+                <svg class="spinner" viewBox="0 0 50 50">
+                  <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                </svg>
+              </span>
+            </button>
+            <div class="admin-feedback" id="fb-about-home"></div>
+          </div>
+
+          <!-- ══ Why Choose ArkiOnix Studio Section Settings ══════════════ -->
+          <div class="admin-form-section">
+            <h3>Why Choose ArkiOnix Studio</h3>
+            <p style="font-size:0.83rem;color:var(--text-2);margin-bottom:18px">Appears between About and Project Gallery on the Home Page.</p>
+
+            <div class="form-grid">
+              <div class="admin-field" style="grid-column:1/-1">
+                <label>Section Heading</label>
+                <input type="text" id="set-wc-heading" placeholder="Why Choose ArkiOnix Studio" />
+              </div>
+            </div>
+
+            <!-- Feature 1 -->
+            <h4 style="margin:24px 0 12px;font-size:0.85rem;letter-spacing:0.06em;text-transform:uppercase">Feature 1</h4>
+            <div class="form-grid">
+              <div class="admin-field">
+                <label>Feature 1 Title</label>
+                <input type="text" id="set-wc-title-1" placeholder="Bespoke Design Solutions" />
+              </div>
+              <div class="admin-field">
+                <label>Feature 1 Description</label>
+                <textarea id="set-wc-desc-1" rows="2"></textarea>
+              </div>
+              <div class="admin-field">
+                <label>Feature 1 Icon</label>
+                <div class="upload-zone compact" style="height:100px;">
+                  <input type="file" id="wc-icon-file-1" accept="image/*" />
+                  <div id="wc-icon-text-1" class="upload-text" style="font-size:10px">Click to upload</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="btn-save btn-xs" id="btn-wc-icon-1" style="flex:1;padding:6px">Upload</button>
+                  <button class="btn-del btn-xs" id="btn-wc-icon-1-del" style="flex:1;padding:6px">Delete</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <h4 style="margin:24px 0 12px;font-size:0.85rem;letter-spacing:0.06em;text-transform:uppercase">Feature 2</h4>
+            <div class="form-grid">
+              <div class="admin-field">
+                <label>Feature 2 Title</label>
+                <input type="text" id="set-wc-title-2" placeholder="Innovative Architecture" />
+              </div>
+              <div class="admin-field">
+                <label>Feature 2 Description</label>
+                <textarea id="set-wc-desc-2" rows="2"></textarea>
+              </div>
+              <div class="admin-field">
+                <label>Feature 2 Icon</label>
+                <div class="upload-zone compact" style="height:100px;">
+                  <input type="file" id="wc-icon-file-2" accept="image/*" />
+                  <div id="wc-icon-text-2" class="upload-text" style="font-size:10px">Click to upload</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="btn-save btn-xs" id="btn-wc-icon-2" style="flex:1;padding:6px">Upload</button>
+                  <button class="btn-del btn-xs" id="btn-wc-icon-2-del" style="flex:1;padding:6px">Delete</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <h4 style="margin:24px 0 12px;font-size:0.85rem;letter-spacing:0.06em;text-transform:uppercase">Feature 3</h4>
+            <div class="form-grid">
+              <div class="admin-field">
+                <label>Feature 3 Title</label>
+                <input type="text" id="set-wc-title-3" placeholder="Premium Project Delivery" />
+              </div>
+              <div class="admin-field">
+                <label>Feature 3 Description</label>
+                <textarea id="set-wc-desc-3" rows="2"></textarea>
+              </div>
+              <div class="admin-field">
+                <label>Feature 3 Icon</label>
+                <div class="upload-zone compact" style="height:100px;">
+                  <input type="file" id="wc-icon-file-3" accept="image/*" />
+                  <div id="wc-icon-text-3" class="upload-text" style="font-size:10px">Click to upload</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="btn-save btn-xs" id="btn-wc-icon-3" style="flex:1;padding:6px">Upload</button>
+                  <button class="btn-del btn-xs" id="btn-wc-icon-3-del" style="flex:1;padding:6px">Delete</button>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn-save" style="margin-top:24px" id="btn-save-wc-text">
+              <span class="btn-text">Save Why Choose Text</span>
+              <span class="btn-loader" style="display:none">
+                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              </span>
+            </button>
+            <div class="admin-feedback" id="fb-wc"></div>
+          </div>
+        </div>
+
+        <!-- ══ HERO SLIDER ═════════════════════════════════════════════════ -->
+        <div class="admin-panel" id="panel-hero_slides">
+          <div class="panel-title">Hero Slider</div>
+          <div class="panel-desc">Manage the dynamic hero slider shown at the very top of the homepage. You can drag and drop to reorder.</div>
+
+          <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+            <button class="btn-add" id="btn-add-heroslide">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Slide
+            </button>
+          </div>
+
+          <div class="items-list" id="heroslides-list-admin"></div>
         </div>
 
         <!-- ══ PROJECTS ══════════════════════════════════════════════════════ -->

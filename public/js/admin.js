@@ -13,6 +13,7 @@
 
   // ─── Init ────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
+    initAdminTheme();
     checkAuth();
     initLogin();
     initSidebar();
@@ -23,7 +24,7 @@
     fetch('/api/settings')
       .then(r => r.json())
       .then(s => { if (s && s.site_color_theme) updateFaviconTheme(s.site_color_theme); })
-      .catch(() => {});
+      .catch(() => { });
   });
 
   // ─── Auth ────────────────────────────────────────────────
@@ -33,7 +34,37 @@
     try {
       const res = await api('GET', '/api/admin/check');
       if (res.loggedIn) showShell();
-    } catch(e) {}
+    } catch (e) { }
+  }
+
+  // ─── Theme ───────────────────────────────────────────────
+  function initAdminTheme() {
+    const saved = localStorage.getItem('onix-theme') || 'dark';
+    setAdminTheme(saved);
+
+    const toggleBtn = document.getElementById('admin-theme-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        setAdminTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    }
+  }
+
+  function setAdminTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('onix-theme', theme);
+    const moon = document.getElementById('admin-icon-moon');
+    const sun = document.getElementById('admin-icon-sun');
+    if (moon && sun) {
+      if (theme === 'dark') {
+        moon.style.display = 'block';
+        sun.style.display = 'none';
+      } else {
+        moon.style.display = 'none';
+        sun.style.display = 'block';
+      }
+    }
   }
 
   function initLogin() {
@@ -43,7 +74,7 @@
       toggleBtn.addEventListener('click', () => {
         const type = passInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passInput.setAttribute('type', type);
-        
+
         const eyeOpen = toggleBtn.querySelectorAll('.eye-open');
         const eyeClosed = toggleBtn.querySelectorAll('.eye-closed');
         if (type === 'text') {
@@ -64,15 +95,15 @@
       const submitBtn = document.getElementById('login-btn');
       const btnText = submitBtn?.querySelector('.btn-text');
       const btnLoader = submitBtn?.querySelector('.btn-loader');
-      
+
       errEl.textContent = '';
-      
+
       if (submitBtn) {
         submitBtn.disabled = true;
         if (btnText) btnText.textContent = 'Signing In...';
         if (btnLoader) btnLoader.style.display = 'block';
       }
-      
+
       try {
         const res = await api('POST', '/api/admin/login', { username: u, password: p });
         localStorage.setItem('adminToken', res.token);
@@ -97,7 +128,7 @@
 
   function initLogout() {
     document.getElementById('logout-btn').addEventListener('click', async () => {
-      try { await api('POST', '/api/admin/logout'); } catch(e){}
+      try { await api('POST', '/api/admin/logout'); } catch (e) { }
       localStorage.removeItem('adminToken');
       location.reload();
     });
@@ -117,9 +148,9 @@
     currentPanel = name;
     document.querySelectorAll('.sidebar-link').forEach(l => l.classList.toggle('active', l.dataset.panel === name));
     document.querySelectorAll('.admin-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
-    const titles = { dashboard: 'Dashboard', settings: 'Site Settings', projects: 'Projects', services: 'Services', team: 'Team Photos', workshops: 'Workshops', about: 'About Content' };
+    const titles = { dashboard: 'Dashboard', settings: 'Site Settings', projects: 'Projects', services: 'Services', team: 'Team Photos', workshops: 'Workshops', about: 'About Content', whatsapp: 'WhatsApp Widget', hero_slides: 'Hero Slider' };
     document.getElementById('topbar-title').textContent = titles[name] || name;
-    
+
     // Close sidebar on mobile
     const sidebar = document.getElementById('admin-sidebar');
     const overlay = document.getElementById('sidebar-overlay');
@@ -136,6 +167,7 @@
     if (name === 'about') loadAboutAdmin();
     if (name === 'settings') loadSettingsAdmin();
     if (name === 'whatsapp') loadWhatsappAdmin();
+    if (name === 'hero_slides') loadHeroSlidesAdmin();
   }
 
   // ─── Dashboard ───────────────────────────────────────────
@@ -164,7 +196,7 @@
       // Load Color Theme
       const currColor = s.site_color_theme || 'gold';
       document.querySelectorAll('.theme-color-btn').forEach(b => {
-        if(b.dataset.color === currColor) b.style.borderColor = 'white';
+        if (b.dataset.color === currColor) b.style.borderColor = 'white';
         else b.style.borderColor = 'transparent';
       });
       document.documentElement.setAttribute('data-theme-color', currColor);
@@ -183,6 +215,31 @@
       } else {
         document.getElementById('logo-upload-text').innerHTML = `<strong>Click to upload</strong> logo<br/><small>PNG, SVG, JPG — max 5MB</small>`;
       }
+
+      // About Section Home
+      setValue('set-about-title', s.about_home_title || '');
+      setValue('set-about-desc-1', s.about_home_desc_1 || '');
+      setValue('set-about-desc-2', s.about_home_desc_2 || '');
+      setValue('set-about-studio-name', s.about_home_studio_name || '');
+
+      // About Images info
+      if (s.about_home_img_main) document.getElementById('about-img-main-text').innerHTML = `<strong>Current:</strong> ${s.about_home_img_main.split('/').pop()}`;
+      if (s.about_home_img_top) document.getElementById('about-img-top-text').innerHTML = `<strong>Current:</strong> ${s.about_home_img_top.split('/').pop()}`;
+      if (s.about_home_img_bottom) document.getElementById('about-img-bottom-text').innerHTML = `<strong>Current:</strong> ${s.about_home_img_bottom.split('/').pop()}`;
+
+      // Why Choose Section
+      setValue('set-wc-heading', s.why_choose_heading || '');
+      setValue('set-wc-title-1', s.feature1_title || '');
+      setValue('set-wc-desc-1', s.feature1_description || '');
+      setValue('set-wc-title-2', s.feature2_title || '');
+      setValue('set-wc-desc-2', s.feature2_description || '');
+      setValue('set-wc-title-3', s.feature3_title || '');
+      setValue('set-wc-desc-3', s.feature3_description || '');
+
+      if (s.feature1_icon) document.getElementById('wc-icon-text-1').innerHTML = `<strong>Current:</strong> ${s.feature1_icon.split('/').pop()}`;
+      if (s.feature2_icon) document.getElementById('wc-icon-text-2').innerHTML = `<strong>Current:</strong> ${s.feature2_icon.split('/').pop()}`;
+      if (s.feature3_icon) document.getElementById('wc-icon-text-3').innerHTML = `<strong>Current:</strong> ${s.feature3_icon.split('/').pop()}`;
+
     } catch (e) { }
   }
 
@@ -217,7 +274,7 @@
       const file = document.getElementById('site-logo-file').files[0];
       if (!file) return showFeedback('fb-logo', 'Please select a logo file.', 'error');
       setBtnLoader('btn-save-logo', true, 'Uploading...');
-      
+
       const compressedFile = await compressImage(file);
       const fd = new FormData();
       fd.append('setting_key', 'logo_path');
@@ -287,6 +344,100 @@
       } catch (e) { showFeedback('fb-text', 'Save failed.', 'error'); }
       finally { setBtnLoader('btn-save-text', false, 'Save Text Settings'); }
     });
+
+    // About Section Text Save
+    document.getElementById('btn-save-about-text').addEventListener('click', async () => {
+      setBtnLoader('btn-save-about-text', true, 'Saving...');
+      try {
+        await Promise.all([
+          api('POST', '/api/admin/settings', { setting_key: 'about_home_title', setting_value: getValue('set-about-title') }),
+          api('POST', '/api/admin/settings', { setting_key: 'about_home_desc_1', setting_value: getValue('set-about-desc-1') }),
+          api('POST', '/api/admin/settings', { setting_key: 'about_home_desc_2', setting_value: getValue('set-about-desc-2') }),
+          api('POST', '/api/admin/settings', { setting_key: 'about_home_studio_name', setting_value: getValue('set-about-studio-name') }),
+        ]);
+        showFeedback('fb-about-home', '✓ About section text saved.', 'success');
+      } catch (e) { showFeedback('fb-about-home', 'Save failed.', 'error'); }
+      finally { setBtnLoader('btn-save-about-text', false, 'Save About Section Text'); }
+    });
+
+    // About Section Image Uploads
+    const initAboutImg = (btnId, fileId, key, fbId) => {
+      document.getElementById(btnId).addEventListener('click', async () => {
+        const file = document.getElementById(fileId).files[0];
+        if (!file) return showFeedback(fbId, 'Please select an image file.', 'error');
+        setBtnLoader(btnId, true, 'Uploading...');
+        const fd = new FormData();
+        fd.append('setting_key', key);
+        fd.append('upload_type', 'logo'); // Using 'logo' type for general images
+        fd.append('file', await compressImage(file));
+        try {
+          const res = await fetch('/api/admin/settings', { method: 'POST', body: fd, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') } });
+          const data = await res.json();
+          if (data.success) {
+            showFeedback(fbId, '✓ Image updated.', 'success');
+            loadSettingsAdmin();
+          } else throw new Error(data.error);
+        } catch (e) { showFeedback(fbId, 'Upload failed.', 'error'); }
+        finally { setBtnLoader(btnId, false, 'Upload'); }
+      });
+    };
+
+    initAboutImg('btn-save-about-img-main', 'about-img-main-file', 'about_home_img_main', 'fb-about-home');
+    initAboutImg('btn-save-about-img-top', 'about-img-top-file', 'about_home_img_top', 'fb-about-home');
+    initAboutImg('btn-save-about-img-bottom', 'about-img-bottom-file', 'about_home_img_bottom', 'fb-about-home');
+
+    // ─── Why Choose Text Save ───────────────────────────────
+    document.getElementById('btn-save-wc-text').addEventListener('click', async () => {
+      setBtnLoader('btn-save-wc-text', true, 'Saving...');
+      try {
+        await Promise.all([
+          api('POST', '/api/admin/settings', { setting_key: 'why_choose_heading', setting_value: getValue('set-wc-heading') }),
+          api('POST', '/api/admin/settings', { setting_key: 'feature1_title', setting_value: getValue('set-wc-title-1') }),
+          api('POST', '/api/admin/settings', { setting_key: 'feature1_description', setting_value: getValue('set-wc-desc-1') }),
+          api('POST', '/api/admin/settings', { setting_key: 'feature2_title', setting_value: getValue('set-wc-title-2') }),
+          api('POST', '/api/admin/settings', { setting_key: 'feature2_description', setting_value: getValue('set-wc-desc-2') }),
+          api('POST', '/api/admin/settings', { setting_key: 'feature3_title', setting_value: getValue('set-wc-title-3') }),
+          api('POST', '/api/admin/settings', { setting_key: 'feature3_description', setting_value: getValue('set-wc-desc-3') }),
+        ]);
+        showFeedback('fb-wc', '\u2713 Why Choose section saved.', 'success');
+      } catch (e) { showFeedback('fb-wc', 'Save failed.', 'error'); }
+      finally { setBtnLoader('btn-save-wc-text', false, 'Save Why Choose Text'); }
+    });
+
+    // ─── Why Choose Icon Uploads ────────────────────────────
+    const initWcIcon = (btnId, delBtnId, fileId, textId, key) => {
+      // Upload
+      document.getElementById(btnId).addEventListener('click', async () => {
+        const file = document.getElementById(fileId).files[0];
+        if (!file) return showFeedback('fb-wc', 'Select an image file first.', 'error');
+        const fd = new FormData();
+        fd.append('setting_key', key);
+        fd.append('upload_type', 'logo');
+        fd.append('file', await compressImage(file));
+        try {
+          const res = await fetch('/api/admin/settings', { method: 'POST', body: fd, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') } });
+          const data = await res.json();
+          if (data.success) {
+            showFeedback('fb-wc', '\u2713 Icon updated.', 'success');
+            loadSettingsAdmin();
+          } else throw new Error(data.error);
+        } catch (e) { showFeedback('fb-wc', 'Upload failed.', 'error'); }
+      });
+      // Delete
+      document.getElementById(delBtnId).addEventListener('click', async () => {
+        if (!confirm('Delete this icon?')) return;
+        try {
+          await api('POST', '/api/admin/settings', { setting_key: key, setting_value: '' });
+          document.getElementById(textId).innerHTML = 'Click to upload';
+          showFeedback('fb-wc', '\u2713 Icon removed.', 'success');
+          loadSettingsAdmin();
+        } catch (e) { showFeedback('fb-wc', 'Delete failed.', 'error'); }
+      });
+    };
+
+    initWcIcon('btn-wc-icon-1', 'btn-wc-icon-1-del', 'wc-icon-file-1', 'wc-icon-text-1', 'feature1_icon');
+    initWcIcon('btn-wc-icon-2', 'btn-wc-icon-2-del', 'wc-icon-file-2', 'wc-icon-text-2', 'feature2_icon');
+    initWcIcon('btn-wc-icon-3', 'btn-wc-icon-3-del', 'wc-icon-file-3', 'wc-icon-text-3', 'feature3_icon');
   }
 
   // ─── Projects ────────────────────────────────────────────
@@ -449,6 +600,36 @@
   const btnAddWhatsapp = document.getElementById('btn-add-whatsapp');
   if (btnAddWhatsapp) btnAddWhatsapp.addEventListener('click', () => openModal('add', 'whatsapp_teammates'));
 
+  // ─── Hero Slides ──────────────────────────────────────────
+  async function loadHeroSlidesAdmin() {
+    const el = document.getElementById('heroslides-list-admin');
+    if (!el) return;
+    el.innerHTML = '';
+    try {
+      const items = await api('GET', '/api/admin/hero_slides');
+      if (!items.length) { el.innerHTML = '<div style="color:var(--text-3);padding:20px">No hero slides yet. Add one to show on homepage.</div>'; return; }
+      items.forEach(s => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        const imgPath = s.image_path && s.image_path.startsWith('http') ? s.image_path : (s.image_path ? `/${s.image_path.replace(/\\\\/g, '/')}` : '/images/hero-featured.jpg');
+        row.innerHTML = `
+          <img class="item-thumb" src="${imgPath}" alt="${s.title}" style="object-fit:cover" onerror="this.style.display='none'" />
+          <div class="item-info">
+            <h4>${s.title || '(No Title)'}</h4>
+            <span>Order: ${s.display_order} - ${s.location || ''}</span>
+          </div>
+          <div class="item-actions">
+            <button class="btn-edit" onclick="adminEdit('hero_slides',${s.id})">Edit</button>
+            <button class="btn-del" onclick="adminDel('hero_slides',${s.id})">Delete</button>
+          </div>`;
+        el.appendChild(row);
+      });
+    } catch (e) { }
+  }
+
+  const btnAddHeroSlide = document.getElementById('btn-add-heroslide');
+  if (btnAddHeroSlide) btnAddHeroSlide.addEventListener('click', () => openModal('add', 'hero_slides'));
+
   // ─── Modal ───────────────────────────────────────────────
   function initModal() {
     document.getElementById('modal-close').addEventListener('click', closeModal);
@@ -468,9 +649,25 @@
       { id: 'f-title', label: 'Title', type: 'text', required: true, key: 'title' },
       { id: 'f-cat', label: 'Category', type: 'text', key: 'category', placeholder: 'Architecture, Interior, Residential...' },
       { id: 'f-target', label: 'Display On', type: 'select', key: 'target_page', options: ['both', 'home', 'work'] },
-      { id: 'f-desc', label: 'Description', type: 'textarea', key: 'description' },
+      { id: 'f-status', label: 'Status', type: 'select', key: 'project_status', options: ['Completed', 'Ongoing', 'On Hold', 'Planned'] },
+      { id: 'f-location', label: 'Location', type: 'text', key: 'location', placeholder: 'City, Country' },
+      { id: 'f-client', label: 'Client Name', type: 'text', key: 'client' },
+      { id: 'f-type', label: 'Project Type', type: 'text', key: 'project_type', placeholder: 'Mixed Use, Office, etc.' },
+      { id: 'f-area', label: 'Area (m²)', type: 'text', key: 'area' },
+      { id: 'f-budget', label: 'Budget/Value', type: 'text', key: 'budget' },
+      { id: 'f-architect', label: 'Lead Architect', type: 'text', key: 'lead_architect' },
+      { id: 'f-start', label: 'Start Date', type: 'text', key: 'start_date' },
+      { id: 'f-end', label: 'Completion Date', type: 'text', key: 'completion_date' },
+      { id: 'f-desc', label: 'Short Summary', type: 'textarea', key: 'description' },
+      { id: 'f-concept', label: 'Design Concept', type: 'textarea', key: 'story_concept' },
+      { id: 'f-materials', label: 'Materials & Sustainability', type: 'textarea', key: 'story_materials' },
+      { id: 'f-challenges', label: 'Challenges & Solutions', type: 'textarea', key: 'story_challenges' },
+      { id: 'f-fl', label: 'Stat: Floors', type: 'text', key: 'stat_floors' },
+      { id: 'f-h', label: 'Stat: Height', type: 'text', key: 'stat_height' },
+      { id: 'f-d', label: 'Stat: Duration', type: 'text', key: 'stat_duration' },
+      { id: 'f-tm', label: 'Stat: Team Size', type: 'text', key: 'stat_team' },
       { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
-      { id: 'f-img', label: 'Project Image', type: 'file', key: 'image' },
+      { id: 'f-img', label: 'Featured Image (Main)', type: 'file', key: 'image' },
     ],
     service: [
       { id: 'f-title', label: 'Service Title', type: 'text', required: true, key: 'title' },
@@ -479,15 +676,15 @@
       { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
     ],
     team: [
-      { id: 'f-name',     label: 'Full Name',             type: 'text',     required: true, key: 'name' },
-      { id: 'f-role',     label: 'Position / Role',        type: 'text',     key: 'role',           placeholder: 'e.g. CEO, Architect' },
-      { id: 'f-phone',    label: 'Phone Number',           type: 'text',     key: 'phone',          placeholder: '+230 5258 4240' },
-      { id: 'f-email',    label: 'Email Address',          type: 'text',     key: 'email',          placeholder: 'name@company.com' },
-      { id: 'f-cal',      label: 'Meeting Schedule Link',  type: 'text',     key: 'calendar_link',  placeholder: 'https://calendly.com/...' },
-      { id: 'f-wa',       label: 'WhatsApp Link',          type: 'text',     key: 'whatsapp_link',  placeholder: 'https://wa.me/...' },
-      { id: 'f-desc',     label: 'Short Description',      type: 'textarea', key: 'description',    placeholder: 'Brief bio or expertise summary...' },
-      { id: 'f-order',    label: 'Display Order',          type: 'number',   key: 'display_order' },
-      { id: 'f-img',      label: 'Team Member Photo',      type: 'file',     key: 'image' },
+      { id: 'f-name', label: 'Full Name', type: 'text', required: true, key: 'name' },
+      { id: 'f-role', label: 'Position / Role', type: 'text', key: 'role', placeholder: 'e.g. CEO, Architect' },
+      { id: 'f-phone', label: 'Phone Number', type: 'text', key: 'phone', placeholder: '+230 5258 4240' },
+      { id: 'f-email', label: 'Email Address', type: 'text', key: 'email', placeholder: 'name@company.com' },
+      { id: 'f-cal', label: 'Meeting Schedule Link', type: 'text', key: 'calendar_link', placeholder: 'https://calendly.com/...' },
+      { id: 'f-wa', label: 'WhatsApp Link', type: 'text', key: 'whatsapp_link', placeholder: 'https://wa.me/...' },
+      { id: 'f-desc', label: 'Short Description', type: 'textarea', key: 'description', placeholder: 'Brief bio or expertise summary...' },
+      { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
+      { id: 'f-img', label: 'Team Member Photo', type: 'file', key: 'image' },
     ],
     workshop: [
       { id: 'f-title', label: 'Workshop Title', type: 'text', required: true, key: 'title' },
@@ -506,6 +703,14 @@
       { id: 'f-welcome', label: 'Welcome Message', type: 'textarea', key: 'welcome_msg', placeholder: "Hi! I'm interested in your properties." },
       { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
       { id: 'f-img', label: 'Profile Image', type: 'file', key: 'image' },
+    ],
+    hero_slides: [
+      { id: 'f-title', label: 'Slide Title', type: 'text', key: 'title', placeholder: 'e.g. Architecture is Experience' },
+      { id: 'f-sub', label: 'Slide Subtitle', type: 'text', key: 'subtitle', placeholder: 'Optional subtitle' },
+      { id: 'f-loc', label: 'Location/Label', type: 'text', key: 'location', placeholder: 'e.g. New York, USA' },
+      { id: 'f-desc', label: 'Description', type: 'textarea', key: 'description' },
+      { id: 'f-order', label: 'Display Order', type: 'number', key: 'display_order' },
+      { id: 'f-img', label: 'Slide Image Upload', type: 'file', key: 'image' },
     ],
   };
 
@@ -549,8 +754,57 @@
     // Make form 2-column where possible
     fieldsEl.style.gridTemplateColumns = '1fr 1fr';
 
+    // Project Specific Enhancement: Multi-Angle Gallery
+    if (entity === 'project' && mode === 'edit' && data.id) {
+      const galleryDiv = document.createElement('div');
+      galleryDiv.className = 'admin-form-section';
+      galleryDiv.style.gridColumn = '1 / -1';
+      galleryDiv.style.marginTop = '20px';
+      galleryDiv.style.padding = '20px';
+      galleryDiv.style.background = 'var(--bg-2)';
+      galleryDiv.style.border = '1px solid var(--border)';
+      galleryDiv.innerHTML = `
+        <h4 style="margin-bottom:15px">Multi-Angle Perspective Gallery (${data.images ? data.images.length : 0} angles)</h4>
+        <div id="project-angle-list" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px"></div>
+        <div class="admin-field">
+          <label>Add New Angles (Max 10 at once)</label>
+          <input type="file" id="f-angles" inherit="none" multiple accept="image/*" />
+          <p style="font-size:0.7rem; color:var(--text-3); margin-top:5px">Select multiple images to upload additional angles for this project.</p>
+        </div>
+      `;
+      fieldsEl.appendChild(galleryDiv);
+      renderProjectAngles(data.images || []);
+    }
+
     document.getElementById('admin-modal').classList.add('open');
   }
+
+  function renderProjectAngles(images) {
+    const list = document.getElementById('project-angle-list');
+    if (!list) return;
+    if (images.length === 0) {
+      list.innerHTML = '<p style="font-size:0.8rem; color:var(--text-3)">No additional angles yet.</p>';
+      return;
+    }
+    list.innerHTML = images.map(img => `
+      <div style="position:relative; width:80px; height:80px; border:1px solid var(--border)">
+        <img src="${img.image_path}" style="width:100%; height:100%; object-fit:cover" />
+        <button type="button" onclick="deleteAngle(${img.id})" style="position:absolute; top:-5px; right:-5px; background:var(--danger); color:white; border:none; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer">✕</button>
+      </div>
+    `).join('');
+  }
+
+  window.deleteAngle = async (id) => {
+    if (!confirm('Remove this perspective angle?')) return;
+    try {
+      const res = await api('DELETE', `/api/admin/project_images/${id}`);
+      if (res.success) {
+        // Refresh project data and modal
+        const items = await api('GET', `/api/projects?id=${editingId}`);
+        renderProjectAngles(items.images || []);
+      }
+    } catch (e) { alert('Failed to delete angle'); }
+  };
 
   function closeModal() {
     document.getElementById('admin-modal').classList.remove('open');
@@ -560,50 +814,51 @@
   async function handleModalSubmit() {
     const fb = document.getElementById('modal-feedback');
     const fields = MODAL_FIELDS[modalEntity] || [];
-    const hasFile = fields.some(f => f.type === 'file');
 
-    let body;
+    let body = new FormData();
     let headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
 
-    if (hasFile) {
-      body = new FormData();
-      for (const f of fields) {
-        const el = document.getElementById(f.id);
-        if (!el) continue;
-        if (f.type === 'file') {
-          body.append('upload_type', modalEntity);
-          if (el.files[0]) {
-            const compressedFile = await compressImage(el.files[0]);
-            body.append('image', compressedFile);
-          }
-        } else {
-          body.append(f.key, el.value);
+    for (const f of fields) {
+      const el = document.getElementById(f.id);
+      if (!el) continue;
+      if (f.type === 'file') {
+        if (el.files[0]) {
+          const compressedFile = await compressImage(el.files[0]);
+          body.append(f.key, compressedFile);
         }
+      } else {
+        body.append(f.key, el.value);
       }
-    } else {
-      const obj = {};
-      fields.forEach(f => {
-        const el = document.getElementById(f.id);
-        if (el) obj[f.key] = el.value;
-      });
-      body = JSON.stringify(obj);
-      headers['Content-Type'] = 'application/json';
     }
+    body.append('upload_type', modalEntity);
 
-    console.log('Admin: Sending project data:', hasFile ? Object.fromEntries(body) : JSON.parse(body));
+    setBtnLoader('modal-submit', true, 'Saving...');
 
-    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates' };
+    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates', hero_slides: 'hero_slides' };
     const ep = endpointMap[modalEntity];
     const url = modalMode === 'edit' ? `/api/admin/${ep}/${editingId}` : `/api/admin/${ep}`;
     const method = modalMode === 'edit' ? 'PUT' : 'POST';
 
-    setBtnLoader('modal-submit', true, 'Saving...');
-
     try {
       const res = await fetch(url, { method, headers, body });
       if (!res.ok) throw new Error(await res.text());
-      const successMsg = hasFile && modalEntity === 'project' ? '✓ Image uploaded successfully.' : '✓ Post saved successfully.';
-      fb.textContent = successMsg;
+      const resJson = await res.json();
+      
+      if (modalEntity === 'project') {
+        const angleInput = document.getElementById('f-angles');
+        if (angleInput && angleInput.files.length > 0) {
+          fb.style.display = 'block';
+          fb.textContent = 'Project saved. Uploading additional perspectives...';
+          const projId = editingId || resJson.id;
+          const angleFd = new FormData();
+          for (let i = 0; i < angleInput.files.length; i++) {
+            angleFd.append('images', await compressImage(angleInput.files[i]));
+          }
+          await fetch(`/api/admin/projects/${projId}/images`, { method: 'POST', headers, body: angleFd });
+        }
+      }
+
+      fb.textContent = '✓ Content saved successfully.';
       fb.className = 'admin-feedback success';
       fb.style.display = 'block';
       setTimeout(() => {
@@ -625,11 +880,11 @@
     const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates' };
     const ep = endpointMap[entity];
     try {
-      // Fetch all, find by id
-      const items = await api('GET', `/api/${ep}`);
-      const item = items.find(i => i.id === id);
+      const url = entity === 'project' ? `/api/projects?id=${id}` : `/api/${ep}`;
+      const items = await api('GET', url);
+      const item = entity === 'project' ? items : items.find(i => i.id === id);
       if (item) openModal('edit', entity, item);
-    } catch (e) { }
+    } catch (e) { console.error('Edit error:', e); }
   };
 
   window.adminDel = async (entity, id) => {
@@ -698,12 +953,12 @@
           let h = img.height;
           const max = 1600; // Shrink slightly more to guarantee small payload
           if (w > max) { h = Math.round((max / w) * h); w = max; }
-          
+
           const canvas = document.createElement('canvas');
           canvas.width = w; canvas.height = h;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h);
-          
+
           // Use WebP format for massive file size savings (supports transparency)
           const mime = 'image/webp';
           canvas.toBlob(blob => {

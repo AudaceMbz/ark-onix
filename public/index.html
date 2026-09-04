@@ -4,117 +4,479 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Onix Home— Architecture</title>
+  <title>ark-onix studio</title>
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
   <meta name="description"
     content="Onix Architecture — We craft spaces that transcend the ordinary, balancing material, light, and proportion into living art." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@100;200;300;400;500;600&display=swap"
     rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
 </head>
 
 <body>
-  <!-- Pre-loader -->
-  <div id="site-loader" class="loader-wrapper">
-    <div class="skeleton-container">
-      <div class="skeleton-header">
-        <div class="skeleton skeleton-logo"></div>
-        <div class="skeleton-nav">
-          <div class="skeleton skeleton-nav-item"></div>
-          <div class="skeleton skeleton-nav-item"></div>
-          <div class="skeleton skeleton-nav-item"></div>
-          <div class="skeleton skeleton-nav-item"></div>
-        </div>
-      </div>
-      <div class="skeleton-hero">
-        <div class="skeleton skeleton-eyebrow"></div>
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-title-2"></div>
-        <div class="skeleton skeleton-sub"></div>
-        <div class="skeleton skeleton-sub-2"></div>
-        <div class="skeleton-actions">
-          <div class="skeleton skeleton-btn"></div>
-          <div class="skeleton skeleton-btn"></div>
-        </div>
-      </div>
-      <div class="skeleton-grid">
-        <div class="skeleton skeleton-grid-item"></div>
-        <div class="skeleton skeleton-grid-item"></div>
-        <div class="skeleton skeleton-grid-item"></div>
-      </div>
-    </div>
-  </div>
   <!-- ─── NAV ─────────────────────────────────────────────────────────────── -->
   <header class="nav-header" id="nav-header">
     <nav class="nav-container">
-      <a href="index.html" class="nav-logo" id="nav-logo-link">
-        <img src="images/onix-logo.png" alt="ONIX STUDIO Logo" class="logo-img" id="logo-img"
-          onerror="this.style.display='none';document.getElementById('logo-text').style.display='block'" />
-        <span class="logo-text" id="logo-text" style="display:none">ONIX STUDIO</span>
-      </a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="index.html" data-page="home" class="nav-link">Home</a></li>
-        <li><a href="about.html" data-page="about" class="nav-link">About Us</a></li>
-        <li><a href="services.html" data-page="services" class="nav-link">Services</a></li>
-        <li><a href="training.html" data-page="training" class="nav-link">Training</a></li>
-        <li><a href="work.html" data-page="work" class="nav-link">Our Work</a></li>
-        <li><a href="contact.html" data-page="contact" class="nav-link nav-cta">Contact</a></li>
-      </ul>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.5">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-        <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.5" style="display:none">
-          <circle cx="12" cy="12" r="5" />
-          <line x1="12" y1="1" x2="12" y2="3" />
-          <line x1="12" y1="21" x2="12" y2="23" />
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-          <line x1="1" y1="12" x2="3" y2="12" />
-          <line x1="21" y1="12" x2="23" y2="12" />
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-        </svg>
-      </button>
+      <div class="logo-wrapper">
+        <a href="/" data-page="home" class="nav-logo">
+          <div class="logo-brand">
+            <img src="" alt="Logo" class="logo-img"
+              style="display:none; height: 64px; width: auto; object-fit: contain;" />
+            <div class="logo-text" id="logo-text">
+              <span class="logo-onix">ONIX</span>
+              <span class="logo-studio">STUDIO</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" style="display:none">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </nav>
   </header>
+
+  <!-- Fullscreen Navigation Overlay -->
+  <div class="fullscreen-menu" id="fullscreen-menu">
+    <div class="menu-overlay"></div>
+    <div class="menu-content">
+      <div class="menu-left">
+        <ul class="menu-links">
+          <li>
+            <a href="/" data-page="home" class="menu-link">
+              <span class="link-num">01</span>
+              <span class="link-text">Home</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/about" data-page="about" class="menu-link">
+              <span class="link-num">02</span>
+              <span class="link-text">About Us</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4" />
+                <path d="M12 8h.01" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/work" data-page="work" class="menu-link">
+              <span class="link-num">03</span>
+              <span class="link-text">Projects</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/services" data-page="services" class="menu-link">
+              <span class="link-num">04</span>
+              <span class="link-text">Services</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 7h-9" />
+                <path d="M14 17H5" />
+                <circle cx="17" cy="17" r="3" />
+                <circle cx="7" cy="7" r="3" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/training" data-page="training" class="menu-link">
+              <span class="link-num">05</span>
+              <span class="link-text">Training</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/contact" data-page="contact" class="menu-link">
+              <span class="link-num">06</span>
+              <span class="link-text">Contact</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m22 2-7 20-4-9-9-4Z" />
+                <path d="M22 2 11 13" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="menu-right">
+        <div class="menu-contact-info">
+          <div class="menu-info-item">
+            <span class="info-label">Email</span>
+            <a href="mailto:kwizeraodilla@gmail.com" class="info-value">kwizeraodilla@gmail.com</a>
+          </div>
+          <div class="menu-info-item">
+            <span class="info-label">Phone</span>
+            <a href="tel:+250790128174" class="info-value">+250 790 128 174</a>
+          </div>
+          <div class="menu-info-item">
+            <span class="info-label">Location</span>
+            <span class="info-value">KN 75 St, Kigali, Rwanda</span>
+          </div>
+        </div>
+        <div class="menu-socials">
+          <a href="https://www.instagram.com/onix_studio26/" target="_blank" class="menu-social-link"
+            aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="#" target="_blank" class="menu-social-link" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+              </path>
+            </svg>
+          </a>
+          <a href="https://wa.me/250790128174" target="_blank" class="menu-social-link" aria-label="WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+              </path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ─── PAGES ────────────────────────────────────────────────────────────── -->
   <main id="main-content">
 
     <!-- ══ HOME PAGE ══════════════════════════════════════════════════════════ -->
     <section id="page-home" class="page active">
-      <!-- Hybrid Hero Showcase -->
-      <section class="hero-showcase" id="hero">
-        <div class="showcase-content reveal">
-          <div class="hero-eyebrow">Kgl. — Kigali, Rwanda</div>
-          <h1 class="hero-title" id="hero-title">Architecture<br /><em>is Experience</em></h1>
-          <p class="hero-sub" id="hero-sub">We craft spaces that transcend the ordinary — balancing material,
-            light, and proportion into living art.</p>
-          <div class="hero-actions">
-            <a href="work.html" class="btn-primary">Explore Our Work</a>
-            <a href="about.html" class="btn-ghost">Our Story</a>
+      <!-- Premium Full-Cover Architectural Hero -->
+      <section class="hero-premium hero-fullbleed" id="hero">
+        <!-- 100% Dynamic CMS Background Image Track -->
+        <div class="hero-bg-container" id="hero-image-container">
+          <img src="images/hero-featured.jpg" alt="Featured Architecture" id="hero-placeholder-img"
+            class="hero-img-main" />
+        </div>
+
+        <!-- Subtle Luxury Vignette / Editorial Backdrop Overlay -->
+        <div class="hero-backdrop-overlay"></div>
+
+        <!-- Foreground Editorial Content Wrapper -->
+        <div class="hero-container">
+          <div class="hero-left reveal">
+            <div class="hero-content-wrapper">
+              <!-- Eyebrow label -->
+              <div class="hero-eyebrow">
+                <span class="eyebrow-accent"></span>
+                <span class="eyebrow-text">Architectural Studio &bull; Design Excellence</span>
+              </div>
+
+              <!-- Main Architectural Headline -->
+              <h1 class="hero-title" id="hero-title">Minimal Architecture</h1>
+
+              <!-- Architectural Meta & Description Block -->
+              <div class="hero-subtitle-block">
+                <div class="hero-project-info">
+                  <span class="project-number">01.</span>
+                  <span class="project-location" id="hero-location">kigali</span>
+                  <span class="project-divider">/</span>
+                  <span class="project-badge">Selected Works</span>
+                </div>
+                <p class="hero-description" id="hero-sub">We craft spaces that transcend the ordinary — balancing
+                  material, light, and proportion into living art.</p>
+              </div>
+
+              <!-- Premium Hero Action CTAs -->
+              <div class="hero-actions">
+                <a href="/work" data-page="work" class="hero-btn-primary">
+                  <span>Explore Portfolio</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+                <a href="/contact" data-page="contact" class="hero-btn-secondary">
+                  <span>Start Consultation</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide Controls & Indicator -->
+          <div class="hero-selectors" id="hero-navigation-controls">
+            <button id="hero-prev" class="hero-nav-btn" aria-label="Previous Slide">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <div class="slide-numbers-wrap">
+              <span class="current-slide" id="hero-current-slide">01</span>
+              <span class="slide-sep">/</span>
+              <span class="total-slides" id="hero-total-slides">02</span>
+            </div>
+            <div class="slide-progress" id="hero-progress-container">
+              <div class="progress-bar" id="hero-progress-bar"></div>
+            </div>
+            <button id="hero-next" class="hero-nav-btn" aria-label="Next Slide">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
           </div>
         </div>
 
-        <!-- Integrated Gallery (becomes part of the hero) -->
-        <div class="gallery-grid showcase-grid reveal" id="home-gallery">
-          <!-- Populated by JS -->
+        <!-- Social Sidebar Overlay -->
+        <div class="hero-social-sidebar">
+          <div class="social-links-vertical">
+            <a href="https://www.instagram.com/onix_studio26/" target="_blank" rel="noopener noreferrer"
+              class="social-side-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/250790128174" target="_blank" rel="noopener noreferrer" class="social-side-link"
+              aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="mailto:kwizeraodilla@gmail.com" class="social-side-link" aria-label="Email"><i
+                class="fas fa-envelope"></i></a>
+          </div>
         </div>
 
-        <div class="gallery-cta reveal">
-          <a href="work.html" class="btn-outline">View All Projects</a>
+        <!-- Architectural Watermark Badge -->
+        <div class="hero-frame-meta">
+          <span class="hero-frame-tag">ARK-ONIX</span>
+          <span class="hero-frame-detail">Est. 2024 &bull; Kigali</span>
         </div>
       </section>
+
+      <!-- About Studio Section -->
+      <section class="home-about-section">
+        <div class="home-about-container">
+          <!-- Left: Layered Collage -->
+          <div class="about-collage-col reveal">
+            <div class="collage-wrapper">
+              <div class="collage-item main">
+                <img id="home-about-img-main" src="images/hero-featured.jpg" alt="Studio Architecture" />
+              </div>
+              <div class="collage-item secondary floating">
+                <img id="home-about-img-top" src="images/hero-featured.jpg" alt="" />
+              </div>
+              <div class="collage-item tertiary floating-slow">
+                <img id="home-about-img-bottom" src="images/hero-featured.jpg" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Editorial Content -->
+          <div class="about-content-col reveal">
+            <div class="about-editorial-wrapper">
+              <div class="section-label-minimal" id="home-about-label">ABOUT ARKIONIX STUDIO</div>
+              <h2 class="about-editorial-text" id="home-about-desc-1">
+                We craft spaces that transcend the ordinary — balancing material, light, and proportion into living art.
+              </h2>
+              <p class="about-editorial-para" id="home-about-desc-2">
+                Our approach is deeply rooted in architectural minimalism and site-specific response, ensuring every
+                line serves a purpose and every shadow tells a story.
+              </p>
+              <div class="about-studio-highlight">
+                <span class="studio-accent-line"></span>
+                <span class="studio-name-text" id="home-about-studio-name">ArkiOnix Studio.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why Choose ArkiOnix Studio -->
+      <section class="why-choose-section">
+        <div class="why-choose-container">
+          <div class="why-choose-header reveal">
+            <div class="section-label-minimal">Our Advantages</div>
+            <h2 class="why-choose-title" id="wc-heading">Why Choose <em>ArkiOnix Studio</em></h2>
+          </div>
+
+          <div class="why-choose-grid">
+            <!-- Feature 1 -->
+            <div class="why-feature reveal">
+              <div class="feature-icon-wrap">
+                <!-- Admin-uploaded icon (shown if present) -->
+                <img class="feature-icon-img" id="wc-icon-1" src="" alt="Feature 1 Icon" style="display:none;" />
+                <!-- SVG Fallback: Blueprint / Floor Plan -->
+                <svg class="feature-icon-svg" id="wc-svg-1" viewBox="0 0 80 80" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <rect x="12" y="20" width="56" height="44" rx="0" stroke="currentColor" stroke-width="1.5" />
+                  <line x1="12" y1="32" x2="68" y2="32" stroke="currentColor" stroke-width="1" />
+                  <line x1="12" y1="44" x2="68" y2="44" stroke="currentColor" stroke-width="1" />
+                  <line x1="36" y1="20" x2="36" y2="64" stroke="currentColor" stroke-width="1" />
+                  <rect x="18" y="36" width="13" height="10" stroke="currentColor" stroke-width="1.2" />
+                  <rect x="42" y="36" width="8" height="5" stroke="currentColor" stroke-width="1.2" />
+                  <rect x="52" y="36" width="8" height="5" stroke="currentColor" stroke-width="1.2" />
+                  <rect x="42" y="45" width="18" height="5" stroke="currentColor" stroke-width="1.2" />
+                  <rect x="18" y="50" width="13" height="14" stroke="currentColor" stroke-width="1.2" />
+                  <!-- compass crosshair -->
+                  <circle cx="60" cy="27" r="5" stroke="currentColor" stroke-width="1.2" />
+                  <line x1="60" y1="20" x2="60" y2="24" stroke="currentColor" stroke-width="1.2" />
+                  <line x1="60" y1="30" x2="60" y2="34" stroke="currentColor" stroke-width="1.2" />
+                  <line x1="53" y1="27" x2="57" y2="27" stroke="currentColor" stroke-width="1.2" />
+                  <line x1="63" y1="27" x2="67" y2="27" stroke="currentColor" stroke-width="1.2" />
+                </svg>
+              </div>
+              <h3 class="feature-title" id="wc-title-1">Bespoke Design Solutions</h3>
+              <p class="feature-desc" id="wc-desc-1">Every project begins as a blank canvas. We listen, sketch, and
+                develop architectural blueprints tailored precisely to your vision, site, and lifestyle.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="why-feature reveal" style="transition-delay: 0.15s">
+              <div class="feature-icon-wrap">
+                <img class="feature-icon-img" id="wc-icon-2" src="" alt="Feature 2 Icon" style="display:none;" />
+                <!-- SVG Fallback: Modern Building -->
+                <svg class="feature-icon-svg" id="wc-svg-2" viewBox="0 0 80 80" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <rect x="16" y="28" width="48" height="42" stroke="currentColor" stroke-width="1.5" />
+                  <line x1="16" y1="42" x2="64" y2="42" stroke="currentColor" stroke-width="1.2" />
+                  <line x1="16" y1="56" x2="64" y2="56" stroke="currentColor" stroke-width="1.2" />
+                  <!-- Windows row 1 -->
+                  <rect x="22" y="31" width="7" height="7" stroke="currentColor" stroke-width="1.2" />
+                  <rect x="36" y="31" width="7" height="7" stroke="currentColor" stroke-width="1.2" />
+                  <rect x="50" y="31" width="7" height="7" stroke="currentColor" stroke-width="1.2" />
+                  <!-- Windows row 2 -->
+                  <rect x="22" y="45" width="7" height="7" stroke="currentColor" stroke-width="1.2" />
+                  <rect x="50" y="45" width="7" height="7" stroke="currentColor" stroke-width="1.2" />
+                  <!-- Door -->
+                  <rect x="34" y="57" width="12" height="13" stroke="currentColor" stroke-width="1.2" />
+                  <!-- Roofline -->
+                  <polyline points="10,28 40,12 70,28" stroke="currentColor" stroke-width="1.5"
+                    stroke-linejoin="round" />
+                  <!-- Flagpole -->
+                  <line x1="40" y1="12" x2="40" y2="7" stroke="currentColor" stroke-width="1.2" />
+                  <polygon points="40,7 46,10 40,13" stroke="currentColor" stroke-width="1" fill="none" />
+                </svg>
+              </div>
+              <h3 class="feature-title" id="wc-title-2">Innovative Architecture</h3>
+              <p class="feature-desc" id="wc-desc-2">We merge contemporary structural engineering with timeless design
+                language, creating facades and spatial forms that define skylines and stand the test of time.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="why-feature reveal" style="transition-delay: 0.3s">
+              <div class="feature-icon-wrap">
+                <img class="feature-icon-img" id="wc-icon-3" src="" alt="Feature 3 Icon" style="display:none;" />
+                <!-- SVG Fallback: Award / Quality Seal -->
+                <svg class="feature-icon-svg" id="wc-svg-3" viewBox="0 0 80 80" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="40" cy="30" r="17" stroke="currentColor" stroke-width="1.5" />
+                  <polyline points="27,44 20,66 40,57 60,66 53,44" stroke="currentColor" stroke-width="1.5"
+                    stroke-linejoin="round" />
+                  <!-- Inner star -->
+                  <polygon points="40,20 42.3,27 49.5,27 43.8,31.5 46.1,38.5 40,34 33.9,38.5 36.2,31.5 30.5,27 37.7,27"
+                    stroke="currentColor" stroke-width="1.2" fill="none" />
+                  <!-- Checkmark overlay -->
+                  <polyline points="34,30 38,35 47,24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </div>
+              <h3 class="feature-title" id="wc-title-3">Premium Project Delivery</h3>
+              <p class="feature-desc" id="wc-desc-3">From concept to key handover, we uphold exceptional quality
+                standards, precision craftsmanship, and uncompromising attention to every material and detail.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ── Combined: Featured Slideshow + Selected Projects Gallery ── -->
+      <section class="featured-and-gallery-combined">
+
+        <!-- Featured Project Slider (first) -->
+        <section class="featured-slider-section">
+          <div class="section-intro reveal">
+            <div class="intro-label">Selected Works</div>
+            <h2 class="section-heading">Featured<br /><em>Projects</em></h2>
+          </div>
+          <div class="featured-slider-container" id="featured-slider-container">
+            <div class="featured-slider-track" id="featured-slider-track">
+              <!-- Slides injected by JS -->
+            </div>
+            <!-- Controls -->
+            <div class="featured-slider-controls">
+              <button class="slider-btn" id="featured-prev" aria-label="Previous project">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+              </button>
+              <button class="slider-btn" id="featured-next" aria-label="Next project">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
+            <!-- Fullscreen button -->
+            <button class="slider-fullscreen-btn" id="featured-fullscreen" aria-label="Fullscreen">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.5">
+                <polyline points="15 3 21 3 21 9" />
+                <polyline points="9 21 3 21 3 15" />
+                <line x1="21" y1="3" x2="14" y2="10" />
+                <line x1="3" y1="21" x2="10" y2="14" />
+              </svg>
+            </button>
+            <!-- Pagination dots -->
+            <div class="featured-slider-pagination" id="featured-pagination"></div>
+          </div>
+        </section>
+
+        <!-- Selected Projects Gallery Grid (below the slideshow) -->
+        <section class="home-gallery-section">
+          <div class="gallery-grid showcase-grid reveal" id="home-gallery">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+      </section><!-- /.featured-and-gallery-combined -->
 
       <!-- Stats -->
       <section class="stats-section reveal">
@@ -354,6 +716,24 @@
         </div>
       </div>
 
+      <!-- NEW: Featured Project -->
+      <section class="work-featured-project reveal">
+        <div class="featured-image-container">
+          <img src="/images/projects/project_01.jpg" alt="Featured Architecture Project" class="featured-image" />
+          <div class="featured-overlay-content">
+            <div class="featured-info">
+              <span class="featured-location">Kigali, Rwanda</span>
+              <h3>The Peak Pavilion <!-- TODO: Replace with real flagship project name --></h3>
+            </div>
+            <p class="featured-description">
+              <!-- TODO: Replace with real narrative -->
+              A harmonious blend of structural honesty and atmospheric depth, redefining the boundary between the built
+              environment and the natural landscape.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <div class="work-filter reveal" id="work-filter">
         <button class="filter-btn active" data-filter="all">All</button>
       </div>
@@ -361,6 +741,56 @@
       <section class="gallery-grid full-gallery reveal" id="work-gallery">
         <!-- Populated by JS -->
       </section>
+
+      <!-- NEW: Load More Projects -->
+      <div class="load-more-container reveal" id="load-more-container" style="display: none;">
+        <button class="btn-load-more" id="btn-load-more">Show More Projects</button>
+      </div>
+
+      <!-- NEW: Project Stats -->
+      <section class="stats-section reveal" style="padding: 100px 80px 40px; margin-top: 40px;">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number">50+</span> <!-- TODO: Add real project count -->
+            <span class="stat-label">Projects Worldwide</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">10</span> <!-- TODO: Add real years -->
+            <span class="stat-label">Years Driven</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">4</span> <!-- TODO: Add real footprint data -->
+            <span class="stat-label">Countries</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- NEW: Our Approach -->
+      <section class="work-approach reveal">
+        <div class="work-approach-grid">
+          <div class="approach-pillar">
+            <h3>Sustainability</h3>
+            <p>We weave passive design strategies and locally sourced materials into every concept, crafting buildings
+              that endure gracefully while respecting their ecosystems.</p>
+          </div>
+          <div class="approach-pillar">
+            <h3>Innovation</h3>
+            <p>Challenging conventions through computational design and advanced material exploration, delivering forms
+              that are as intelligent as they are striking.</p>
+          </div>
+          <div class="approach-pillar">
+            <h3>Craftsmanship</h3>
+            <p>Our commitment to detail borders on the obsessive. We collaborate intimately with master builders to
+              ensure every junction is perfectly realized.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- NEW: Closing CTA -->
+      <div class="services-cta reveal" style="margin-top: 40px;">
+        <h2 class="cta-heading">Ready to begin<br /><em>your project?</em></h2>
+        <a href="/contact" class="btn-primary" data-page="contact">Start a Project</a>
+      </div>
     </section>
 
     <!-- ══ CONTACT PAGE ══════════════════════════════════════════════════════ -->
@@ -515,12 +945,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="index.html" style="display:inline-block; margin-bottom: 20px;">
-          <img src="images/onix-logo.png" alt="ONIX STUDIO Logo" class="footer-logo-img"
-            style="width: auto; object-fit: contain;"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
-          <div class="footer-logo-text"
-            style="display:none; font-family: var(--font-serif); font-size: 1.8rem; letter-spacing: 0.2em; color: var(--text);">
-            ONIX STUDIO</div>
+          <img src="images/onix-logo.png" alt="ONIX STUDIO Logo" class="footer-logo-img" />
         </a>
         <p class="footer-tagline">Architecture is about experience,<br />not only visual.</p>
 
@@ -547,7 +972,7 @@
       <div class="footer-nav">
         <h4>Navigate</h4>
         <ul>
-          <li><a href="home.html">Home</a></li>
+          <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a href="services.html">Services</a></li>
           <li><a href="training.html">Training</a></li>
@@ -561,11 +986,7 @@
           <li><a href="/services.html">Interior Design</a></li>
           <li><a href="/services.html">Sustainable Design</a></li>
           <li><a href="/services.html">Brand Identity</a></li>
-          <li><a href="services.html">Architecture</a></li>
-          <li><a href="services.html">Interior Design</a></li>
-          <li><a href="services.html">Sustainable Design</a></li>
-          <li><a href="services.html">Brand Identity</a></li>
-          <li><a href="services.html">Construction Consulting</a></li>
+          <li><a href="/services.html">Construction Consulting</a></li>
         </ul>
       </div>
       <div class="footer-contact">

@@ -98,7 +98,7 @@ onix/
 All public pages share the same navigation and footer, controlled by `app.js` and `style.css`.
 
 ### 🏠 Home — `index.html`
-- **Hero section** with a full-screen background video (managed via admin).
+- **ction** with a full-screen background video (managed via admin).
 - **Animated headline** with a tagline about the studio.
 - **Featured Projects** gallery (fetches from `/api/projects?page=home`).
 - **Services overview** strip.
