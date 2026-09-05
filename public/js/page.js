@@ -56,7 +56,7 @@
   // ─── Theme ──────────────────────────────────────────────────
   function initTheme() {
     let saved = 'dark';
-    try { saved = localStorage.getItem('onix-theme') || 'dark'; } catch(e) {}
+    try { saved = localStorage.getItem('onix-theme') || 'dark'; } catch (e) { }
     setTheme(saved);
     const btn = document.getElementById('theme-toggle');
     if (btn) btn.addEventListener('click', () => {
@@ -67,7 +67,7 @@
 
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('onix-theme', theme); } catch(e) {}
+    try { localStorage.setItem('onix-theme', theme); } catch (e) { }
     const moon = document.getElementById('icon-moon');
     const sun = document.getElementById('icon-sun');
     if (!moon || !sun) return;
@@ -81,14 +81,14 @@
     const menu = document.getElementById('fullscreen-menu');
     const header = document.getElementById('nav-header');
     if (!toggle || !menu || !header) return;
-    
+
     toggle.addEventListener('click', () => {
       const isOpen = toggle.classList.toggle('open');
       menu.classList.toggle('open', isOpen);
       header.classList.toggle('nav-open', isOpen);
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
-    
+
     menu.querySelectorAll('.menu-link').forEach(a => {
       a.addEventListener('click', () => {
         toggle.classList.remove('open');
@@ -147,7 +147,7 @@
       }
 
       // ─── Home Page Specific Dynamic Sections ───
-      
+
       // About Studio (Home Collage)
       if (s.about_home_title) {
         const al = document.getElementById('home-about-label');
@@ -191,7 +191,7 @@
         const title = s[`feature${i}_title`];
         const desc = s[`feature${i}_description`];
         const icon = s[`feature${i}_icon`];
-        
+
         if (title) {
           const el = document.getElementById(`wc-title-${i}`);
           if (el) el.textContent = title;
@@ -235,11 +235,15 @@
 
   // ─── About ───────────────────────────────────────────────────
   async function loadAbout() {
+    if (window.Skeleton) window.Skeleton.show('sk-about-narrative');
     try {
       const data = await fetchJSON('/api/about');
       const el = document.getElementById('about-narrative');
       if (el && data.narrative) el.textContent = data.narrative;
-    } catch (e) { }
+      if (window.Skeleton) window.Skeleton.hide('sk-about-narrative');
+    } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-about-narrative');
+    }
   }
 
   // ─── Team ────────────────────────────────────────────────────
@@ -247,6 +251,12 @@
     const aboutEl = document.getElementById('team-row');
     const homeEl = document.getElementById('home-team-row');
     const contactEl = document.getElementById('contact-team-row');
+
+    if (window.Skeleton) {
+      if (aboutEl) window.Skeleton.show('sk-about-team');
+      if (homeEl) window.Skeleton.show('sk-home-team');
+      if (contactEl) window.Skeleton.show('sk-contact-team');
+    }
 
     // Roles that appear on the Home page
     const HOME_ROLES = ['ceo', 'manager', 'c.e.o', 'director', 'managing director'];
@@ -361,7 +371,18 @@
       renderInto(aboutEl, team);
       renderInto(contactEl, team);
 
+      if (window.Skeleton) {
+        if (aboutEl) window.Skeleton.hide('sk-about-team');
+        if (homeEl) window.Skeleton.hide('sk-home-team');
+        if (contactEl) window.Skeleton.hide('sk-contact-team');
+      }
+
     } catch (e) {
+      if (window.Skeleton) {
+        if (aboutEl) window.Skeleton.hide('sk-about-team');
+        if (homeEl) window.Skeleton.hide('sk-home-team');
+        if (contactEl) window.Skeleton.hide('sk-contact-team');
+      }
       [aboutEl, homeEl, contactEl].forEach(el => {
         if (el) el.innerHTML = '<div class="team-empty">Team photos coming soon.</div>';
       });
@@ -381,12 +402,14 @@
     console.log('Loading Services...');
     const el = document.getElementById('services-list');
     if (!el) { console.log('services-list EL NOT FOUND'); return; }
+    if (window.Skeleton) window.Skeleton.show('sk-services-list');
     try {
       const services = await fetchJSON('/api/services');
       console.log('Services API result:', services);
       el.innerHTML = '';
       if (services.length === 0) {
         el.innerHTML = '<div style="padding:40px;color:var(--text-3)">No services found in database.</div>';
+        if (window.Skeleton) window.Skeleton.hide('sk-services-list');
         return;
       }
       services.forEach((s, i) => {
@@ -403,8 +426,10 @@
         el.appendChild(div);
         if (revealObserver) revealObserver.observe(div);
       });
+      if (window.Skeleton) window.Skeleton.hide('sk-services-list');
       triggerReveal();
     } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-services-list');
       el.innerHTML = '<div style="padding:40px;color:var(--text-3)">Services loading failed.</div>';
     }
   }
@@ -413,6 +438,7 @@
   async function loadWorkshops() {
     const el = document.getElementById('workshops-list');
     if (!el) return;
+    if (window.Skeleton) window.Skeleton.show('sk-workshops-list');
     try {
       const workshops = await fetchJSON('/api/workshops');
       el.innerHTML = '';
@@ -455,7 +481,9 @@
         el.appendChild(item);
         if (revealObserver) revealObserver.observe(item);
       });
+      if (window.Skeleton) window.Skeleton.hide('sk-workshops-list');
     } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-workshops-list');
       el.innerHTML = '<div style="padding:40px;color:var(--text-3)">Workshops loading failed.</div>';
     }
   }
@@ -473,7 +501,7 @@
       </div>`;
   }
 
-  // ─── Home Gallery (Showcase) ──────────────────────────────────
+  // ─── Home Gallery ────────────────────────────────────────
   async function loadHomeGallery() {
     const el = document.getElementById('home-gallery');
     if (!el) return;
@@ -512,7 +540,7 @@
     pagination.innerHTML = '';
     let currentSlide = 0;
 
-    projects.forEach(function(p, i) {
+    projects.forEach(function (p, i) {
       const slide = document.createElement('div');
       slide.className = 'featured-slide' + (i === 0 ? ' active' : '');
       const imgSrc = p.image_path || '/images/projects/project_0' + ((i % 5) + 1) + '.jpg';
@@ -520,29 +548,29 @@
 
       slide.innerHTML =
         '<div class="featured-slide-img-wrapper">' +
-          '<img src="' + imgSrc + '" class="featured-slide-img" alt="' + p.title + '" />' +
+        '<img src="' + imgSrc + '" class="featured-slide-img" alt="' + p.title + '" />' +
         '</div>' +
         '<div class="featured-slide-content">' +
-          '<span class="featured-slide-category">' + (p.category || 'Architecture') + '</span>' +
-          '<h2 class="featured-slide-title">' + p.title + '</h2>' +
-          '<div class="featured-slide-meta">' +
-            '<span>' +
-              '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-              (p.location || 'Kigali') +
-            '</span>' +
-          '</div>' +
-          desc +
-          '<a href="project-detail.html?id=' + p.id + '" class="featured-btn">' +
-            'View Project ' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
-          '</a>' +
+        '<span class="featured-slide-category">' + (p.category || 'Architecture') + '</span>' +
+        '<h2 class="featured-slide-title">' + p.title + '</h2>' +
+        '<div class="featured-slide-meta">' +
+        '<span>' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+        (p.location || 'Kigali') +
+        '</span>' +
+        '</div>' +
+        desc +
+        '<a href="project-detail.html?id=' + p.id + '" class="featured-btn">' +
+        'View Project ' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+        '</a>' +
         '</div>';
 
       track.appendChild(slide);
 
       const dot = document.createElement('div');
       dot.className = 'pagination-dot' + (i === 0 ? ' active' : '');
-      dot.addEventListener('click', (function(idx) { return function() { goToSlide(idx); }; })(i));
+      dot.addEventListener('click', (function (idx) { return function () { goToSlide(idx); }; })(i));
       pagination.appendChild(dot);
     });
 
@@ -573,7 +601,7 @@
       container.addEventListener('mouseleave', () => {
         autoplay = setInterval(nextSlide, 5000);
       });
-      
+
       // Swipe support
       let startX = 0;
       container.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX);
@@ -583,7 +611,129 @@
         else if (endX - startX > 50) prevSlide();
       });
     }
-    
+
+    // Fullscreen toggle
+    if (fullscreenBtn && container) {
+      fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          container.requestFullscreen().catch(err => {
+            console.log('Fullscreen error: ' + err.message);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+    }
+  }
+
+  // ─── Work Featured Slider Logic (Admin CMS Projects) ─────────
+  function initWorkSlider(workProjects) {
+    const track = document.getElementById('work-slider-track');
+    const pagination = document.getElementById('work-slider-pagination');
+    const prevBtn = document.getElementById('work-slider-prev');
+    const nextBtn = document.getElementById('work-slider-next');
+    const fullscreenBtn = document.getElementById('work-slider-fullscreen');
+    const container = document.getElementById('work-slider-container');
+    const curEl = document.getElementById('work-slide-current');
+    const totalEl = document.getElementById('work-slide-total');
+
+    if (!track || !workProjects || workProjects.length === 0) return;
+
+    // Pick spotlight projects that have a valid image
+    const validProjects = workProjects.filter(p => p.image_path && p.image_path.trim() !== '');
+    const sliderProjects = (validProjects.length >= 3 ? validProjects : workProjects).slice(0, 6);
+
+    if (sliderProjects.length === 0) return;
+
+    track.innerHTML = '';
+    pagination.innerHTML = '';
+    let currentSlide = 0;
+
+    if (totalEl) {
+      totalEl.textContent = String(sliderProjects.length).padStart(2, '0');
+    }
+
+    sliderProjects.forEach(function (p, i) {
+      const slide = document.createElement('div');
+      slide.className = 'featured-slide' + (i === 0 ? ' active' : '');
+      const imgSrc = p.image_path || '/images/projects/project_0' + ((i % 5) + 1) + '.jpg';
+      const descText = p.description ? p.description.trim() : (p.story_concept ? p.story_concept.trim() : '');
+      const descHtml = descText
+        ? '<p class="featured-slide-desc">' + descText.substring(0, 140) + (descText.length > 140 ? '...' : '') + '</p>'
+        : '';
+      const locationText = p.location ? p.location.trim() : 'Kigali';
+      const categoryText = (p.category ? p.category.trim() : 'Architecture');
+
+      slide.innerHTML =
+        '<div class="featured-slide-img-wrapper">' +
+          '<img src="' + imgSrc + '" class="featured-slide-img" alt="' + (p.title || 'Project') + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />' +
+        '</div>' +
+        '<div class="featured-slide-content">' +
+          '<span class="featured-slide-category">' + categoryText + '</span>' +
+          '<h2 class="featured-slide-title">' + (p.title || 'Architectural Project') + '</h2>' +
+          '<div class="featured-slide-meta">' +
+            '<span>' +
+              '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+              locationText +
+            '</span>' +
+            (p.project_status ? '<span style="opacity:0.6">•</span><span>' + p.project_status + '</span>' : '') +
+          '</div>' +
+          descHtml +
+          '<a href="project-detail.html?id=' + p.id + '" class="featured-btn">' +
+            '<span>View Project</span>' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+          '</a>' +
+        '</div>';
+
+      track.appendChild(slide);
+
+      const dot = document.createElement('div');
+      dot.className = 'pagination-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      dot.addEventListener('click', (function (idx) { return function () { goToSlide(idx); }; })(i));
+      pagination.appendChild(dot);
+    });
+
+    const slides = track.querySelectorAll('.featured-slide');
+    const dots = pagination.querySelectorAll('.pagination-dot');
+
+    function goToSlide(index) {
+      if (!slides.length) return;
+      slides[currentSlide].classList.remove('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
+      currentSlide = index;
+      if (currentSlide >= slides.length) currentSlide = 0;
+      if (currentSlide < 0) currentSlide = slides.length - 1;
+      slides[currentSlide].classList.add('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+      if (curEl) curEl.textContent = String(currentSlide + 1).padStart(2, '0');
+    }
+
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function prevSlide() { goToSlide(currentSlide - 1); }
+
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+    let autoplay = setInterval(nextSlide, 5000);
+
+    if (container) {
+      container.addEventListener('mouseenter', () => clearInterval(autoplay));
+      container.addEventListener('mouseleave', () => {
+        clearInterval(autoplay);
+        autoplay = setInterval(nextSlide, 5000);
+      });
+
+      // Swipe support
+      let startX = 0;
+      container.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; }, { passive: true });
+      container.addEventListener('touchend', e => {
+        let endX = e.changedTouches[0].screenX;
+        if (startX - endX > 50) nextSlide();
+        else if (endX - startX > 50) prevSlide();
+      }, { passive: true });
+    }
+
     // Fullscreen toggle
     if (fullscreenBtn && container) {
       fullscreenBtn.addEventListener('click', () => {
@@ -603,19 +753,31 @@
     const el = document.getElementById('work-gallery');
     const filterEl = document.getElementById('work-filter');
     if (!el) return;
+    if (window.Skeleton) window.Skeleton.show('sk-work-gallery');
     try {
       projects = await fetchJSON('/api/projects?page=work');
+      initWorkSlider(projects);
       if (!filterEl.dataset.filtersInited) {
-        const categories = [...new Set(projects.map(p => p.category).filter(Boolean))];
-        categories.forEach(cat => {
+        // Normalize categories: trim and uppercase to deduplicate e.g. "INTERIOR " vs "interior"
+        const catMap = new Map();
+        projects.forEach(p => {
+          if (p.category && p.category.trim()) {
+            const normKey = p.category.trim().toUpperCase();
+            if (!catMap.has(normKey)) {
+              catMap.set(normKey, normKey);
+            }
+          }
+        });
+
+        catMap.forEach((displayName, normKey) => {
           const btn = document.createElement('button');
           btn.className = 'filter-btn';
-          btn.dataset.filter = cat;
-          btn.textContent = cat;
-          btn.addEventListener('click', () => filterWork(cat));
+          btn.dataset.filter = normKey;
+          btn.textContent = displayName;
+          btn.addEventListener('click', () => filterWork(normKey));
           filterEl.appendChild(btn);
         });
-        filterEl.querySelector('[data-filter="all"]').addEventListener('click', () => filterWork('all'));
+        filterEl.querySelector('[data-filter="all"]')?.addEventListener('click', () => filterWork('all'));
         filterEl.dataset.filtersInited = '1';
       }
       filterWork('all');
@@ -623,7 +785,9 @@
       // The toggle HTML is hidden in work.html; calling initLayoutToggle() here would be
       // dead code and could cause confusion if the hidden toggle is ever accidentally revealed.
       initLoadMore();
+      if (window.Skeleton) window.Skeleton.hide('sk-work-gallery');
     } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-work-gallery');
       el.innerHTML = '<div style="padding:60px;color:var(--text-3);text-align:center;grid-column:1/-1">No projects found. Add some from the admin panel.</div>';
     }
   }
@@ -638,7 +802,7 @@
         const layout = btn.dataset.layout;
         toggle.querySelectorAll('.layout-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        
+
         gallery.classList.toggle('list', layout === 'list');
         triggerReveal();
       });
@@ -657,7 +821,9 @@
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-filter="${cat}"]`)?.classList.add('active');
 
-    filteredProjects = cat === 'all' ? projects : projects.filter(p => p.category === cat);
+    filteredProjects = cat === 'all'
+      ? projects
+      : projects.filter(p => p.category && p.category.trim().toUpperCase() === cat.toUpperCase());
     lightboxImages = filteredProjects;
     lightboxIdx = 0;
 
@@ -666,10 +832,41 @@
     // Disable infinite scroll as requested, using manual "Show More"
   }
 
+  function createArchHeaderBlock() {
+    const headerBlock = document.createElement('div');
+    headerBlock.className = 'arch-header-block reveal visible';
+    headerBlock.innerHTML = `
+      <div class="arch-header-label">Our Projects</div>
+      <h2 class="arch-header-title">Selected<br>Work</h2>
+      <div class="arch-header-divider"></div>
+      <p class="arch-header-desc">A collection of spaces we've designed and crafted with purpose, detail, and timeless vision.</p>
+      <a href="#work-filter" class="arch-header-link">View All Projects <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    `;
+    headerBlock.querySelector('.arch-header-link')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+      if (allBtn) allBtn.click();
+      const filterEl = document.getElementById('work-filter');
+      if (filterEl) filterEl.scrollIntoView({ behavior: 'smooth' });
+    });
+    return headerBlock;
+  }
+
   function renderNextWorkBatch(reset = false) {
     const el = document.getElementById('work-gallery');
     const loader = document.getElementById('load-more-container');
-    if (reset) el.innerHTML = '';
+    if (reset) {
+      el.innerHTML = '';
+      if (filteredProjects.length > 0) {
+        const headerBlock = createArchHeaderBlock();
+        el.appendChild(headerBlock);
+        if (revealObserver) revealObserver.observe(headerBlock);
+      } else {
+        el.innerHTML = '<div style="padding:60px;color:var(--text-3);text-align:center;grid-column:1/-1">No projects found in this category.</div>';
+        if (loader) loader.style.display = 'none';
+        return;
+      }
+    }
 
     const remaining = filteredProjects.length - workVisibleCount;
     if (remaining <= 0) {
@@ -703,11 +900,10 @@
     const div = document.createElement('div');
     const imgSrc = p.image_path || `/images/projects/project_0${(i % 5) + 1}.jpg`;
     const location = p.location || 'Kigali, Rwanda';
-    const category = p.category || 'Architecture';
+    const category = p.category ? p.category.trim() : 'Architecture';
 
     if (isHome) {
-      // Home page: uniform 3-col grid with title/info below image.
-      const status = p.project_status || 'Completed';
+      // Home page: showcase card layout
       div.className = `gallery-item reveal span-1`;
       div.style.transitionDelay = `${(i % 3) * 150}ms`;
       div.dataset.index = i;
@@ -715,55 +911,88 @@
         <div class="gallery-item-frame">
           <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
           <div class="gallery-item-overlay">
-            <button class="btn-view-project">View Project</button>
+            <h3 class="gallery-item-title">${p.title}</h3>
+            <span class="gallery-item-cat">${category}</span>
           </div>
-        </div>
-        <div class="gallery-item-info">
-          <h3 class="gallery-item-name">${p.title}</h3>
-          <span class="gallery-item-location">${location}</span>
-          <span class="gallery-item-status">${status}</span>
         </div>`;
       div.addEventListener('click', () => { window.location.href = `project-detail.html?id=${p.id}`; });
       return div;
     }
 
-    // ── Work page: masonry image-only layout ────────────────────────────────────
-    // IMPORTANT: This markup must stay in sync with the identical function in app.js
-    // (lines ~656–687). The site has two rendering paths for /work:
+    // ── Work page: exact 11-slot editorial arch blueprint ──────────────────
+    // IMPORTANT: This markup must stay in sync with the identical function in app.js.
+    // The site has two rendering paths for /work:
     //   • SPA navigation  → index.html + app.js  (reference implementation)
     //   • Hard refresh    → work.html  + page.js  (this path)
-    // Both paths must produce identical masonry-item DOM so the page looks the same
-    // regardless of how the user arrives. Do NOT add .gallery-item-info here.
-    const MASONRY_SLOTS = ['masonry-hero', 'masonry-medium', 'masonry-medium', 'masonry-small', 'masonry-small', 'masonry-full'];
-    const slotClass = MASONRY_SLOTS[i % MASONRY_SLOTS.length];
+    // Both paths must produce identical arch-project-item DOM.
+    //
+    // Slot map (14-column grid, rows auto-sized at minmax(75px, auto)):
+    //   0 = arch-slot-1   (top centre-left, tall portrait)
+    //   1 = arch-slot-2   (top centre-right, landscape)
+    //   2 = arch-slot-3   (top right, landscape)
+    //   3 = arch-slot-4   (middle left, wide landscape)
+    //   4 = arch-slot-hero arch-slot-5  (CENTRAL DOMINANT HERO)
+    //   5 = arch-slot-6   (middle right upper, wide)
+    //   6 = arch-slot-7   (middle right lower, compact)
+    //   7 = arch-slot-8   (bottom left, portrait)
+    //   8 = arch-slot-9   (bottom centre-left, tall portrait)
+    //   9 = arch-slot-10  (bottom centre-right, wide)
+    //  10 = arch-slot-11  (bottom right, square/portrait)
+    // Items beyond slot 11 cycle through a secondary balanced pattern.
+    const ARCH_SLOTS = [
+      'arch-slot-1',
+      'arch-slot-2',
+      'arch-slot-3',
+      'arch-slot-4',
+      'arch-slot-hero arch-slot-5',
+      'arch-slot-6',
+      'arch-slot-7',
+      'arch-slot-8',
+      'arch-slot-9',
+      'arch-slot-10',
+      'arch-slot-11'
+    ];
+    const EXTRA_SLOTS = [
+      'arch-extra-wide',
+      'arch-extra-slim',
+      'arch-extra-mid',
+      'arch-extra-slim',
+      'arch-extra-wide',
+      'arch-extra-mid'
+    ];
 
-    div.className = `masonry-item ${slotClass} reveal`;
-    div.style.transitionDelay = `${(i % 4) * 80}ms`;
+    let slotClass;
+    if (i < ARCH_SLOTS.length) {
+      slotClass = ARCH_SLOTS[i];
+    } else {
+      slotClass = EXTRA_SLOTS[(i - ARCH_SLOTS.length) % EXTRA_SLOTS.length];
+    }
+
+    div.className = `arch-project-item ${slotClass} reveal`;
+    div.style.transitionDelay = `${(i % 5) * 70}ms`;
     div.dataset.index = i;
 
+    const numStr = String(i + 1).padStart(2, '0');
+
     div.innerHTML = `
-      <div class="masonry-card-inner">
-        <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
-        <div class="masonry-overlay">
-          <div class="masonry-overlay-content">
-            <span class="masonry-category">${category}</span>
-            <h3 class="masonry-title">${p.title}</h3>
-            <span class="masonry-location">${location}</span>
-            <a href="project-detail.html?id=${p.id}" class="masonry-btn">
-              View project
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-          </div>
+      <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
+      <div class="arch-project-overlay">
+        <div class="arch-overlay-top">
+          <span class="arch-project-num">${numStr}</span>
+        </div>
+        <div class="arch-overlay-bottom">
+          <span class="arch-project-cat">${category}</span>
+          <h3 class="arch-project-title">${p.title}</h3>
+          <span class="arch-project-loc">${location}</span>
         </div>
       </div>`;
 
-    div.addEventListener('click', (e) => {
-      if (!e.target.closest('.masonry-btn')) {
-        window.location.href = `project-detail.html?id=${p.id}`;
-      }
+    div.addEventListener('click', () => {
+      window.location.href = `project-detail.html?id=${p.id}`;
     });
     return div;
   }
+
 
   // ─── Lightbox ─────────────────────────────────────────────────
   function initLightbox() {
@@ -855,7 +1084,7 @@
 
       setTimeout(() => {
         window.open(waUrl, '_blank');
-        btn.textContent = btn.classList.contains('btn-primary') ? 'Send Message' : 'GET IN TOUCH';
+        btn.textContent = 'SEND MESSAGE';
         btn.disabled = false;
         if (fb) {
           fb.textContent = '✓ Opening WhatsApp chat...';

@@ -23,6 +23,7 @@
     initScrollNav();
     loadSettings();
     initCounters();
+    initDonationSection();
   });
 
 
@@ -30,7 +31,7 @@
   // ─── Theme ──────────────────────────────────────────────
   function initTheme() {
     let saved = 'dark';
-    try { saved = localStorage.getItem('onix-theme') || 'dark'; } catch(e) {}
+    try { saved = localStorage.getItem('onix-theme') || 'dark'; } catch (e) { }
     setTheme(saved);
 
     const toggle = document.getElementById('theme-toggle');
@@ -44,7 +45,7 @@
 
   function setTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('onix-theme', theme); } catch(e) {}
+    try { localStorage.setItem('onix-theme', theme); } catch (e) { }
     const moon = document.getElementById('icon-moon');
     const sun = document.getElementById('icon-sun');
     if (moon && sun) {
@@ -63,7 +64,7 @@
     const toggle = document.getElementById('nav-toggle');
     const menu = document.getElementById('fullscreen-menu');
     const header = document.getElementById('nav-header');
-    
+
     if (!toggle || !menu) return;
 
     toggle.addEventListener('click', () => {
@@ -228,7 +229,7 @@
           img.style.display = 'block';
         });
         document.querySelectorAll('.logo-text').forEach(txt => {
-          if (txt.id === 'logo-text') txt.style.display = 'none';
+          txt.style.display = 'none';
         });
       }
 
@@ -237,40 +238,44 @@
         document.getElementById('hero-title').textContent = s.hero_title;
       }
       if (s.hero_subtitle) {
-        // Handle city/number splitting for the new layout
         const sub = s.hero_subtitle;
         if (sub.includes('|')) {
-           const parts = sub.split('|');
-           document.querySelector('.project-number').textContent = parts[0].trim();
-           document.getElementById('hero-location').textContent = parts[1].trim();
-           document.getElementById('hero-sub').textContent = parts[2] || '';
+          const parts = sub.split('|');
+          const pNum = document.querySelector('.project-number');
+          const pLoc = document.getElementById('hero-location');
+          const pSub = document.getElementById('hero-sub');
+          if (pNum) pNum.textContent = parts[0].trim();
+          if (pLoc) pLoc.textContent = parts[1].trim();
+          if (pSub) pSub.textContent = parts[2] ? parts[2].trim() : parts[1].trim();
         } else {
-           document.getElementById('hero-sub').textContent = sub;
+          const pSub = document.getElementById('hero-sub');
+          if (pSub) pSub.textContent = sub;
         }
       }
-      if (s.footer_text) document.getElementById('footer-text').textContent = s.footer_text;
+      const footerTextEl = document.getElementById('footer-text');
+      if (s.footer_text && footerTextEl) footerTextEl.textContent = s.footer_text;
 
       // About Section Home
-      if (s.about_home_title) document.getElementById('home-about-label').textContent = s.about_home_title;
-      if (s.about_home_desc_1) document.getElementById('home-about-desc-1').textContent = s.about_home_desc_1;
-      if (s.about_home_desc_2) document.getElementById('home-about-desc-2').textContent = s.about_home_desc_2;
-      if (s.about_home_studio_name) document.getElementById('home-about-studio-name').textContent = s.about_home_studio_name;
+      const _set = (id, val, prop = 'textContent') => { const el = document.getElementById(id); if (el && val) el[prop] = val; };
+      _set('home-about-label', s.about_home_title);
+      _set('home-about-desc-1', s.about_home_desc_1);
+      _set('home-about-desc-2', s.about_home_desc_2);
+      _set('home-about-studio-name', s.about_home_studio_name);
 
-      if (s.about_home_img_main) document.getElementById('home-about-img-main').src = s.about_home_img_main;
-      if (s.about_home_img_top) document.getElementById('home-about-img-top').src = s.about_home_img_top;
-      if (s.about_home_img_bottom) document.getElementById('home-about-img-bottom').src = s.about_home_img_bottom;
+      _set('home-about-img-main', s.about_home_img_main, 'src');
+      _set('home-about-img-top', s.about_home_img_top, 'src');
+      _set('home-about-img-bottom', s.about_home_img_bottom, 'src');
 
       // Why Choose Section
       if (s.why_choose_heading) document.getElementById('wc-heading').textContent = s.why_choose_heading;
 
       const setWcFeature = (n, title, desc, iconPath) => {
-        if (title) document.getElementById(`wc-title-${n}`).textContent = title;
-        if (desc) document.getElementById(`wc-desc-${n}`).textContent = desc;
+        _set(`wc-title-${n}`, title);
+        _set(`wc-desc-${n}`, desc);
         if (iconPath) {
           const img = document.getElementById(`wc-icon-${n}`);
           const svg = document.getElementById(`wc-svg-${n}`);
-          img.src = iconPath;
-          img.style.display = 'block';
+          if (img) { img.src = iconPath; img.style.display = 'block'; }
           if (svg) svg.style.display = 'none';
         }
       };
@@ -278,6 +283,68 @@
       setWcFeature(1, s.feature1_title, s.feature1_description, s.feature1_icon);
       setWcFeature(2, s.feature2_title, s.feature2_description, s.feature2_icon);
       setWcFeature(3, s.feature3_title, s.feature3_description, s.feature3_icon);
+
+      // ─── Dynamic Donation Section (CMS Controlled) ───────────
+      const donSec = document.getElementById('donation-section');
+      if (donSec) {
+        // Section Visibility
+        if (s.donation_enable_section !== undefined) {
+          const isEnabled = s.donation_enable_section === '1' || s.donation_enable_section === 'true' || s.donation_enable_section === true;
+          donSec.style.display = isEnabled ? '' : 'none';
+        }
+
+        // Headline & Description (supports controlled linebreaks if present)
+        if (s.donation_headline) {
+          const hEl = document.getElementById('donation-headline');
+          if (hEl) hEl.innerHTML = s.donation_headline.replace(/\n/g, '<br />');
+        }
+        if (s.donation_description) {
+          _set('donation-desc', s.donation_description);
+        }
+
+        // CTA text & link
+        if (s.donation_cta_text) {
+          _set('donation-cta-text', s.donation_cta_text);
+        }
+        if (s.donation_cta_url) {
+          const ctaWrap = document.getElementById('donation-cta-wrap');
+          if (ctaWrap) ctaWrap.dataset.ctaUrl = s.donation_cta_url;
+        }
+
+        // Images
+        if (s.donation_img_center) _set('donation-img-center', s.donation_img_center, 'src');
+        if (s.donation_img_left) _set('donation-img-left', s.donation_img_left, 'src');
+        if (s.donation_img_right) _set('donation-img-right', s.donation_img_right, 'src');
+
+        // Testimonial
+        const testiOverlay = document.getElementById('donation-testimonial-overlay');
+        const showTesti = (s.donation_enable_testimonial === undefined || s.donation_enable_testimonial === '1' || s.donation_enable_testimonial === 'true' || s.donation_enable_testimonial === true);
+        const hasQuote = (s.donation_testi_quote && s.donation_testi_quote.trim()) || document.getElementById('donation-testi-quote')?.textContent.trim();
+
+        if (testiOverlay) {
+          if (!showTesti || !hasQuote) {
+            testiOverlay.style.display = 'none';
+          } else {
+            testiOverlay.style.display = 'block';
+            if (s.donation_testi_quote) _set('donation-testi-quote', `"${s.donation_testi_quote.replace(/^["']|["']$/g, '')}"`);
+            if (s.donation_testi_name) _set('donation-testi-name', s.donation_testi_name);
+            if (s.donation_testi_avatar) _set('donation-testi-avatar', s.donation_testi_avatar, 'src');
+            if (s.donation_testi_role) {
+              const roleEl = document.getElementById('donation-testi-role');
+              if (roleEl) {
+                roleEl.textContent = ` • ${s.donation_testi_role}`;
+                roleEl.style.display = 'inline';
+              }
+            }
+          }
+        }
+
+        // Decorations Visibility
+        const showDoodles = (s.donation_enable_decorations === undefined || s.donation_enable_decorations === '1' || s.donation_enable_decorations === 'true' || s.donation_enable_decorations === true);
+        document.querySelectorAll('.donation-doodle').forEach(d => {
+          d.style.display = showDoodles ? 'block' : 'none';
+        });
+      }
 
       // Store video path globally so loadBrandVideo() can use it
       if (s.hero_video_path) window._onixVideoPath = s.hero_video_path;
@@ -304,14 +371,25 @@
   async function loadHomeGallery() {
     const el = document.getElementById('home-gallery');
     if (!el) return;
+    if (window.Skeleton) window.Skeleton.show('sk-home-gallery');
 
     try {
+      let limit = 8;
+      try {
+        const s = await fetchJSON('/api/settings');
+        if (s && s.home_projects_limit) {
+          const parsed = parseInt(s.home_projects_limit, 10);
+          if (!isNaN(parsed) && parsed > 0) limit = parsed;
+        }
+      } catch (err) {}
+
       projects = await fetchJSON('/api/projects?page=home');
-      const slice = projects.slice(0, 8);
+      const slice = projects.slice(0, limit);
       el.innerHTML = '';
 
       if (!slice.length) {
         el.innerHTML = fallbackGallery();
+        if (window.Skeleton) window.Skeleton.hide('sk-home-gallery');
         return;
       }
 
@@ -323,7 +401,9 @@
 
       lightboxImages = slice;
       initFeaturedSlider(slice);
+      if (window.Skeleton) window.Skeleton.hide('sk-home-gallery');
     } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-home-gallery');
       el.innerHTML = fallbackGallery();
     }
   }
@@ -337,12 +417,12 @@
     const locationEl = document.getElementById('hero-location');
     const currentSlideEl = document.getElementById('hero-current-slide');
     const totalSlidesEl = document.getElementById('hero-total-slides');
-    
+
     if (!container) return;
 
     try {
       const slides = await fetchJSON('/api/hero_slides');
-      
+
       container.innerHTML = '';
       if (heroAutoplayDelay) clearInterval(heroAutoplayDelay);
 
@@ -369,7 +449,7 @@
       function updateSlideText(index) {
         const s = slides[index];
         if (!s) return;
-        
+
         if (titleEl) {
           titleEl.style.opacity = '0';
           titleEl.style.transform = 'translateY(10px)';
@@ -388,7 +468,7 @@
         }
         if (locationEl) locationEl.textContent = s.location || 'Kigali';
         if (currentSlideEl) currentSlideEl.textContent = (index + 1).toString().padStart(2, '0');
-        
+
         if (progressBar && slides.length) {
           const pct = ((index + 1) / slides.length) * 100;
           progressBar.style.width = pct + '%';
@@ -425,10 +505,10 @@
       updateSlideText(0);
 
       heroAutoplayDelay = setInterval(nextSlide, 5000);
-      
+
       const controlsWrap = document.getElementById('hero-navigation-controls');
       const hoverTargets = controlsWrap ? [container, controlsWrap] : [container];
-      
+
       hoverTargets.forEach(tgt => {
         tgt.addEventListener('mouseenter', () => clearInterval(heroAutoplayDelay));
         tgt.addEventListener('mouseleave', () => {
@@ -438,7 +518,7 @@
       });
 
     } catch (e) {
-       console.error('Hero Slider load failed:', e);
+      console.error('Hero Slider load failed:', e);
     }
   }
 
@@ -457,7 +537,7 @@
     pagination.innerHTML = '';
     let currentSlide = 0;
 
-    projects.forEach(function(p, i) {
+    projects.forEach(function (p, i) {
       const slide = document.createElement('div');
       slide.className = 'featured-slide' + (i === 0 ? ' active' : '');
       const imgSrc = p.image_path || '/images/projects/project_0' + ((i % 5) + 1) + '.jpg';
@@ -465,29 +545,29 @@
 
       slide.innerHTML =
         '<div class="featured-slide-img-wrapper">' +
-          '<img src="' + imgSrc + '" class="featured-slide-img" alt="' + p.title + '" />' +
+        '<img src="' + imgSrc + '" class="featured-slide-img" alt="' + p.title + '" />' +
         '</div>' +
         '<div class="featured-slide-content">' +
-          '<span class="featured-slide-category">' + (p.category || 'Architecture') + '</span>' +
-          '<h2 class="featured-slide-title">' + p.title + '</h2>' +
-          '<div class="featured-slide-meta">' +
-            '<span>' +
-              '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-              (p.location || 'Kigali') +
-            '</span>' +
-          '</div>' +
-          desc +
-          '<a href="project-detail.html?id=' + p.id + '" class="featured-btn">' +
-            'View Project ' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
-          '</a>' +
+        '<span class="featured-slide-category">' + (p.category || 'Architecture') + '</span>' +
+        '<h2 class="featured-slide-title">' + p.title + '</h2>' +
+        '<div class="featured-slide-meta">' +
+        '<span>' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+        (p.location || 'Kigali') +
+        '</span>' +
+        '</div>' +
+        desc +
+        '<a href="project-detail.html?id=' + p.id + '" class="featured-btn">' +
+        'View Project ' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+        '</a>' +
         '</div>';
 
       track.appendChild(slide);
 
       const dot = document.createElement('div');
       dot.className = 'pagination-dot' + (i === 0 ? ' active' : '');
-      dot.addEventListener('click', (function(idx) { return function() { goToSlide(idx); }; })(i));
+      dot.addEventListener('click', (function (idx) { return function () { goToSlide(idx); }; })(i));
       pagination.appendChild(dot);
     });
 
@@ -512,13 +592,13 @@
     if (nextBtn) nextBtn.addEventListener('click', nextSlide);
 
     let autoplay = setInterval(nextSlide, 5000);
-    
+
     if (container) {
       container.addEventListener('mouseenter', () => clearInterval(autoplay));
       container.addEventListener('mouseleave', () => {
         autoplay = setInterval(nextSlide, 5000);
       });
-      
+
       let startX = 0;
       container.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX);
       container.addEventListener('touchend', e => {
@@ -527,11 +607,133 @@
         else if (endX - startX > 50) prevSlide();
       });
     }
-    
+
     if (fullscreenBtn && container) {
       fullscreenBtn.addEventListener('click', () => {
         if (!document.fullscreenElement) {
           container.requestFullscreen().catch(e => console.log(e));
+        } else {
+          document.exitFullscreen();
+        }
+      });
+    }
+  }
+
+  // ─── Work Featured Slider Logic (Admin CMS Projects) ─────────
+  function initWorkSlider(workProjects) {
+    const track = document.getElementById('work-slider-track');
+    const pagination = document.getElementById('work-slider-pagination');
+    const prevBtn = document.getElementById('work-slider-prev');
+    const nextBtn = document.getElementById('work-slider-next');
+    const fullscreenBtn = document.getElementById('work-slider-fullscreen');
+    const container = document.getElementById('work-slider-container');
+    const curEl = document.getElementById('work-slide-current');
+    const totalEl = document.getElementById('work-slide-total');
+
+    if (!track || !workProjects || workProjects.length === 0) return;
+
+    // Pick spotlight projects that have a valid image
+    const validProjects = workProjects.filter(p => p.image_path && p.image_path.trim() !== '');
+    const sliderProjects = (validProjects.length >= 3 ? validProjects : workProjects).slice(0, 6);
+
+    if (sliderProjects.length === 0) return;
+
+    track.innerHTML = '';
+    pagination.innerHTML = '';
+    let currentSlide = 0;
+
+    if (totalEl) {
+      totalEl.textContent = String(sliderProjects.length).padStart(2, '0');
+    }
+
+    sliderProjects.forEach(function (p, i) {
+      const slide = document.createElement('div');
+      slide.className = 'featured-slide' + (i === 0 ? ' active' : '');
+      const imgSrc = p.image_path || '/images/projects/project_0' + ((i % 5) + 1) + '.jpg';
+      const descText = p.description ? p.description.trim() : (p.story_concept ? p.story_concept.trim() : '');
+      const descHtml = descText
+        ? '<p class="featured-slide-desc">' + descText.substring(0, 140) + (descText.length > 140 ? '...' : '') + '</p>'
+        : '';
+      const locationText = p.location ? p.location.trim() : 'Kigali';
+      const categoryText = (p.category ? p.category.trim() : 'Architecture');
+
+      slide.innerHTML =
+        '<div class="featured-slide-img-wrapper">' +
+          '<img src="' + imgSrc + '" class="featured-slide-img" alt="' + (p.title || 'Project') + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" />' +
+        '</div>' +
+        '<div class="featured-slide-content">' +
+          '<span class="featured-slide-category">' + categoryText + '</span>' +
+          '<h2 class="featured-slide-title">' + (p.title || 'Architectural Project') + '</h2>' +
+          '<div class="featured-slide-meta">' +
+            '<span>' +
+              '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+              locationText +
+            '</span>' +
+            (p.project_status ? '<span style="opacity:0.6">•</span><span>' + p.project_status + '</span>' : '') +
+          '</div>' +
+          descHtml +
+          '<a href="project-detail.html?id=' + p.id + '" class="featured-btn">' +
+            '<span>View Project</span>' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+          '</a>' +
+        '</div>';
+
+      track.appendChild(slide);
+
+      const dot = document.createElement('div');
+      dot.className = 'pagination-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      dot.addEventListener('click', (function (idx) { return function () { goToSlide(idx); }; })(i));
+      pagination.appendChild(dot);
+    });
+
+    const slides = track.querySelectorAll('.featured-slide');
+    const dots = pagination.querySelectorAll('.pagination-dot');
+
+    function goToSlide(index) {
+      if (!slides.length) return;
+      slides[currentSlide].classList.remove('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
+      currentSlide = index;
+      if (currentSlide >= slides.length) currentSlide = 0;
+      if (currentSlide < 0) currentSlide = slides.length - 1;
+      slides[currentSlide].classList.add('active');
+      if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+      if (curEl) curEl.textContent = String(currentSlide + 1).padStart(2, '0');
+    }
+
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function prevSlide() { goToSlide(currentSlide - 1); }
+
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+
+    let autoplay = setInterval(nextSlide, 5000);
+
+    if (container) {
+      container.addEventListener('mouseenter', () => clearInterval(autoplay));
+      container.addEventListener('mouseleave', () => {
+        clearInterval(autoplay);
+        autoplay = setInterval(nextSlide, 5000);
+      });
+
+      // Swipe support
+      let startX = 0;
+      container.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; }, { passive: true });
+      container.addEventListener('touchend', e => {
+        let endX = e.changedTouches[0].screenX;
+        if (startX - endX > 50) nextSlide();
+        else if (endX - startX > 50) prevSlide();
+      }, { passive: true });
+    }
+
+    // Fullscreen toggle
+    if (fullscreenBtn && container) {
+      fullscreenBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          container.requestFullscreen().catch(err => {
+            console.log('Fullscreen error: ' + err.message);
+          });
         } else {
           document.exitFullscreen();
         }
@@ -552,19 +754,30 @@
     try {
       // Always fetch fresh for "real-time" feel
       projects = await fetchJSON('/api/projects?page=work');
+      initWorkSlider(projects);
 
       // Setup filters if first time
       if (!filterEl.dataset.filtersInited) {
-        const categories = [...new Set(projects.map(p => p.category).filter(Boolean))];
-        categories.forEach(cat => {
+        // Normalize categories: trim and uppercase to deduplicate e.g. "INTERIOR " vs "interior"
+        const catMap = new Map();
+        projects.forEach(p => {
+          if (p.category && p.category.trim()) {
+            const normKey = p.category.trim().toUpperCase();
+            if (!catMap.has(normKey)) {
+              catMap.set(normKey, normKey);
+            }
+          }
+        });
+
+        catMap.forEach((displayName, normKey) => {
           const btn = document.createElement('button');
           btn.className = 'filter-btn';
-          btn.dataset.filter = cat;
-          btn.textContent = cat;
-          btn.addEventListener('click', () => filterWork(cat));
+          btn.dataset.filter = normKey;
+          btn.textContent = displayName;
+          btn.addEventListener('click', () => filterWork(normKey));
           filterEl.appendChild(btn);
         });
-        filterEl.querySelector('[data-filter="all"]').addEventListener('click', () => filterWork('all'));
+        filterEl.querySelector('[data-filter="all"]')?.addEventListener('click', () => filterWork('all'));
         filterEl.dataset.filtersInited = '1';
       }
 
@@ -585,7 +798,9 @@
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     document.querySelector(`[data-filter="${cat}"]`)?.classList.add('active');
 
-    filteredProjects = cat === 'all' ? projects : projects.filter(p => p.category === cat);
+    filteredProjects = cat === 'all'
+      ? projects
+      : projects.filter(p => p.category && p.category.trim().toUpperCase() === cat.toUpperCase());
     lightboxImages = filteredProjects;
     lightboxIndex = 0;
 
@@ -594,13 +809,47 @@
     renderNextWorkBatch(true);
   }
 
+  function createArchHeaderBlock() {
+    const headerBlock = document.createElement('div');
+    headerBlock.className = 'arch-header-block reveal visible';
+    headerBlock.innerHTML = `
+      <div class="arch-header-label">Our Projects</div>
+      <h2 class="arch-header-title">Selected<br>Work</h2>
+      <div class="arch-header-divider"></div>
+      <p class="arch-header-desc">A collection of spaces we've designed and crafted with purpose, detail, and timeless vision.</p>
+      <a href="#work-filter" class="arch-header-link">View All Projects <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    `;
+    headerBlock.querySelector('.arch-header-link')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+      if (allBtn) allBtn.click();
+      const filterEl = document.getElementById('work-filter');
+      if (filterEl) filterEl.scrollIntoView({ behavior: 'smooth' });
+    });
+    return headerBlock;
+  }
+
   function renderNextWorkBatch(reset = false) {
     const el = document.getElementById('work-gallery');
     const loadMoreContainer = document.getElementById('load-more-container');
-    if (reset) el.innerHTML = '';
+    if (reset) {
+      el.innerHTML = '';
+      if (filteredProjects.length > 0) {
+        const headerBlock = createArchHeaderBlock();
+        el.appendChild(headerBlock);
+        if (revealObserver) revealObserver.observe(headerBlock);
+      } else {
+        el.innerHTML = '<div style="padding:60px;color:var(--text-3);text-align:center;grid-column:1/-1">No projects found in this category.</div>';
+        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+        return;
+      }
+    }
 
     const remaining = filteredProjects.length - workVisibleCount;
-    if (remaining <= 0) return;
+    if (remaining <= 0) {
+      if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+      return;
+    }
 
     const countToLoad = Math.min(workPageSize, remaining);
     const nextBatch = filteredProjects.slice(workVisibleCount, workVisibleCount + countToLoad);
@@ -629,7 +878,7 @@
     const div = document.createElement('div');
     const imgSrc = p.image_path || `/images/projects/project_0${(i % 5) + 1}.jpg`;
     const location = p.location || 'Kigali, Rwanda';
-    const category = p.category || 'Architecture';
+    const category = p.category ? p.category.trim() : 'Architecture';
 
     if (isHome) {
       // Home page: uniform 3-col grid, existing style
@@ -653,38 +902,80 @@
       return div;
     }
 
-    // ── Work page: masonry layout ──────────────────────────────
-    // Slot pattern per 6 items: hero, medium, medium, small, small, full
-    const MASONRY_SLOTS = ['masonry-hero', 'masonry-medium', 'masonry-medium', 'masonry-small', 'masonry-small', 'masonry-full'];
-    const slotClass = MASONRY_SLOTS[i % MASONRY_SLOTS.length];
+    // ── Work page: exact 11-slot editorial arch blueprint ──────────────────
+    // IMPORTANT: This markup must stay in sync with the identical function in page.js.
+    // The site has two rendering paths for /work:
+    //   • SPA navigation  → index.html + app.js  (this path)
+    //   • Hard refresh    → work.html  + page.js  (reference implementation)
+    // Both paths must produce identical arch-project-item DOM.
+    //
+    // Slot map (14-column grid, rows auto-sized at minmax(75px, auto)):
+    //   0 = arch-slot-1   (top centre-left, tall portrait)
+    //   1 = arch-slot-2   (top centre-right, landscape)
+    //   2 = arch-slot-3   (top right, landscape)
+    //   3 = arch-slot-4   (middle left, wide landscape)
+    //   4 = arch-slot-hero arch-slot-5  (CENTRAL DOMINANT HERO)
+    //   5 = arch-slot-6   (middle right upper, wide)
+    //   6 = arch-slot-7   (middle right lower, compact)
+    //   7 = arch-slot-8   (bottom left, portrait)
+    //   8 = arch-slot-9   (bottom centre-left, tall portrait)
+    //   9 = arch-slot-10  (bottom centre-right, wide)
+    //  10 = arch-slot-11  (bottom right, square/portrait)
+    // Items beyond slot 11 cycle through a secondary balanced pattern.
+    const ARCH_SLOTS = [
+      'arch-slot-1',
+      'arch-slot-2',
+      'arch-slot-3',
+      'arch-slot-4',
+      'arch-slot-hero arch-slot-5',
+      'arch-slot-6',
+      'arch-slot-7',
+      'arch-slot-8',
+      'arch-slot-9',
+      'arch-slot-10',
+      'arch-slot-11'
+    ];
+    const EXTRA_SLOTS = [
+      'arch-extra-wide',
+      'arch-extra-slim',
+      'arch-extra-mid',
+      'arch-extra-slim',
+      'arch-extra-wide',
+      'arch-extra-mid'
+    ];
 
-    div.className = `masonry-item ${slotClass} reveal`;
-    div.style.transitionDelay = `${(i % 4) * 80}ms`;
+    let slotClass;
+    if (i < ARCH_SLOTS.length) {
+      slotClass = ARCH_SLOTS[i];
+    } else {
+      slotClass = EXTRA_SLOTS[(i - ARCH_SLOTS.length) % EXTRA_SLOTS.length];
+    }
+
+    div.className = `arch-project-item ${slotClass} reveal`;
+    div.style.transitionDelay = `${(i % 5) * 70}ms`;
     div.dataset.index = i;
 
+    const numStr = String(i + 1).padStart(2, '0');
+
     div.innerHTML = `
-      <div class="masonry-card-inner">
-        <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
-        <div class="masonry-overlay">
-          <div class="masonry-overlay-content">
-            <span class="masonry-category">${category}</span>
-            <h3 class="masonry-title">${p.title}</h3>
-            <span class="masonry-location">${location}</span>
-            <a href="project-detail.html?id=${p.id}" class="masonry-btn">
-              View project
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-          </div>
+      <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
+      <div class="arch-project-overlay">
+        <div class="arch-overlay-top">
+          <span class="arch-project-num">${numStr}</span>
+        </div>
+        <div class="arch-overlay-bottom">
+          <span class="arch-project-cat">${category}</span>
+          <h3 class="arch-project-title">${p.title}</h3>
+          <span class="arch-project-loc">${location}</span>
         </div>
       </div>`;
 
-    div.addEventListener('click', (e) => {
-      if (!e.target.closest('.masonry-btn')) {
-        window.location.href = `project-detail.html?id=${p.id}`;
-      }
+    div.addEventListener('click', () => {
+      window.location.href = `project-detail.html?id=${p.id}`;
     });
     return div;
   }
+
 
   function fallbackGallery() {
     return '<div style="padding:60px;color:var(--text-3);text-align:center;grid-column:1/-1">No projects found. Add some from the admin panel.</div>';
@@ -692,12 +983,16 @@
 
   // ─── About ───────────────────────────────────────────────
   async function loadAbout() {
+    if (window.Skeleton) window.Skeleton.show('sk-about-narrative');
     try {
       const data = await fetchJSON('/api/about');
       if (data.narrative) {
         document.getElementById('about-narrative').textContent = data.narrative;
       }
-    } catch (e) { }
+      if (window.Skeleton) window.Skeleton.hide('sk-about-narrative');
+    } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-about-narrative');
+    }
   }
 
   // ─── Dynamic Favicon Updater ──────────────────────────────────
@@ -786,6 +1081,12 @@
       el.dataset.loaded = '1';
     }
 
+    if (window.Skeleton) {
+      if (aboutEl) window.Skeleton.show('sk-about-team');
+      if (homeEl) window.Skeleton.show('sk-home-team');
+      if (contactEl) window.Skeleton.show('sk-contact-team');
+    }
+
     try {
       const team = await fetchJSON('/api/team');
 
@@ -797,7 +1098,18 @@
       renderInto(aboutEl, team);
       renderInto(contactEl, team);
 
+      if (window.Skeleton) {
+        if (aboutEl) window.Skeleton.hide('sk-about-team');
+        if (homeEl) window.Skeleton.hide('sk-home-team');
+        if (contactEl) window.Skeleton.hide('sk-contact-team');
+      }
+
     } catch (e) {
+      if (window.Skeleton) {
+        if (aboutEl) window.Skeleton.hide('sk-about-team');
+        if (homeEl) window.Skeleton.hide('sk-home-team');
+        if (contactEl) window.Skeleton.hide('sk-contact-team');
+      }
       [aboutEl, homeEl, contactEl].forEach(el => {
         if (el) el.innerHTML = '<div class="team-empty">Team photos coming soon.</div>';
       });
@@ -817,6 +1129,7 @@
     const el = document.getElementById('services-list');
     if (el.dataset.loaded) return;
     el.dataset.loaded = '1';
+    if (window.Skeleton) window.Skeleton.show('sk-services-list');
 
     try {
       const services = await fetchJSON('/api/services');
@@ -838,7 +1151,9 @@
       });
 
       el.dataset.loaded = '1';
+      if (window.Skeleton) window.Skeleton.hide('sk-services-list');
     } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-services-list');
       el.innerHTML = '<div style="padding:40px;color:var(--text-3)">Services loading failed. Check database connection.</div>';
     }
   }
@@ -848,6 +1163,7 @@
     const el = document.getElementById('workshops-list');
     if (el.dataset.loaded) return;
     el.dataset.loaded = '1';
+    if (window.Skeleton) window.Skeleton.show('sk-workshops-list');
 
     try {
       const workshops = await fetchJSON('/api/workshops');
@@ -898,7 +1214,9 @@
       });
 
       el.dataset.loaded = '1';
+      if (window.Skeleton) window.Skeleton.hide('sk-workshops-list');
     } catch (e) {
+      if (window.Skeleton) window.Skeleton.hide('sk-workshops-list');
       el.innerHTML = '<div style="padding:40px;color:var(--text-3)">Workshops loading failed.</div>';
     }
   }
@@ -1031,7 +1349,7 @@
 
         setTimeout(() => {
           window.open(waUrl, '_blank');
-          btn.textContent = btn.classList.contains('btn-primary') ? 'Send Message' : 'GET IN TOUCH';
+          btn.textContent = 'SEND MESSAGE';
           btn.disabled = false;
           if (fb) {
             fb.textContent = '✓ Opening WhatsApp chat...';
@@ -1099,6 +1417,152 @@
       }
     };
     window.requestAnimationFrame(step);
+  }
+
+  // ─── Donation Section ───────────────────────────────────
+  function initDonationSection() {
+    const sec = document.getElementById('donation-section');
+    if (!sec) return;
+
+    // Connect Main Pill CTA Button
+    const ctaBtn = sec.querySelector('#donation-cta-btn');
+    const ctaWrap = sec.querySelector('#donation-cta-wrap');
+    const modalBackdrop = sec.querySelector('#donation-checkout-modal');
+    const modalCloseBtn = sec.querySelector('#donation-modal-close');
+
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', (e) => {
+        const customUrl = ctaWrap?.dataset?.ctaUrl;
+        if (customUrl && customUrl.trim() !== '' && customUrl.trim() !== '#') {
+          // Administrator configured external payment or custom donation page URL
+          window.location.href = customUrl;
+          return;
+        }
+
+        // Open integrated payment checkout modal
+        if (modalBackdrop) {
+          modalBackdrop.classList.add('open');
+          modalBackdrop.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    }
+
+    function closeModal() {
+      if (modalBackdrop) {
+        modalBackdrop.classList.remove('open');
+        modalBackdrop.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+    if (modalBackdrop) {
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) closeModal();
+      });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalBackdrop?.classList.contains('open')) closeModal();
+    });
+
+    let selectedAmount = '50';
+    let frequency = 'once';
+    let method = 'card';
+
+    const amountBtns = sec.querySelectorAll('.amount-btn');
+    const customInput = sec.querySelector('#custom-donation-amount');
+    const submitBtn = sec.querySelector('#donation-submit-btn');
+    const submitText = submitBtn ? submitBtn.querySelector('span') : null;
+    const freqBtns = sec.querySelectorAll('.freq-btn');
+    const methodInputs = sec.querySelectorAll('input[name="donation-method"]');
+    const momoWrap = sec.querySelector('#momo-phone-wrap');
+    const form = sec.querySelector('#donation-form');
+    const feedback = sec.querySelector('#donation-feedback');
+
+    function updateSubmitText() {
+      if (!submitText) return;
+      const amt = selectedAmount ? `$${selectedAmount}` : '$50';
+      const freqLabel = frequency === 'monthly' ? '/mo' : '';
+      submitText.textContent = `Support With ${amt}${freqLabel}`;
+    }
+
+    // Frequency Toggle
+    freqBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        freqBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        frequency = btn.dataset.freq;
+        updateSubmitText();
+      });
+    });
+
+    // Amount Selection
+    amountBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        amountBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (customInput) customInput.value = '';
+        selectedAmount = btn.dataset.amount;
+        updateSubmitText();
+      });
+    });
+
+    // Custom Amount Input
+    if (customInput) {
+      customInput.addEventListener('input', () => {
+        if (customInput.value && parseInt(customInput.value, 10) > 0) {
+          amountBtns.forEach(b => b.classList.remove('active'));
+          selectedAmount = customInput.value;
+        } else {
+          selectedAmount = '50';
+        }
+        updateSubmitText();
+      });
+    }
+
+    // Payment Method Toggle
+    methodInputs.forEach(input => {
+      input.addEventListener('change', () => {
+        method = input.value;
+        sec.querySelectorAll('.donation-method-option').forEach(opt => {
+          opt.classList.toggle('active', opt.querySelector('input') === input);
+        });
+        if (momoWrap) {
+          momoWrap.style.display = method === 'momo' ? 'block' : 'none';
+          const phoneInput = momoWrap.querySelector('input');
+          if (phoneInput) phoneInput.required = method === 'momo';
+        }
+      });
+    });
+
+    // Form Submission
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = form.querySelector('#donor-name')?.value || '';
+        const email = form.querySelector('#donor-email')?.value || '';
+        const amount = selectedAmount || '50';
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          if (submitText) submitText.textContent = 'Processing...';
+        }
+
+        setTimeout(() => {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            updateSubmitText();
+          }
+          if (feedback) {
+            feedback.style.color = 'var(--accent)';
+            feedback.innerHTML = `✓ Thank you, <strong>${name}</strong>! Your donation of <strong>$${amount}</strong> (${frequency === 'monthly' ? 'Monthly' : 'One-Time'}) via ${method.toUpperCase()} has been received with deep gratitude.`;
+            form.reset();
+            if (momoWrap) momoWrap.style.display = 'none';
+          }
+        }, 800);
+      });
+    }
   }
 
   // ─── Utility ─────────────────────────────────────────────

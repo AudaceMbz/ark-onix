@@ -14,6 +14,10 @@
       return;
     }
 
+    if (window.Skeleton) {
+      window.Skeleton.show('sk-project-detail', 'project-detail-content');
+    }
+
     try {
       const resp = await fetch(`/api/projects?id=${projectId}`);
       if (!resp.ok) throw new Error('Project not found');
@@ -21,15 +25,23 @@
 
       renderProjectDetail(project);
       setupProjectNav(projectId);
+
+      if (window.Skeleton) {
+        window.Skeleton.hide('sk-project-detail', 'project-detail-content');
+      }
     } catch (err) {
       console.error('Failed to load project:', err);
-      document.getElementById('project-detail-content').innerHTML = `
-        <div style="padding: 100px; text-align: center;">
-          <h2>Project Not Found</h2>
-          <p>The project you're looking for doesn't exist or has been removed.</p>
-          <a href="/" class="btn-minimal">Back to Home</a>
-        </div>
-      `;
+      if (window.Skeleton) {
+        window.Skeleton.showError('sk-project-detail', 'Project not found or unavailable.', () => location.reload());
+      } else {
+        document.getElementById('project-detail-content').innerHTML = `
+          <div style="padding: 100px; text-align: center;">
+            <h2>Project Not Found</h2>
+            <p>The project you're looking for doesn't exist or has been removed.</p>
+            <a href="/" class="btn-minimal">Back to Home</a>
+          </div>
+        `;
+      }
     }
   }
 
@@ -40,6 +52,16 @@
     document.getElementById('pd-location').textContent = p.location || 'Architecture';
     document.getElementById('pd-status').textContent = p.project_status || 'Completed';
     document.getElementById('pd-featured-img').src = p.image_path;
+
+    // ── Populate new premium hero overlay ──
+    const heroTitle = document.getElementById('pd-hero-title-display');
+    if (heroTitle) heroTitle.textContent = p.title;
+
+    const heroLocation = document.getElementById('pd-hero-location-display');
+    if (heroLocation) heroLocation.textContent = p.location || 'Kigali, Rwanda';
+
+    const heroCategory = document.getElementById('pd-hero-category');
+    if (heroCategory) heroCategory.textContent = p.project_type || p.category || 'Architecture';
 
     // Sidebar
     document.getElementById('pd-client').textContent = p.client || 'Private Client';

@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/responsive.css" />
+  <link rel="stylesheet" href="/css/skeleton.css" />
 </head>
 
 <body>
@@ -25,8 +26,7 @@
       <div class="logo-wrapper">
         <a href="/" data-page="home" class="nav-logo">
           <div class="logo-brand">
-            <img src="" alt="Logo" class="logo-img"
-              style="display:none; height: 64px; width: auto; object-fit: contain;" />
+            <img src="" alt="Logo" class="logo-img" style="display:none;" />
             <div class="logo-text" id="logo-text">
               <span class="logo-onix">ONIX</span>
               <span class="logo-studio">STUDIO</span>
@@ -176,9 +176,9 @@
           <a href="https://wa.me/250790128174" target="_blank" class="menu-social-link" aria-label="WhatsApp">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
               <path
-                d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
-              </path>
+                d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
             </svg>
           </a>
         </div>
@@ -208,21 +208,14 @@
             <div class="hero-content-wrapper">
               <!-- Eyebrow label -->
               <div class="hero-eyebrow">
-                <span class="eyebrow-accent"></span>
                 <span class="eyebrow-text">Architectural Studio &bull; Design Excellence</span>
               </div>
 
               <!-- Main Architectural Headline -->
-              <h1 class="hero-title" id="hero-title">Minimal Architecture</h1>
+              <h1 class="hero-title" id="hero-title">Minimal<br />Architecture</h1>
 
-              <!-- Architectural Meta & Description Block -->
-              <div class="hero-subtitle-block">
-                <div class="hero-project-info">
-                  <span class="project-number">01.</span>
-                  <span class="project-location" id="hero-location">kigali</span>
-                  <span class="project-divider">/</span>
-                  <span class="project-badge">Selected Works</span>
-                </div>
+              <!-- Architectural Description Block -->
+              <div class="hero-description-block">
                 <p class="hero-description" id="hero-sub">We craft spaces that transcend the ordinary — balancing
                   material, light, and proportion into living art.</p>
               </div>
@@ -231,41 +224,37 @@
               <div class="hero-actions">
                 <a href="/work" data-page="work" class="hero-btn-primary">
                   <span>Explore Portfolio</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+                  <span class="btn-arrow" aria-hidden="true">&rarr;</span>
                 </a>
                 <a href="/contact" data-page="contact" class="hero-btn-secondary">
                   <span>Start Consultation</span>
                 </a>
               </div>
-            </div>
-          </div>
 
-          <!-- Slide Controls & Indicator -->
-          <div class="hero-selectors" id="hero-navigation-controls">
-            <button id="hero-prev" class="hero-nav-btn" aria-label="Previous Slide">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
-            </button>
-            <div class="slide-numbers-wrap">
-              <span class="current-slide" id="hero-current-slide">01</span>
-              <span class="slide-sep">/</span>
-              <span class="total-slides" id="hero-total-slides">02</span>
+              <!-- Slide Controls & Indicator -->
+              <div class="hero-selectors" id="hero-navigation-controls">
+                <button id="hero-prev" class="hero-nav-btn" aria-label="Previous Slide">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                <div class="slide-numbers-wrap">
+                  <span class="current-slide" id="hero-current-slide">01</span>
+                  <span class="slide-sep">/</span>
+                  <span class="total-slides" id="hero-total-slides">03</span>
+                </div>
+                <div class="slide-track-line" id="hero-progress-container">
+                  <div class="progress-bar" id="hero-progress-bar"></div>
+                </div>
+                <button id="hero-next" class="hero-nav-btn" aria-label="Next Slide">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
             </div>
-            <div class="slide-progress" id="hero-progress-container">
-              <div class="progress-bar" id="hero-progress-bar"></div>
-            </div>
-            <button id="hero-next" class="hero-nav-btn" aria-label="Next Slide">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
           </div>
         </div>
 
@@ -281,11 +270,6 @@
           </div>
         </div>
 
-        <!-- Architectural Watermark Badge -->
-        <div class="hero-frame-meta">
-          <span class="hero-frame-tag">ARK-ONIX</span>
-          <span class="hero-frame-detail">Est. 2024 &bull; Kigali</span>
-        </div>
       </section>
 
       <!-- About Studio Section -->
@@ -331,7 +315,7 @@
         <div class="why-choose-container">
           <div class="why-choose-header reveal">
             <div class="section-label-minimal">Our Advantages</div>
-            <h2 class="why-choose-title" id="wc-heading">Why Choose <em>ArkiOnix Studio</em></h2>
+            <h2 class="why-choose-title" id="wc-heading">Why Choose <br><em>Onix Studio</em></h2>
           </div>
 
           <div class="why-choose-grid">
@@ -469,8 +453,61 @@
           </div>
         </section>
 
-        <!-- Selected Projects Gallery Grid (below the slideshow) -->
+        <!-- Selected Projects Gallery Grid -->
         <section class="home-gallery-section">
+          <!-- Skeleton for Home Gallery -->
+          <div class="sk-container" id="sk-home-gallery" aria-label="Loading projects...">
+            <div class="sk-home-gallery" style="margin-bottom: 24px;">
+              <div class="sk-project-card">
+                <div class="sk-img r-4-3"></div>
+                <div class="sk-meta">
+                  <span class="sk-line w-35 h-sm"></span>
+                  <span class="sk-line w-85 h-lg"></span>
+                  <span class="sk-line w-50 h-sm"></span>
+                </div>
+              </div>
+              <div class="sk-project-card">
+                <div class="sk-img r-4-3"></div>
+                <div class="sk-meta">
+                  <span class="sk-line w-40 h-sm"></span>
+                  <span class="sk-line w-70 h-lg"></span>
+                  <span class="sk-line w-45 h-sm"></span>
+                </div>
+              </div>
+              <div class="sk-project-card">
+                <div class="sk-img r-4-3"></div>
+                <div class="sk-meta">
+                  <span class="sk-line w-30 h-sm"></span>
+                  <span class="sk-line w-92 h-lg"></span>
+                  <span class="sk-line w-55 h-sm"></span>
+                </div>
+              </div>
+              <div class="sk-project-card">
+                <div class="sk-img r-4-3"></div>
+                <div class="sk-meta">
+                  <span class="sk-line w-45 h-sm"></span>
+                  <span class="sk-line w-75 h-lg"></span>
+                  <span class="sk-line w-40 h-sm"></span>
+                </div>
+              </div>
+              <div class="sk-project-card">
+                <div class="sk-img r-4-3"></div>
+                <div class="sk-meta">
+                  <span class="sk-line w-35 h-sm"></span>
+                  <span class="sk-line w-80 h-lg"></span>
+                  <span class="sk-line w-60 h-sm"></span>
+                </div>
+              </div>
+              <div class="sk-project-card">
+                <div class="sk-img r-4-3"></div>
+                <div class="sk-meta">
+                  <span class="sk-line w-40 h-sm"></span>
+                  <span class="sk-line w-65 h-lg"></span>
+                  <span class="sk-line w-35 h-sm"></span>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="gallery-grid showcase-grid reveal" id="home-gallery">
             <!-- Populated by JS -->
           </div>
@@ -505,8 +542,222 @@
           <div class="intro-label">The People</div>
           <h2 class="section-heading">Meet the team<br /><em>behind the vision</em></h2>
         </div>
+        <!-- Skeleton for Home Team -->
+        <div class="sk-container" id="sk-home-team" aria-label="Loading team...">
+          <div class="sk-team-grid" style="max-width:900px;margin:0 auto 30px;padding:0 4%;">
+            <div class="sk-team-card">
+              <div class="sk-avatar xl"></div>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+            <div class="sk-team-card">
+              <div class="sk-avatar xl"></div>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+          </div>
+        </div>
         <div class="team-row" id="home-team-row">
           <div class="team-empty">Team photos will appear here once uploaded from the admin panel.</div>
+        </div>
+      </section>
+
+      <!-- ══ Donation / Impact Section ══════════════════════════════════ -->
+      <!-- ══ Donation / Impact Section ══════════════════════════════════ -->
+      <section class="donation-section reveal" id="donation-section">
+        <div class="donation-ref-container">
+
+          <!-- Top Header Content -->
+          <div class="donation-ref-header">
+            <h2 class="donation-ref-headline" id="donation-headline">
+              Together, we build<br /><em>a brighter future</em>
+            </h2>
+            <p class="donation-ref-desc" id="donation-desc">
+              Because every small act of kindness waters the seeds of change
+            </p>
+            <div class="donation-ref-cta-wrap" id="donation-cta-wrap">
+              <button type="button" class="donation-ref-cta-btn" id="donation-cta-btn">
+                <span id="donation-cta-text">Donate Now</span>
+                <span class="donation-cta-arrow">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 26 19" style="display:none"></polyline>
+                    <path d="M13 6l6 6-6 6" />
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Layered Image Composition & Testimonial -->
+          <div class="donation-ref-visual-stage">
+
+            <!-- Left Hand-Drawn Doodle (paper plane / arrow) -->
+            <div class="donation-doodle donation-doodle-left" id="donation-doodle-left">
+              <svg width="74" height="74" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 68 C 15 50, 18 35, 30 28 C 45 20, 52 48, 28 54 C 20 56, 15 45, 25 38"
+                  stroke="rgba(165, 142, 251, 0.75)" stroke-dasharray="2 3" />
+                <!-- paper plane -->
+                <path d="M42 46 L 78 30 L 58 72 L 50 56 Z" stroke="rgba(150, 125, 248, 0.85)" fill="none" />
+                <path d="M50 56 L 78 30" stroke="rgba(150, 125, 248, 0.85)" />
+              </svg>
+            </div>
+
+            <!-- Right Hand-Drawn Doodle (heart / flower scribble) -->
+            <div class="donation-doodle donation-doodle-right" id="donation-doodle-right">
+              <svg width="84" height="84" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M45 42 C 40 28, 20 30, 24 48 C 28 60, 48 72, 48 72 C 48 72, 68 60, 72 48 C 76 30, 56 28, 51 42 Z"
+                  stroke="rgba(244, 143, 177, 0.75)" />
+                <path d="M60 30 C 58 20, 72 18, 76 26 C 80 34, 70 42, 60 46" stroke="rgba(244, 143, 177, 0.6)" />
+              </svg>
+            </div>
+
+            <!-- Overlapping Layered Images -->
+            <div class="donation-cards-cluster">
+
+              <!-- IMAGE 1 — LEFT/BACKGROUND -->
+              <div class="donation-img-card donation-card-left" id="donation-card-left">
+                <img src="/images/donation/left.jpg" id="donation-img-left" alt="Community Architecture & Impact"
+                  onerror="this.src='/images/projects/project_01.jpg'" />
+              </div>
+
+              <!-- IMAGE 2 — CENTER/MAIN -->
+              <div class="donation-img-card donation-card-center" id="donation-card-center">
+                <img src="/images/donation/center.jpg" id="donation-img-center" alt="Building a brighter future"
+                  onerror="this.src='/images/projects/project_02.jpg'" />
+
+                <!-- TESTIMONIAL OVERLAY ON LOWER PORTION OF CENTER IMAGE -->
+                <div class="donation-testimonial-overlay" id="donation-testimonial-overlay">
+                  <div class="donation-testi-avatar-wrap">
+                    <img src="/images/donation/avatar.jpg" id="donation-testi-avatar" alt="Testimonial Author"
+                      onerror="this.src='/images/team/1778344060907-837.jpg'" />
+                  </div>
+                  <blockquote class="donation-testi-quote" id="donation-testi-quote">
+                    "This organization transformed my life and the lives of many others."
+                  </blockquote>
+                  <div class="donation-testi-meta">
+                    <span class="donation-testi-name" id="donation-testi-name">Diana rose</span>
+                    <span class="donation-testi-role" id="donation-testi-role" style="display:none;"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- IMAGE 3 — RIGHT/BACKGROUND -->
+              <div class="donation-img-card donation-card-right" id="donation-card-right">
+                <img src="/images/donation/right.jpg" id="donation-img-right" alt="Sustainable Future"
+                  onerror="this.src='/images/projects/project_04.jpg'" />
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ══ Integrated Donation Checkout Modal (Preserving All Donation Functionality) ══ -->
+        <div class="donation-modal-backdrop" id="donation-checkout-modal" aria-hidden="true">
+          <div class="donation-modal-window">
+            <button type="button" class="donation-modal-close" id="donation-modal-close"
+              aria-label="Close donation dialog">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <div class="donation-card-header">
+              <h3>Make a Contribution</h3>
+              <p>Choose an amount or enter your custom gift</p>
+            </div>
+
+            <!-- Frequency Tabs -->
+            <div class="donation-frequency-toggle">
+              <button type="button" class="freq-btn active" data-freq="once">One-Time</button>
+              <button type="button" class="freq-btn" data-freq="monthly">Monthly</button>
+            </div>
+
+            <!-- Amount Selection -->
+            <div class="donation-amounts">
+              <button type="button" class="amount-btn" data-amount="25">$25</button>
+              <button type="button" class="amount-btn active" data-amount="50">$50</button>
+              <button type="button" class="amount-btn" data-amount="100">$100</button>
+              <button type="button" class="amount-btn" data-amount="250">$250</button>
+            </div>
+
+            <div class="custom-amount-wrap">
+              <span class="currency-symbol">$</span>
+              <input type="number" id="custom-donation-amount" placeholder="Custom amount" min="5" />
+            </div>
+
+            <!-- Payment Method Selection -->
+            <div class="donation-methods-label">Select Payment Method</div>
+            <div class="donation-methods">
+              <label class="donation-method-option active">
+                <input type="radio" name="donation-method" value="card" checked />
+                <span class="method-box">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                    <line x1="6" y1="15" x2="10" y2="15"></line>
+                  </svg>
+                  <span>Credit / Debit Card</span>
+                </span>
+              </label>
+              <label class="donation-method-option">
+                <input type="radio" name="donation-method" value="momo" />
+                <span class="method-box">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="2" width="14" height="20" rx="3"></rect>
+                    <path d="M12 18h.01"></path>
+                    <path d="M9 5h6"></path>
+                  </svg>
+                  <span>Mobile Money (MTN / Airtel)</span>
+                </span>
+              </label>
+              <label class="donation-method-option">
+                <input type="radio" name="donation-method" value="paypal" />
+                <span class="method-box">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.82.875 4.966-.78 3.902-3.14 6.046-7.018 6.046H9.72l-1.408 8.082a.641.641 0 0 1-.633.533h-.603z" opacity="0.88"/>
+                    <path d="M10.272 17.502h-3.23a.641.641 0 0 1-.633-.532l1.625-9.333a.641.641 0 0 1 .633-.533h4.942c2.476 0 4.298.53 5.12 1.705.748 1.07.822 2.585.22 4.507-.723 2.308-2.316 4.186-4.664 4.186h-4.013z"/>
+                  </svg>
+                  <span>PayPal</span>
+                </span>
+              </label>
+            </div>
+
+            <!-- Details Form -->
+            <form class="donation-form" id="donation-form">
+              <div class="donation-input-row">
+                <input type="text" id="donor-name" placeholder="Your Full Name" required />
+                <input type="email" id="donor-email" placeholder="Email Address" required />
+              </div>
+              <!-- Dynamic Momo Phone Field -->
+              <div id="momo-phone-wrap" style="display: none; margin-top: 10px;">
+                <input type="tel" id="donor-phone" placeholder="MOMO Phone Number (e.g., +250 790 128 174)" />
+              </div>
+              <button type="submit" class="btn-primary donation-submit-btn" id="donation-submit-btn">
+                <span>Support With $50</span>
+              </button>
+            </form>
+
+            <div class="donation-feedback" id="donation-feedback"></div>
+            <div class="donation-security-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <span>Encrypted & secure transaction. 100% tax deductible.</span>
+            </div>
+          </div>
         </div>
       </section>
     </section>
@@ -526,6 +777,15 @@
             <div class="vertical-label">Our Story</div>
           </div>
           <div class="about-text-col">
+            <!-- Narrative Skeleton -->
+            <div class="sk-container" id="sk-about-narrative" aria-label="Loading story...">
+              <div class="sk-about-text">
+                <span class="sk-line w-100 h-md"></span>
+                <span class="sk-line w-100 h-md"></span>
+                <span class="sk-line w-92 h-md"></span>
+                <span class="sk-line w-68 h-md"></span>
+              </div>
+            </div>
             <p class="about-narrative" id="about-narrative">
               Architecture is about experience, not only visual. We design spaces that balance right material and
               proportion, inspired by contemporary study and timeless craft. Our work is a dialogue between the built
@@ -588,6 +848,29 @@
           <div class="intro-label">The People</div>
           <h2 class="section-heading">Meet the team<br /><em>behind the vision</em></h2>
         </div>
+        <!-- Skeleton for Team on About Page -->
+        <div class="sk-container" id="sk-about-team" aria-label="Loading team...">
+          <div class="sk-team-grid" style="max-width:1200px;margin:0 auto 40px;padding:0 4%;">
+            <div class="sk-team-card">
+              <div class="sk-avatar xl"></div>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+            <div class="sk-team-card">
+              <div class="sk-avatar xl"></div>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+            <div class="sk-team-card">
+              <div class="sk-avatar xl"></div>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+          </div>
+        </div>
         <div class="team-row" id="team-row">
           <!-- Populated by JS -->
         </div>
@@ -606,6 +889,36 @@
       <div class="services-intro reveal">
         <p>From a single room to a city block — our services span the full spectrum of the built environment, delivered
           with precision and passion.</p>
+      </div>
+
+      <!-- Skeleton for Services -->
+      <div class="sk-container" id="sk-services-list" aria-label="Loading services...">
+        <div style="max-width:1100px;margin:0 auto 40px;padding:0 4%;">
+          <div class="sk-service-item">
+            <div class="sk-number sk"></div>
+            <div class="sk-body">
+              <span class="sk-line w-40 h-lg"></span>
+              <span class="sk-line w-80 h-sm"></span>
+              <span class="sk-line w-65 h-sm"></span>
+            </div>
+          </div>
+          <div class="sk-service-item">
+            <div class="sk-number sk"></div>
+            <div class="sk-body">
+              <span class="sk-line w-50 h-lg"></span>
+              <span class="sk-line w-75 h-sm"></span>
+              <span class="sk-line w-60 h-sm"></span>
+            </div>
+          </div>
+          <div class="sk-service-item">
+            <div class="sk-number sk"></div>
+            <div class="sk-body">
+              <span class="sk-line w-35 h-lg"></span>
+              <span class="sk-line w-80 h-sm"></span>
+              <span class="sk-line w-70 h-sm"></span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <section class="services-list" id="services-list">
@@ -630,6 +943,28 @@
       <div class="training-intro reveal">
         <p>Our workshops are curated experiences designed to sharpen your skills, expand your network, and transform
           your architectural practice.</p>
+      </div>
+
+      <!-- Skeleton for Workshops List -->
+      <div class="sk-container" id="sk-workshops-list" aria-label="Loading workshops...">
+        <div style="max-width:1100px;margin:0 auto 40px;padding:0 4%;">
+          <div class="sk-workshop-item">
+            <div class="sk-body">
+              <span class="sk-line w-30 h-sm"></span>
+              <span class="sk-line w-65 h-lg"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+            <div class="sk-circle sk" style="width:36px;height:36px;border-radius:50%;"></div>
+          </div>
+          <div class="sk-workshop-item">
+            <div class="sk-body">
+              <span class="sk-line w-25 h-sm"></span>
+              <span class="sk-line w-60 h-lg"></span>
+              <span class="sk-line w-75 h-sm"></span>
+            </div>
+            <div class="sk-circle sk" style="width:36px;height:36px;border-radius:50%;"></div>
+          </div>
+        </div>
       </div>
 
       <section class="workshops-list reveal" id="workshops-list">
@@ -716,21 +1051,24 @@
         </div>
       </div>
 
-      <!-- NEW: Featured Project -->
-      <section class="work-featured-project reveal">
-        <div class="featured-image-container">
-          <img src="/images/projects/project_01.jpg" alt="Featured Architecture Project" class="featured-image" />
-          <div class="featured-overlay-content">
-            <div class="featured-info">
-              <span class="featured-location">Kigali, Rwanda</span>
-              <h3>The Peak Pavilion <!-- TODO: Replace with real flagship project name --></h3>
-            </div>
-            <p class="featured-description">
-              <!-- TODO: Replace with real narrative -->
-              A harmonious blend of structural honesty and atmospheric depth, redefining the boundary between the built
-              environment and the natural landscape.
-            </p>
+      <!-- Featured Projects Slideshow (Dynamic from Admin Panel) -->
+      <section class="featured-slider-section work-slider-section reveal" id="work-slider-section">
+        <div class="featured-slider-container work-slider-container" id="work-slider-container">
+          <div class="featured-slider-track" id="work-slider-track">
+            <!-- Dynamically populated with admin panel projects by JS -->
           </div>
+          <!-- Fullscreen button -->
+          <button class="slider-fullscreen-btn" id="work-slider-fullscreen" aria-label="Toggle Fullscreen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <polyline points="15 3 21 3 21 9" />
+              <polyline points="9 21 3 21 3 15" />
+              <line x1="21" y1="3" x2="14" y2="10" />
+              <line x1="3" y1="21" x2="10" y2="14" />
+            </svg>
+          </button>
+          <!-- Pagination dots -->
+          <div class="featured-slider-pagination" id="work-slider-pagination"></div>
         </div>
       </section>
 
@@ -738,7 +1076,37 @@
         <button class="filter-btn active" data-filter="all">All</button>
       </div>
 
-      <section class="gallery-grid full-gallery reveal" id="work-gallery">
+      <!-- Skeleton for Gallery Grid on Work Page -->
+      <div class="sk-container" id="sk-work-gallery" aria-label="Loading projects...">
+        <div class="sk-work-grid" style="max-width:1400px;margin:0 auto 60px;padding:0 4%;">
+          <div class="sk-project-card">
+            <div class="sk-img r-4-3"></div>
+            <div class="sk-meta">
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-md"></span>
+              <span class="sk-line w-50 h-sm"></span>
+            </div>
+          </div>
+          <div class="sk-project-card">
+            <div class="sk-img r-4-3"></div>
+            <div class="sk-meta">
+              <span class="sk-line w-30 h-sm"></span>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+            </div>
+          </div>
+          <div class="sk-project-card">
+            <div class="sk-img r-4-3"></div>
+            <div class="sk-meta">
+              <span class="sk-line w-50 h-sm"></span>
+              <span class="sk-line w-70 h-md"></span>
+              <span class="sk-line w-30 h-sm"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="gallery-grid full-gallery arch-gallery-grid reveal" id="work-gallery">
         <!-- Populated by JS -->
       </section>
 
@@ -795,130 +1163,245 @@
 
     <!-- ══ CONTACT PAGE ══════════════════════════════════════════════════════ -->
     <section id="page-contact" class="page">
-      <div class="page-hero contact-hero">
-        <div class="page-hero-content">
-          <div class="hero-eyebrow">Get in Touch</div>
-          <h1 class="page-title">Let's build<br /><em>something together.</em></h1>
-        </div>
+      <!-- Page Hero / Header -->
+      <div class="contact-v2-header">
+        <h1 class="contact-v2-title">Contact Us</h1>
+        <p class="contact-v2-subtitle">Reach out to our team for vehicle inquiries, selling advice, or any questions.
+        </p>
       </div>
 
-      <div class="contact-layout reveal">
-        <div class="contact-info-card">
-          <div class="hero-eyebrow">Consultation</div>
-          <h2>Chat to our team</h2>
-          <p>Need help with something? Want a demo? Get in touch with our friendly team and we'll get in touch within 2
-            hours.</p>
+      <!-- Main Content Grid -->
+      <section class="contact-v2-wrapper">
+        <div class="contact-v2-container">
+          <!-- LEFT COLUMN -->
+          <div class="contact-v2-col-left">
+            <!-- Get in Touch Card -->
+            <div class="contact-v2-card">
+              <h3 class="contact-v2-card-title">Get in Touch</h3>
+              <p class="contact-v2-card-subtitle">Have questions? We're here to help.</p>
 
-          <div class="contact-block">
-            <div class="contact-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.5">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
+              <div class="contact-v2-info-list">
+                <!-- Phone -->
+                <div class="contact-v2-info-item">
+                  <div class="contact-v2-info-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.71 3.41 2 2 0 0 1 3.68 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z">
+                      </path>
+                    </svg>
+                  </div>
+                  <div class="contact-v2-info-content">
+                    <span class="contact-v2-info-label">Phone</span>
+                    <a href="tel:+250790128174" class="contact-v2-info-val">+250 790 128 174</a>
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="contact-v2-info-item">
+                  <div class="contact-v2-info-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </div>
+                  <div class="contact-v2-info-content">
+                    <span class="contact-v2-info-label">Email</span>
+                    <a href="mailto:kwizeraodilla@gmail.com" class="contact-v2-info-val">kwizeraodilla@gmail.com</a>
+                  </div>
+                </div>
+
+                <!-- WhatsApp -->
+                <div class="contact-v2-info-item">
+                  <div class="contact-v2-info-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                      <path
+                        d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+                    </svg>
+                  </div>
+                  <div class="contact-v2-info-content">
+                    <span class="contact-v2-info-label">WhatsApp</span>
+                    <a href="https://wa.me/250790128174" target="_blank" rel="noopener noreferrer"
+                      class="contact-v2-info-val">Open Chat →</a>
+                  </div>
+                </div>
+
+                <!-- Showroom / Address -->
+                <div class="contact-v2-info-item">
+                  <div class="contact-v2-info-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div class="contact-v2-info-content">
+                    <span class="contact-v2-info-label">Kigali Studio & Showroom</span>
+                    <span class="contact-v2-info-text">KN 75 St, Nyarugenge, Kigali, Rwanda</span>
+                  </div>
+                </div>
+
+                <!-- Hours -->
+                <div class="contact-v2-info-item">
+                  <div class="contact-v2-info-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                  </div>
+                  <div class="contact-v2-info-content">
+                    <span class="contact-v2-info-label">Hours</span>
+                    <span class="contact-v2-info-text">Mon–Sat from 8:00 AM to 6:00 PM CAT</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <div class="contact-label">ONIX STUDIO</div>
-              <div class="contact-value">Onix Studio NYARUGENGE<br />KN 75 St, Kigali<br />Kigali City, Rwanda</div>
+
+            <!-- FAQ Card -->
+            <div class="contact-v2-card contact-v2-faq-card">
+              <div class="contact-v2-faq-inner">
+                <div class="contact-v2-info-icon-box" style="margin-top:0;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
+                <div class="contact-v2-faq-content">
+                  <h4 class="contact-v2-faq-title">Have Questions?</h4>
+                  <p class="contact-v2-faq-desc">Browse our FAQ for quick answers.</p>
+                  <a href="/about" data-page="about" class="contact-v2-faq-link">Visit FAQ →</a>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="contact-block">
-            <div class="contact-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.5">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-            </div>
-            <div>
-              <div class="contact-label">Email</div>
-              <div class="contact-value">kwizeraodilla@gmail.com</div>
-            </div>
-          </div>
+          <!-- RIGHT COLUMN -->
+          <div class="contact-v2-col-right">
+            <!-- Send a Message Card -->
+            <div class="contact-v2-card">
+              <h3 class="contact-v2-card-title">Send a Message</h3>
+              <p class="contact-v2-card-subtitle">We'll get back to you quickly.</p>
 
-          <div class="contact-block">
-            <div class="contact-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.5">
-                <path
-                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.71 3.41 2 2 0 0 1 3.68 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.65a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-              </svg>
+              <form class="contact-v2-form" id="contact-form">
+                <!-- Row 1: Full Name & Email -->
+                <div class="contact-v2-form-row">
+                  <div class="contact-v2-field">
+                    <label class="contact-v2-label" for="contact-name">FULL NAME</label>
+                    <input type="text" id="contact-name" name="name" class="contact-v2-input" required
+                      placeholder="Your name" />
+                  </div>
+                  <div class="contact-v2-field">
+                    <label class="contact-v2-label" for="contact-email">EMAIL ADDRESS</label>
+                    <input type="email" id="contact-email" name="email" class="contact-v2-input" required
+                      placeholder="you@example.com" />
+                  </div>
+                </div>
+
+                <!-- Row 2: Phone & Subject -->
+                <div class="contact-v2-form-row">
+                  <div class="contact-v2-field">
+                    <label class="contact-v2-label" for="contact-phone">PHONE (OPTIONAL)</label>
+                    <input type="tel" id="contact-phone" name="phone" class="contact-v2-input"
+                      placeholder="+250 7XX XXX XXX" />
+                  </div>
+                  <div class="contact-v2-field">
+                    <label class="contact-v2-label" for="contact-subject">SUBJECT</label>
+                    <select id="contact-subject" name="subject" class="contact-v2-select">
+                      <option value="Vehicle Acquisition" selected>Vehicle Acquisition</option>
+                      <option value="Vehicle Inquiry">Vehicle Inquiry</option>
+                      <option value="Selling a Vehicle">Selling a Vehicle</option>
+                      <option value="Financing">Financing</option>
+                      <option value="General Question">General Question</option>
+                      <option value="Architectural Project">Architectural Project</option>
+                      <option value="Interior Design">Interior Design</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Row 3: Message Full Width -->
+                <div class="contact-v2-field">
+                  <label class="contact-v2-label" for="contact-message">MESSAGE</label>
+                  <textarea id="contact-message" name="message" class="contact-v2-textarea" rows="4" required
+                    placeholder="Tell us about the vehicle you're looking for, or your question..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="contact-v2-btn-submit" id="contact-submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                  <span>SEND MESSAGE</span>
+                </button>
+                <div class="contact-v2-feedback" id="form-feedback"></div>
+              </form>
             </div>
-            <div>
-              <div class="contact-label">Phone</div>
-              <div class="contact-value">+250 790 128 174</div>
+
+            <!-- Google Maps Location Card -->
+            <div class="contact-v2-card contact-v2-map-card">
+              <div class="contact-v2-map-header">
+                <div class="contact-v2-map-title-wrap">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="color:#2563eb;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span class="contact-v2-map-title">Nearby With Showroom</span>
+                </div>
+                <a href="https://maps.google.com/?q=Nyarugenge,+Kigali,+Rwanda" target="_blank"
+                  rel="noopener noreferrer" class="contact-v2-map-open-link">
+                  Open in Maps ↗
+                </a>
+              </div>
+
+              <div class="contact-v2-map-frame-box">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.504627849027!2d30.059694700000003!3d-1.9440637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca7a9c32dc5d3%3A0x3eed15c39c9ad1d3!2sNyarugenge%2C%20Kigali%2C%20Rwanda!5e0!3m2!1sen!2s!4v1720099200000!5m2!1sen!2s"
+                  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                  title="Onix Studio & Showroom Location — Nyarugenge, Kigali">
+                </iframe>
+              </div>
+
+              <div class="contact-v2-map-footer">
+                <span class="contact-v2-map-address">KN 75 St, Nyarugenge, Kigali, Rwanda</span>
+                <span class="contact-v2-badge-open">Open Today</span>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <form class="contact-form" id="contact-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contact-name">FULL NAME</label>
-              <input type="text" id="contact-name" name="name" required placeholder="Jane Doe" />
-            </div>
-            <div class="form-group">
-              <label for="contact-email">EMAIL</label>
-              <input type="email" id="contact-email" name="email" required placeholder="you@example.com" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contact-phone">PHONE</label>
-              <input type="tel" id="contact-phone" name="phone" placeholder="+250 7XX XXX XXX" />
-            </div>
-            <div class="form-group">
-              <label for="contact-location">PROJECT LOCATION</label>
-              <input type="text" id="contact-location" name="location" placeholder="Kigali, Rwanda (e.g. Nyarugenge)" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contact-type">PROJECT TYPE</label>
-              <select id="contact-type" name="type" required>
-                <option value="" disabled selected>Select...</option>
-                <option value="architecture">Architecture</option>
-                <option value="interior">Interior Design</option>
-                <option value="sustainable">Sustainable Design</option>
-                <option value="landscape">Landscape Design</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="contact-stage">PROJECT STAGE</label>
-              <select id="contact-stage" name="stage">
-                <option value="" disabled selected>Select...</option>
-                <option value="concept">Concept Stage</option>
-                <option value="planning">Planning & Design</option>
-                <option value="construction">Construction</option>
-                <option value="finished">Finished</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="contact-message">HOW CAN WE HELP?</label>
-            <textarea id="contact-message" name="message" rows="5" required
-              placeholder="Scope, approximate size, budget band, and anything else we should know."></textarea>
-          </div>
-
-          <label class="form-checkbox">
-            <input type="checkbox" required />
-            <span>I agree to the processing of my data for the purpose of this inquiry.</span>
-          </label>
-
-          <button type="submit" class="btn-contact-submit" id="contact-submit">GET IN TOUCH</button>
-          <div class="form-feedback" id="form-feedback"></div>
-        </form>
-      </div>
-
-      <!-- Team Section on Contact Page -->
-      <section class="team-section reveal" style="padding-top: 80px;">
-        <div class="section-intro">
+      <!-- Team Section on Contact Page (Preserved Dynamic Backend Integration) -->
+      <section class="team-section reveal" style="padding-top: 20px; max-width: 1160px; margin: 0 auto 60px;">
+        <div class="section-intro" style="padding: 0 4%;">
           <div class="intro-label">The People</div>
           <h2 class="section-heading">Meet the team<br /><em>behind the vision</em></h2>
+        </div>
+        <!-- Skeleton for Contact Team on Contact Page -->
+        <div class="sk-container" id="sk-contact-team" aria-label="Loading team...">
+          <div class="sk-team-grid" style="max-width:1200px;margin:0 auto 40px;padding:0 4%;">
+            <div class="sk-team-card">
+              <div class="sk-avatar xl"></div>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+            <div class="sk-team-card">
+              <div class="sk-avatar xl"></div>
+              <span class="sk-line w-65 h-md"></span>
+              <span class="sk-line w-40 h-sm"></span>
+              <span class="sk-line w-80 h-sm"></span>
+            </div>
+          </div>
         </div>
         <div class="team-row" id="contact-team-row">
           <div class="team-empty">Team photos will appear here once uploaded from the admin panel.</div>
@@ -941,67 +1424,114 @@
   </div>
 
   <!-- ─── FOOTER ────────────────────────────────────────────────────────────── -->
-  <footer class="footer">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" style="display:inline-block; margin-bottom: 20px;">
-          <img src="images/onix-logo.png" alt="ONIX STUDIO Logo" class="footer-logo-img" />
-        </a>
-        <p class="footer-tagline">Architecture is about experience,<br />not only visual.</p>
+  <!-- Redesigned Footer matching reference -->
+  <footer class="footer-v2-wrapper">
+    <div class="footer-v2-container">
+      <div class="footer-v2-grid">
+        <!-- Brand Column -->
+        <div class="footer-v2-brand-col">
+          <a href="/" class="footer-v2-logo">
+            <img src="" alt="Logo" class="footer-logo-img"
+              style="display:none; height: 60px; width: auto; object-fit: contain;" />
+          </a>
+          <p class="footer-v2-desc">
+            The modern digital benchmark for luxury acquisitions, verified private sales, and prestige design
+            marketplaces.
+          </p>
+          <div class="footer-v2-socials">
+            <a href="https://www.instagram.com/onix_studio26/" target="_blank" rel="noopener noreferrer"
+              class="footer-v2-social-btn" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a href="https://wa.me/250790128174" target="_blank" rel="noopener noreferrer" class="footer-v2-social-btn"
+              aria-label="WhatsApp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                <path
+                  d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+              </svg>
+            </a>
+            <a href="#" class="footer-v2-social-btn" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+            <a href="#" class="footer-v2-social-btn" aria-label="X Twitter">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
 
-        <div class="footer-social" style="display:flex;gap:16px;margin-top:20px;">
-          <a href="https://www.instagram.com/onix_studio26/followers/?hl=en" aria-label="Instagram"
-            class="social-link instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-          </a>
-          <a href="https://wa.me/250790128174" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-            class="social-link whatsapp">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9l-5.05.9"></path>
-              <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"></path>
-            </svg>
-          </a>
+        <!-- MARKETPLACE Column -->
+        <div class="footer-v2-col">
+          <h4 class="footer-v2-heading">MARKETPLACE</h4>
+          <ul class="footer-v2-nav-list">
+            <li><a href="/work.html" class="footer-v2-nav-link">Browse All Projects</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">New Architecture</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">Prestige Interiors</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">Marques & Brands</a></li>
+            <li><a href="/contact.html" class="footer-v2-nav-link">Sell Your Property</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">Design Comparison</a></li>
+          </ul>
+        </div>
+
+        <!-- SERVICES Column -->
+        <div class="footer-v2-col">
+          <h4 class="footer-v2-heading">SERVICES</h4>
+          <ul class="footer-v2-nav-list">
+            <li><a href="/services.html" class="footer-v2-nav-link">Financing Calculator</a></li>
+            <li><a href="/services.html" class="footer-v2-nav-link">Nationwide Delivery</a></li>
+            <li><a href="/training.html" class="footer-v2-nav-link">Academy & Workshops</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">Help Center & FAQ</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">About ONIX</a></li>
+            <li><a href="/contact.html" class="footer-v2-nav-link">Contact Concierge</a></li>
+          </ul>
+        </div>
+
+        <!-- COMPANY Column -->
+        <div class="footer-v2-col">
+          <h4 class="footer-v2-heading">COMPANY</h4>
+          <ul class="footer-v2-nav-list">
+            <li><a href="/contact.html" class="footer-v2-nav-link">Showrooms</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">Journal & News</a></li>
+            <li><a href="/admin.html" class="footer-v2-nav-link">Admin CMS</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">Privacy & Terms</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">My Garage / Saved</a></li>
+          </ul>
         </div>
       </div>
-      <div class="footer-nav">
-        <h4>Navigate</h4>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="training.html">Training</a></li>
-          <li><a href="work.html">Our Work</a></li>
-        </ul>
-      </div>
-      <div class="footer-nav">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="/services.html">Architecture</a></li>
-          <li><a href="/services.html">Interior Design</a></li>
-          <li><a href="/services.html">Sustainable Design</a></li>
-          <li><a href="/services.html">Brand Identity</a></li>
-          <li><a href="/services.html">Construction Consulting</a></li>
-        </ul>
-      </div>
-      <div class="footer-contact">
-        <h4>Contact</h4>
-        <p>New Nyarugenge, Kigali</p>
-        <p>kwizeraodilla@gmail.com</p>
-        <a href="contact.html" class="footer-cta">Start a Project →</a>
+
+      <div class="footer-v2-divider"></div>
+
+      <!-- Bottom Row -->
+      <div class="footer-v2-bottom-row">
+        <span>© 2026 ONIX STUDIO LLC. All Rights Reserved.</span>
+        <div class="footer-v2-legal-links">
+          <a href="/about.html" class="footer-v2-legal-link">Privacy Policy</a>
+          <a href="/about.html" class="footer-v2-legal-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-v2-legal-link">Support</a>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p id="footer-text">© 2026 Onix Studio. All rights reserved.</p>
-      <a href="admin.html" class="admin-link">Admin</a>
-    </div>
+
+    <!-- Decorative Large Subtle Background Brand Text -->
+    <div class="footer-v2-watermark">ONIX STUDIO</div>
   </footer>
 
+  <script src="/js/skeleton.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/whatsapp-widget.js"></script>
 </body>

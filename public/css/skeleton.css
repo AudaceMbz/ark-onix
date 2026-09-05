@@ -1,0 +1,600 @@
+/* ═══════════════════════════════════════════════════════════
+   ONIX — Skeleton Loading System (Enhanced)
+   Accurately matches dimensions, typography, aspect ratios,
+   and responsive layouts of the real content.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Custom Properties & Theme Palette ──────────────────── */
+:root {
+  --sk-base:   #1c1c1c;
+  --sk-shine:  #292929;
+  --sk-border: rgba(255, 255, 255, 0.05);
+  --sk-radius: 2px;
+  --sk-duration: 1.5s;
+}
+
+[data-theme="light"] {
+  --sk-base:   #ebebeb;
+  --sk-shine:  #f8f8f8;
+  --sk-border: rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Shimmer Keyframe ───────────────────────────────────── */
+@keyframes sk-shimmer {
+  0%   { background-position: -800px 0; }
+  100% { background-position:  800px 0; }
+}
+
+/* ─── Accessibility & Reduced Motion ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .sk, .sk-line, .sk-heading, .sk-img, .sk-btn,
+  .sk-avatar, .sk-input, .sk-textarea, .sk-badge,
+  .sk-hero-wrap::after, .sk-pd-hero::after, .sk-featured-slider::after {
+    animation: none !important;
+    background: var(--sk-base) !important;
+  }
+}
+
+/* ─── Base Skeleton Shimmer Block ────────────────────────── */
+.sk {
+  display: block;
+  border-radius: var(--sk-radius);
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  flex-shrink: 0;
+}
+
+/* ─── Text Lines ─────────────────────────────────────────── */
+.sk-line {
+  height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  display: block;
+}
+
+.sk-line + .sk-line { margin-top: 10px; }
+
+/* Dynamic realistic line width percentages */
+.sk-line.w-100 { width: 100%; }
+.sk-line.w-95  { width: 95%; }
+.sk-line.w-92  { width: 92%; }
+.sk-line.w-88  { width: 88%; }
+.sk-line.w-85  { width: 85%; }
+.sk-line.w-80  { width: 80%; }
+.sk-line.w-75  { width: 75%; }
+.sk-line.w-70  { width: 70%; }
+.sk-line.w-68  { width: 68%; }
+.sk-line.w-65  { width: 65%; }
+.sk-line.w-60  { width: 60%; }
+.sk-line.w-55  { width: 55%; }
+.sk-line.w-50  { width: 50%; }
+.sk-line.w-45  { width: 45%; }
+.sk-line.w-40  { width: 40%; }
+.sk-line.w-35  { width: 35%; }
+.sk-line.w-30  { width: 30%; }
+.sk-line.w-25  { width: 25%; }
+.sk-line.w-20  { width: 20%; }
+
+/* Typography heights matching real fonts */
+.sk-line.h-xs  { height: 8px; }
+.sk-line.h-sm  { height: 11px; } /* Small labels, captions */
+.sk-line.h-md  { height: 15px; } /* Body text, paragraphs */
+.sk-line.h-lg  { height: 20px; } /* Card titles, subheadings */
+.sk-line.h-xl  { height: 28px; } /* H3/H2 headings */
+.sk-line.h-2xl { height: clamp(36px, 5vw, 56px); } /* Hero/Page titles */
+
+/* Center alignment helper */
+.sk-line.center {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ─── Paragraph Block Skeletons (Natural Multi-Line Flow) ── */
+.sk-paragraph {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.sk-paragraph.center {
+  align-items: center;
+}
+
+/* ─── Image Placeholder ──────────────────────────────────── */
+.sk-img {
+  width: 100%;
+  display: block;
+  border-radius: var(--sk-radius);
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Explicit Aspect Ratios */
+.sk-img.r-16-9  { aspect-ratio: 16/9; }
+.sk-img.r-4-3   { aspect-ratio: 4/3; }
+.sk-img.r-3-2   { aspect-ratio: 3/2; }
+.sk-img.r-1-1   { aspect-ratio: 1/1; }
+.sk-img.r-3-4   { aspect-ratio: 3/4; }
+.sk-img.r-21-9  { aspect-ratio: 21/9; }
+
+/* ─── Buttons ────────────────────────────────────────────── */
+.sk-btn {
+  height: 48px;
+  border-radius: var(--sk-radius);
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.sk-btn.sm { height: 38px; width: 120px; }
+.sk-btn.md { height: 48px; width: 180px; }
+.sk-btn.lg { height: 52px; width: 220px; }
+
+/* ─── Avatars & Circles ──────────────────────────────────── */
+.sk-avatar {
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.sk-avatar.sm { width: 36px;  height: 36px; }
+.sk-avatar.md { width: 56px;  height: 56px; }
+.sk-avatar.lg { width: 80px;  height: 80px; }
+.sk-avatar.xl { width: 110px; height: 110px; }
+
+/* ─── Input & Form Controls ──────────────────────────────── */
+.sk-input {
+  height: 48px;
+  border-radius: var(--sk-radius);
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.sk-textarea {
+  height: 130px;
+  border-radius: var(--sk-radius);
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* ─── Container State Control & Transitions ──────────────── */
+.sk-container {
+  opacity: 1;
+  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  user-select: none;
+}
+.sk-container[aria-hidden="true"],
+.sk-container.sk-done {
+  opacity: 0;
+  pointer-events: none;
+}
+.sk-container.sk-hidden {
+  display: none !important;
+}
+
+/* ─── Real Content Reveal (Zero Layout Shift) ─────────────── */
+.sk-content-area {
+  opacity: 0;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sk-content-area.sk-visible {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════════════════════
+   COMPONENT-SPECIFIC SKELETON LAYOUTS
+   ══════════════════════════════════════════════════════════ */
+
+/* ─── 1. Architectural Hero Skeleton ─────────────────────── */
+.sk-hero-wrap {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: var(--sk-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 24px 60px;
+}
+.sk-hero-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent     0%,
+    var(--sk-shine) 50%,
+    transparent     100%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.sk-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.sk-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+/* ─── 2. Project Card Skeleton (Matches Real Architecture Cards) ── */
+.sk-project-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--sk-radius);
+  overflow: hidden;
+  background: var(--bg-2, #141414);
+  border: 1px solid var(--sk-border);
+  transition: transform 0.2s ease;
+}
+.sk-project-card .sk-img {
+  aspect-ratio: 4/3;
+  width: 100%;
+}
+.sk-project-card .sk-meta {
+  padding: 18px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ─── 3. Project Detail Page Skeleton ────────────────────── */
+.sk-pd-hero {
+  width: 100%;
+  height: 100vh;
+  min-height: 540px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sk-base);
+}
+.sk-pd-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent     0%,
+    var(--sk-shine)  50%,
+    transparent     100%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.sk-pd-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+  max-width: 640px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.sk-pd-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 4% 80px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 60px;
+}
+@media (max-width: 1024px) {
+  .sk-pd-layout { grid-template-columns: 1fr; gap: 40px; }
+}
+.sk-pd-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.sk-pd-story-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sk-pd-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+.sk-pd-stat-card {
+  padding: 20px 16px;
+  border: 1px solid var(--sk-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sk-pd-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 32px 28px;
+  border: 1px solid var(--sk-border);
+  height: fit-content;
+  background: var(--bg-2, #141414);
+}
+.sk-pd-gallery-section {
+  max-width: 1400px;
+  margin: 0 auto 60px;
+  padding: 0 4%;
+}
+.sk-pd-gallery-masonry {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1024px) {
+  .sk-pd-gallery-masonry { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .sk-pd-gallery-masonry { grid-template-columns: 1fr; }
+}
+
+/* ─── 4. Gallery Grids (Home & Work) ─────────────────────── */
+.sk-home-gallery,
+.sk-work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1024px) {
+  .sk-home-gallery,
+  .sk-work-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+}
+@media (max-width: 640px) {
+  .sk-home-gallery,
+  .sk-work-grid { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* ─── 5. Team Card Skeleton ──────────────────────────────── */
+.sk-team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+@media (max-width: 1024px) {
+  .sk-team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .sk-team-grid { grid-template-columns: 1fr; }
+}
+.sk-team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 36px 24px;
+  border: 1px solid var(--sk-border);
+  background: var(--bg-2, #141414);
+  text-align: center;
+}
+
+/* ─── 6. Service Item Skeleton ───────────────────────────── */
+.sk-service-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  padding: 36px 0;
+  border-bottom: 1px solid var(--sk-border);
+}
+.sk-service-item .sk-number {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: var(--sk-radius);
+  background: linear-gradient(
+    90deg,
+    var(--sk-base)  20%,
+    var(--sk-shine) 45%,
+    var(--sk-base)  70%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.sk-service-item .sk-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── 7. Workshop Item Skeleton ──────────────────────────── */
+.sk-workshop-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 24px;
+  border: 1px solid var(--sk-border);
+  margin-bottom: 14px;
+  background: var(--bg-2, #141414);
+}
+.sk-workshop-item .sk-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+/* ─── 8. About Narrative Skeleton ────────────────────────── */
+.sk-about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 780px;
+  width: 100%;
+}
+
+/* ─── 9. Featured Slider Skeleton ────────────────────────── */
+.sk-featured-slider {
+  width: 100%;
+  aspect-ratio: 16/7;
+  min-height: 320px;
+  position: relative;
+  overflow: hidden;
+  background: var(--sk-base);
+  border-radius: var(--sk-radius);
+}
+.sk-featured-slider::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent     0%,
+    var(--sk-shine)  50%,
+    transparent     100%
+  );
+  background-size: 800px 100%;
+  animation: sk-shimmer var(--sk-duration) cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* ─── 10. Donation Section Skeleton ──────────────────────── */
+.sk-donation-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .sk-donation-layout { grid-template-columns: 1fr; }
+}
+.sk-donation-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ─── 11. Contact Page Skeleton ──────────────────── */
+.sk-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+@media (max-width: 768px) {
+  .sk-contact-grid { grid-template-columns: 1fr; }
+}
+.sk-contact-card {
+  padding: 32px 24px;
+  border: 1px solid var(--sk-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-2, #141414);
+}
+
+/* ─── 12. Error & Empty States ───────────────────────────── */
+.sk-error-state,
+.sk-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 24px;
+  text-align: center;
+  color: var(--text-3, #888);
+  font-family: var(--font-sans, 'Inter', sans-serif);
+}
+.sk-error-state .sk-state-icon,
+.sk-empty-state .sk-state-icon {
+  width: 44px;
+  height: 44px;
+  opacity: 0.45;
+}
+.sk-error-state p,
+.sk-empty-state p {
+  font-size: 0.92rem;
+  max-width: 340px;
+  line-height: 1.6;
+  opacity: 0.75;
+}
+.sk-retry-btn {
+  padding: 10px 26px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: var(--text, #fff);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+}
+.sk-retry-btn:hover {
+  background: var(--accent, #C9A96E);
+  border-color: var(--accent, #C9A96E);
+  color: #000;
+}
+
+/* ─── Responsive Fine-Tuning ─────────────────────────────── */
+@media (max-width: 640px) {
+  .sk-hero-wrap { min-height: 90vh; padding: 80px 20px 40px; }
+  .sk-pd-hero   { min-height: 85vh; }
+  .sk-pd-layout { padding: 40px 4%; }
+  .sk-btn.md    { width: 100%; }
+}

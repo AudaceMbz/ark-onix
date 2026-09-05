@@ -148,7 +148,7 @@
     currentPanel = name;
     document.querySelectorAll('.sidebar-link').forEach(l => l.classList.toggle('active', l.dataset.panel === name));
     document.querySelectorAll('.admin-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
-    const titles = { dashboard: 'Dashboard', settings: 'Site Settings', projects: 'Projects', services: 'Services', team: 'Team Photos', workshops: 'Workshops', about: 'About Content', whatsapp: 'WhatsApp Widget', hero_slides: 'Hero Slider' };
+    const titles = { dashboard: 'Dashboard', settings: 'Site Settings', projects: 'Projects', services: 'Services', team: 'Team Photos', workshops: 'Workshops', about: 'About Content', donation: 'Donation Section', whatsapp: 'WhatsApp Widget', hero_slides: 'Hero Slider' };
     document.getElementById('topbar-title').textContent = titles[name] || name;
 
     // Close sidebar on mobile
@@ -166,6 +166,7 @@
     if (name === 'workshops') loadWorkshopsAdmin();
     if (name === 'about') loadAboutAdmin();
     if (name === 'settings') loadSettingsAdmin();
+    if (name === 'donation') loadDonationAdmin();
     if (name === 'whatsapp') loadWhatsappAdmin();
     if (name === 'hero_slides') loadHeroSlidesAdmin();
   }
@@ -192,6 +193,7 @@
       setValue('set-hero-title', s.hero_title || '');
       setValue('set-hero-sub', s.hero_subtitle || '');
       setValue('set-footer-text', s.footer_text || '');
+      setValue('set-home-projects-limit', s.home_projects_limit || '8');
 
       // Load Color Theme
       const currColor = s.site_color_theme || 'gold';
@@ -339,6 +341,7 @@
           api('POST', '/api/admin/settings', { setting_key: 'hero_title', setting_value: getValue('set-hero-title') }),
           api('POST', '/api/admin/settings', { setting_key: 'hero_subtitle', setting_value: getValue('set-hero-sub') }),
           api('POST', '/api/admin/settings', { setting_key: 'footer_text', setting_value: getValue('set-footer-text') }),
+          api('POST', '/api/admin/settings', { setting_key: 'home_projects_limit', setting_value: getValue('set-home-projects-limit') }),
         ]);
         showFeedback('fb-text', '✓ Text settings saved.', 'success');
       } catch (e) { showFeedback('fb-text', 'Save failed.', 'error'); }
@@ -629,6 +632,165 @@
 
   const btnAddHeroSlide = document.getElementById('btn-add-heroslide');
   if (btnAddHeroSlide) btnAddHeroSlide.addEventListener('click', () => openModal('add', 'hero_slides'));
+
+  // ─── Donation Section Admin ───────────────────────────────
+  async function loadDonationAdmin() {
+    try {
+      const s = await api('GET', '/api/settings');
+
+      // Visibility toggles
+      const chkSection = document.getElementById('set-donation-enable-section');
+      const chkTesti = document.getElementById('set-donation-enable-testi');
+      const chkDoodles = document.getElementById('set-donation-enable-doodles');
+
+      if (chkSection) chkSection.checked = (s.donation_enable_section === undefined || s.donation_enable_section === '1' || s.donation_enable_section === 'true' || s.donation_enable_section === true);
+      if (chkTesti) chkTesti.checked = (s.donation_enable_testi === undefined || s.donation_enable_testi === '1' || s.donation_enable_testi === 'true' || s.donation_enable_testi === true);
+      if (chkDoodles) chkDoodles.checked = (s.donation_enable_doodles === undefined || s.donation_enable_doodles === '1' || s.donation_enable_doodles === 'true' || s.donation_enable_doodles === true);
+
+      // Texts
+      setValue('set-donation-headline', s.donation_headline || 'Together, we\nbuild a brighter\nfuture');
+      setValue('set-donation-desc', s.donation_description || 'Because every small act of kindness waters the seeds of change');
+      setValue('set-donation-cta-text', s.donation_cta_text || 'Donate Now');
+      setValue('set-donation-cta-url', s.donation_cta_url || '');
+
+      // Image labels & current paths
+      if (s.donation_img_center) {
+        document.getElementById('don-img-text-center').innerHTML = `<strong>Current:</strong> ${s.donation_img_center.split('/').pop()}<br/><small>Ready to replace</small>`;
+      } else {
+        document.getElementById('don-img-text-center').innerHTML = 'Click to upload Center Image';
+      }
+
+      if (s.donation_img_left) {
+        document.getElementById('don-img-text-left').innerHTML = `<strong>Current:</strong> ${s.donation_img_left.split('/').pop()}<br/><small>Ready to replace</small>`;
+      } else {
+        document.getElementById('don-img-text-left').innerHTML = 'Click to upload Left Image';
+      }
+
+      if (s.donation_img_right) {
+        document.getElementById('don-img-text-right').innerHTML = `<strong>Current:</strong> ${s.donation_img_right.split('/').pop()}<br/><small>Ready to replace</small>`;
+      } else {
+        document.getElementById('don-img-text-right').innerHTML = 'Click to upload Right Image';
+      }
+
+      // Testimonial fields
+      setValue('set-donation-testi-quote', s.donation_testi_quote || 'This organization transformed my life and the lives of many others.');
+      setValue('set-donation-testi-name', s.donation_testi_name || 'Diana rose');
+      setValue('set-donation-testi-role', s.donation_testi_role || '');
+
+      if (s.donation_testi_avatar) {
+        document.getElementById('don-img-text-avatar').innerHTML = `<strong>Current:</strong> ${s.donation_testi_avatar.split('/').pop()}`;
+      } else {
+        document.getElementById('don-img-text-avatar').innerHTML = 'Click to upload Avatar';
+      }
+
+    } catch (e) {
+      console.error('Failed to load donation admin settings:', e);
+    }
+
+    // Save Text, CTA & Visibility
+    const saveTextBtn = document.getElementById('btn-save-donation-text');
+    if (saveTextBtn) {
+      saveTextBtn.onclick = async () => {
+        setBtnLoader('btn-save-donation-text', true, 'Saving...');
+        try {
+          const chkSection = document.getElementById('set-donation-enable-section')?.checked ? '1' : '0';
+          const chkTesti = document.getElementById('set-donation-enable-testi')?.checked ? '1' : '0';
+          const chkDoodles = document.getElementById('set-donation-enable-doodles')?.checked ? '1' : '0';
+
+          await Promise.all([
+            api('POST', '/api/admin/settings', { setting_key: 'donation_enable_section', setting_value: chkSection }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_enable_testi', setting_value: chkTesti }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_enable_doodles', setting_value: chkDoodles }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_headline', setting_value: getValue('set-donation-headline') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_description', setting_value: getValue('set-donation-desc') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_cta_text', setting_value: getValue('set-donation-cta-text') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_cta_url', setting_value: getValue('set-donation-cta-url') }),
+          ]);
+          showFeedback('fb-donation-text', '✓ Donation headline, CTA & visibility saved.', 'success');
+        } catch (e) {
+          showFeedback('fb-donation-text', 'Save failed: ' + e.message, 'error');
+        } finally {
+          setBtnLoader('btn-save-donation-text', false, 'Save Donation Text & CTA');
+        }
+      };
+    }
+
+    // Save Testimonial Text
+    const saveTestiBtn = document.getElementById('btn-save-donation-testi');
+    if (saveTestiBtn) {
+      saveTestiBtn.onclick = async () => {
+        setBtnLoader('btn-save-donation-testi', true, 'Saving...');
+        try {
+          await Promise.all([
+            api('POST', '/api/admin/settings', { setting_key: 'donation_testi_quote', setting_value: getValue('set-donation-testi-quote') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_testi_name', setting_value: getValue('set-donation-testi-name') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_testi_role', setting_value: getValue('set-donation-testi-role') }),
+          ]);
+          showFeedback('fb-donation-testi', '✓ Testimonial content saved.', 'success');
+        } catch (e) {
+          showFeedback('fb-donation-testi', 'Save failed: ' + e.message, 'error');
+        } finally {
+          setBtnLoader('btn-save-donation-testi', false, 'Save Testimonial Text');
+        }
+      };
+    }
+
+    // Donation Image Upload & Reset Helper
+    const initDonationImageField = (btnUpId, btnDelId, fileInputId, textId, settingKey, fallbackPath, feedbackId) => {
+      const upBtn = document.getElementById(btnUpId);
+      const delBtn = document.getElementById(btnDelId);
+      const fileInput = document.getElementById(fileInputId);
+      const textEl = document.getElementById(textId);
+
+      if (upBtn && fileInput) {
+        upBtn.onclick = async () => {
+          const file = fileInput.files[0];
+          if (!file) return showFeedback(feedbackId, 'Please select an image file first.', 'error');
+          setBtnLoader(btnUpId, true, 'Uploading...');
+          try {
+            const fd = new FormData();
+            fd.append('setting_key', settingKey);
+            fd.append('upload_type', 'project');
+            fd.append('file', await compressImage(file));
+
+            const res = await fetch('/api/admin/settings', {
+              method: 'POST',
+              body: fd,
+              headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') }
+            });
+            const data = await res.json();
+            if (data.success) {
+              showFeedback(feedbackId, '✓ Image uploaded & updated successfully.', 'success');
+              if (textEl) textEl.innerHTML = `<strong>Current:</strong> ${data.value.split('/').pop()}`;
+              fileInput.value = '';
+            } else throw new Error(data.error || 'Upload failed');
+          } catch (err) {
+            showFeedback(feedbackId, 'Upload failed: ' + err.message, 'error');
+          } finally {
+            setBtnLoader(btnUpId, false, 'Upload');
+          }
+        };
+      }
+
+      if (delBtn) {
+        delBtn.onclick = async () => {
+          if (!confirm('Reset this image to default?')) return;
+          try {
+            await api('POST', '/api/admin/settings', { setting_key: settingKey, setting_value: fallbackPath });
+            if (textEl) textEl.innerHTML = `<strong>Reset to:</strong> ${fallbackPath.split('/').pop()}`;
+            showFeedback(feedbackId, '✓ Image reset to default.', 'success');
+          } catch (e) {
+            showFeedback(feedbackId, 'Reset failed.', 'error');
+          }
+        };
+      }
+    };
+
+    initDonationImageField('btn-don-center-up', 'btn-don-center-del', 'don-img-file-center', 'don-img-text-center', 'donation_img_center', '/images/donation/center.jpg', 'fb-donation-img');
+    initDonationImageField('btn-don-left-up', 'btn-don-left-del', 'don-img-file-left', 'don-img-text-left', 'donation_img_left', '/images/donation/left.jpg', 'fb-donation-img');
+    initDonationImageField('btn-don-right-up', 'btn-don-right-del', 'don-img-file-right', 'don-img-text-right', 'donation_img_right', '/images/donation/right.jpg', 'fb-donation-img');
+    initDonationImageField('btn-don-avatar-up', 'btn-don-avatar-del', 'don-img-file-avatar', 'don-img-text-avatar', 'donation_testi_avatar', '/images/donation/avatar.jpg', 'fb-donation-testi');
+  }
 
   // ─── Modal ───────────────────────────────────────────────
   function initModal() {

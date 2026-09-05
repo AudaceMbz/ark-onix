@@ -153,6 +153,13 @@
           </svg>
           About Content
         </div>
+        <div class="sidebar-link" data-panel="donation">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          Donation Section
+        </div>
         <div class="sidebar-link" data-panel="whatsapp">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -323,6 +330,18 @@
                 <span>Edit narrative & mission</span>
               </div>
             </div>
+            <div class="quick-link" data-panel="donation">
+              <div class="quick-link-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.5">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+              </div>
+              <div class="quick-link-text">
+                <h4>Donation Section</h4>
+                <span>3 images, headline, CTA</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -436,6 +455,11 @@
               <div class="admin-field">
                 <label>Footer Text</label>
                 <input type="text" id="set-footer-text" value="© 2026 Onix Architecture. All rights reserved." />
+              </div>
+              <div class="admin-field">
+                <label>Featured Projects on Home Page</label>
+                <input type="number" id="set-home-projects-limit" min="1" max="50" placeholder="e.g. 6 (default 8)" />
+                <small style="color:var(--text-3);font-size:0.75rem;display:block;margin-top:4px">Number of projects to display in the Home page gallery.</small>
               </div>
             </div>
             <button class="btn-save" style="margin-top:16px" id="btn-save-text">
@@ -737,7 +761,149 @@
           </div>
         </div>
 
-        <!-- ══ WHATSAPP TEAMMATES ═════════════════════════════════════════════ -->
+        <!-- ══ DONATION SECTION ═══════════════════════════════════════════════ -->
+        <div class="admin-panel" id="panel-donation">
+          <div class="panel-title">Donation Section</div>
+          <div class="panel-desc">Rebuilt to match the modern reference: large headline, rounded pill CTA button, layered 3-image composition, testimonial card, and playful doodles.</div>
+
+          <!-- Section Visibility Toggles -->
+          <div class="admin-form-section">
+            <h3>Visibility & Controls</h3>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 14px;">
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.86rem;color:var(--text)">
+                <input type="checkbox" id="set-donation-enable-section" checked style="width:18px;height:18px;accent-color:var(--accent);" />
+                Enable Donation Section
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.86rem;color:var(--text)">
+                <input type="checkbox" id="set-donation-enable-testi" checked style="width:18px;height:18px;accent-color:var(--accent);" />
+                Show Testimonial Overlay
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:0.86rem;color:var(--text)">
+                <input type="checkbox" id="set-donation-enable-doodles" checked style="width:18px;height:18px;accent-color:var(--accent);" />
+                Show Hand-Drawn Doodles
+              </label>
+            </div>
+          </div>
+
+          <!-- Content & CTA -->
+          <div class="admin-form-section">
+            <h3>Headline & CTA</h3>
+            <div class="form-grid">
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Donation Headline (Press Enter for line breaks)</label>
+                <textarea id="set-donation-headline" rows="3" placeholder="Together, we&#10;build a brighter&#10;future"></textarea>
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Supporting Description</label>
+                <textarea id="set-donation-desc" rows="2" placeholder="Because every small act of kindness waters the seeds of change"></textarea>
+              </div>
+              <div class="admin-field">
+                <label>CTA Button Text</label>
+                <input type="text" id="set-donation-cta-text" placeholder="Donate Now" />
+              </div>
+              <div class="admin-field">
+                <label>Custom Payment / Destination URL (Leave blank for internal modal)</label>
+                <input type="text" id="set-donation-cta-url" placeholder="https://... or empty for modal" />
+              </div>
+            </div>
+            <button class="btn-save" style="margin-top:16px" id="btn-save-donation-text">
+              <span class="btn-text">Save Donation Text & CTA</span>
+              <span class="btn-loader" style="display:none">
+                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              </span>
+            </button>
+            <div class="admin-feedback" id="fb-donation-text"></div>
+          </div>
+
+          <!-- Three Layered Images -->
+          <div class="admin-form-section">
+            <h3>Three Layered Images</h3>
+            <p style="font-size:0.83rem;color:var(--text-2);margin-bottom:18px">Matches the overlapping 3-image layout: Left tilted card, Front dominant center portrait card, and Right tilted card.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:20px;">
+              
+              <!-- Center Main Image -->
+              <div style="background:var(--bg-3);padding:16px;border:1px solid var(--border);border-radius:6px">
+                <h4 style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;color:var(--accent)">Center Image (Main Focus)</h4>
+                <div class="upload-zone compact" style="height:120px;">
+                  <input type="file" id="don-img-file-center" accept="image/*" />
+                  <div id="don-img-text-center" class="upload-text" style="font-size:11px">Click to upload Center Image</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="btn-save btn-xs" id="btn-don-center-up" style="flex:1;padding:6px">Upload</button>
+                  <button class="btn-del btn-xs" id="btn-don-center-del" style="flex:1;padding:6px">Reset</button>
+                </div>
+              </div>
+
+              <!-- Left Image -->
+              <div style="background:var(--bg-3);padding:16px;border:1px solid var(--border);border-radius:6px">
+                <h4 style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Left Image (Tilted Back)</h4>
+                <div class="upload-zone compact" style="height:120px;">
+                  <input type="file" id="don-img-file-left" accept="image/*" />
+                  <div id="don-img-text-left" class="upload-text" style="font-size:11px">Click to upload Left Image</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="btn-save btn-xs" id="btn-don-left-up" style="flex:1;padding:6px">Upload</button>
+                  <button class="btn-del btn-xs" id="btn-don-left-del" style="flex:1;padding:6px">Reset</button>
+                </div>
+              </div>
+
+              <!-- Right Image -->
+              <div style="background:var(--bg-3);padding:16px;border:1px solid var(--border);border-radius:6px">
+                <h4 style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px">Right Image (Tilted Back)</h4>
+                <div class="upload-zone compact" style="height:120px;">
+                  <input type="file" id="don-img-file-right" accept="image/*" />
+                  <div id="don-img-text-right" class="upload-text" style="font-size:11px">Click to upload Right Image</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="btn-save btn-xs" id="btn-don-right-up" style="flex:1;padding:6px">Upload</button>
+                  <button class="btn-del btn-xs" id="btn-don-right-del" style="flex:1;padding:6px">Reset</button>
+                </div>
+              </div>
+
+            </div>
+            <div class="admin-feedback" id="fb-donation-img"></div>
+          </div>
+
+          <!-- Testimonial Overlay -->
+          <div class="admin-form-section">
+            <h3>Testimonial Overlay (On Center Image)</h3>
+            <div class="form-grid">
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Testimonial Quote</label>
+                <textarea id="set-donation-testi-quote" rows="2" placeholder="This organization transformed my life and the lives of many others."></textarea>
+              </div>
+              <div class="admin-field">
+                <label>Person Name</label>
+                <input type="text" id="set-donation-testi-name" placeholder="Diana rose" />
+              </div>
+              <div class="admin-field">
+                <label>Role / Title (Optional)</label>
+                <input type="text" id="set-donation-testi-role" placeholder="Architectural Fellow" />
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Avatar Photo</label>
+                <div style="display:flex;gap:16px;align-items:center;">
+                  <div class="upload-zone compact" style="height:90px;flex:1;">
+                    <input type="file" id="don-img-file-avatar" accept="image/*" />
+                    <div id="don-img-text-avatar" class="upload-text" style="font-size:11px">Click to upload Avatar</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:8px;width:120px;">
+                    <button class="btn-save btn-xs" id="btn-don-avatar-up" style="padding:8px">Upload</button>
+                    <button class="btn-del btn-xs" id="btn-don-avatar-del" style="padding:8px">Reset</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="btn-save" style="margin-top:16px" id="btn-save-donation-testi">
+              <span class="btn-text">Save Testimonial Text</span>
+              <span class="btn-loader" style="display:none">
+                <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+              </span>
+            </button>
+            <div class="admin-feedback" id="fb-donation-testi"></div>
+          </div>
+
+        </div>
         <div class="admin-panel" id="panel-whatsapp">
           <div class="panel-title">WhatsApp Widget</div>
           <div class="panel-desc">Manage the floating WhatsApp support popup team members.</div>

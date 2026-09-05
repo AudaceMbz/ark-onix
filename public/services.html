@@ -15,6 +15,7 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/responsive.css" />
+  <link rel="stylesheet" href="/css/skeleton.css" />
   <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
 </head>
 
@@ -25,7 +26,7 @@
       <a href="/" data-page="home" class="nav-logo">
         <div class="logo-brand">
           <img src="" alt="Logo" class="logo-img"
-            style="display:none; height: 64px; width: auto; object-fit: contain;" />
+            style="display:none;" />
           <div class="logo-text" id="logo-text">
             <span class="logo-onix">ONIX</span>
             <span class="logo-studio">STUDIO</span>
@@ -175,9 +176,9 @@
         <a href="https://wa.me/250790128174" target="_blank" class="menu-social-link" aria-label="WhatsApp">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
             <path
-              d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
-            </path>
+              d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
           </svg>
         </a>
       </div>
@@ -199,6 +200,44 @@
       with precision and passion.</p>
   </div>
 
+  <!-- Skeleton for Services -->
+  <div class="sk-container" id="sk-services-list" aria-label="Loading services...">
+    <div style="max-width:1100px;margin:0 auto 40px;padding:0 4%;">
+      <div class="sk-service-item">
+        <div class="sk-number sk"></div>
+        <div class="sk-body">
+          <span class="sk-line w-40 h-lg"></span>
+          <span class="sk-line w-80 h-sm"></span>
+          <span class="sk-line w-65 h-sm"></span>
+        </div>
+      </div>
+      <div class="sk-service-item">
+        <div class="sk-number sk"></div>
+        <div class="sk-body">
+          <span class="sk-line w-50 h-lg"></span>
+          <span class="sk-line w-75 h-sm"></span>
+          <span class="sk-line w-60 h-sm"></span>
+        </div>
+      </div>
+      <div class="sk-service-item">
+        <div class="sk-number sk"></div>
+        <div class="sk-body">
+          <span class="sk-line w-35 h-lg"></span>
+          <span class="sk-line w-80 h-sm"></span>
+          <span class="sk-line w-70 h-sm"></span>
+        </div>
+      </div>
+      <div class="sk-service-item">
+        <div class="sk-number sk"></div>
+        <div class="sk-body">
+          <span class="sk-line w-45 h-lg"></span>
+          <span class="sk-line w-80 h-sm"></span>
+          <span class="sk-line w-50 h-sm"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Services List (populated by JS from DB) -->
   <section class="services-list" id="services-list">
     <!-- Loading state -->
@@ -212,70 +251,115 @@
   </div>
 </main>
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="index.html" style="display:inline-block; margin-bottom: 20px;">
-        <img src="images/onix-logo.png" alt="ONIX STUDIO Logo" class="footer-logo-img" />
-      </a>
-      <p class="footer-tagline">Architecture is about experience,<br />not only visual.</p>
+<!-- Redesigned Footer matching reference -->
+<footer class="footer-v2-wrapper">
+  <div class="footer-v2-container">
+    <div class="footer-v2-grid">
+      <!-- Brand Column -->
+      <div class="footer-v2-brand-col">
+        <a href="/" class="footer-v2-logo">
+          <img src="" alt="Logo" class="footer-logo-img"
+            style="display:none; height: 60px; width: auto; object-fit: contain;" />
+        </a>
+        <p class="footer-v2-desc">
+          The modern digital benchmark for luxury acquisitions, verified private sales, and prestige design marketplaces.
+        </p>
+        <div class="footer-v2-socials">
+          <a href="https://www.instagram.com/onix_studio26/" target="_blank" rel="noopener noreferrer"
+            class="footer-v2-social-btn" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="https://wa.me/250790128174" target="_blank" rel="noopener noreferrer"
+            class="footer-v2-social-btn" aria-label="WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+              <path
+                d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+            </svg>
+          </a>
+          <a href="#" class="footer-v2-social-btn" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+              <rect x="2" y="9" width="4" height="12"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+          </a>
+          <a href="#" class="footer-v2-social-btn" aria-label="X Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+              <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
 
-      <div class="footer-social" style="display:flex;gap:16px;margin-top:20px;">
-        <a href="https://www.instagram.com/onix_studio26/followers/?hl=en" aria-label="Instagram"
-          class="social-link instagram">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-          </svg>
-        </a>
-        <a href="https://wa.me/250790128174" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-          class="social-link whatsapp">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9l-5.05.9"></path>
-            <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"></path>
-          </svg>
-        </a>
+      <!-- MARKETPLACE Column -->
+      <div class="footer-v2-col">
+        <h4 class="footer-v2-heading">MARKETPLACE</h4>
+        <ul class="footer-v2-nav-list">
+          <li><a href="/work.html" class="footer-v2-nav-link">Browse All Projects</a></li>
+          <li><a href="/work.html" class="footer-v2-nav-link">New Architecture</a></li>
+          <li><a href="/work.html" class="footer-v2-nav-link">Prestige Interiors</a></li>
+          <li><a href="/work.html" class="footer-v2-nav-link">Marques & Brands</a></li>
+          <li><a href="/contact.html" class="footer-v2-nav-link">Sell Your Property</a></li>
+          <li><a href="/work.html" class="footer-v2-nav-link">Design Comparison</a></li>
+        </ul>
+      </div>
+
+      <!-- SERVICES Column -->
+      <div class="footer-v2-col">
+        <h4 class="footer-v2-heading">SERVICES</h4>
+        <ul class="footer-v2-nav-list">
+          <li><a href="/services.html" class="footer-v2-nav-link">Financing Calculator</a></li>
+          <li><a href="/services.html" class="footer-v2-nav-link">Nationwide Delivery</a></li>
+          <li><a href="/training.html" class="footer-v2-nav-link">Academy & Workshops</a></li>
+          <li><a href="/about.html" class="footer-v2-nav-link">Help Center & FAQ</a></li>
+          <li><a href="/about.html" class="footer-v2-nav-link">About ONIX</a></li>
+          <li><a href="/contact.html" class="footer-v2-nav-link">Contact Concierge</a></li>
+        </ul>
+      </div>
+
+      <!-- COMPANY Column -->
+      <div class="footer-v2-col">
+        <h4 class="footer-v2-heading">COMPANY</h4>
+        <ul class="footer-v2-nav-list">
+          <li><a href="/contact.html" class="footer-v2-nav-link">Showrooms</a></li>
+          <li><a href="/about.html" class="footer-v2-nav-link">Journal & News</a></li>
+          <li><a href="/admin.html" class="footer-v2-nav-link">Admin CMS</a></li>
+          <li><a href="/about.html" class="footer-v2-nav-link">Privacy & Terms</a></li>
+          <li><a href="/work.html" class="footer-v2-nav-link">My Garage / Saved</a></li>
+        </ul>
       </div>
     </div>
-    <div class="footer-nav">
-      <h4>Navigate</h4>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/about.html">About Us</a></li>
-        <li><a href="/services.html">Services</a></li>
-        <li><a href="/training.html">Training</a></li>
-        <li><a href="/work.html">Our Work</a></li>
-      </ul>
-    </div>
-    <div class="footer-nav">
-      <h4>Services</h4>
-      <ul>
-        <li><a href="/services.html">Architecture</a></li>
-        <li><a href="/services.html">Interior Design</a></li>
-        <li><a href="/services.html">Sustainable Design</a></li>
-        <li><a href="/services.html">Brand Identity</a></li>
-        <li><a href="/services.html">Construction Consulting</a></li>
-      </ul>
-    </div>
-    <div class="footer-contact">
-      <h4>Contact</h4>
-      <p>New Nyarugenge, Kigali</p>
-      <p>kwizeraodilla@gmail.com</p>
-      <a href="contact.html" class="footer-cta">Start a Project →</a>
+
+    <div class="footer-v2-divider"></div>
+
+    <!-- Bottom Row -->
+    <div class="footer-v2-bottom-row">
+      <span>© 2026 ONIX STUDIO LLC. All Rights Reserved.</span>
+      <div class="footer-v2-legal-links">
+        <a href="/about.html" class="footer-v2-legal-link">Privacy Policy</a>
+        <a href="/about.html" class="footer-v2-legal-link">Terms of Service</a>
+        <a href="/contact.html" class="footer-v2-legal-link">Support</a>
+      </div>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p id="footer-text">© 2026 Onix Studio. All rights reserved.</p>
-    <a href="admin.html" class="admin-link">Admin</a>
-  </div>
+
+  <!-- Decorative Large Subtle Background Brand Text -->
+  <div class="footer-v2-watermark">ONIX STUDIO</div>
 </footer>
 
-<script src="/js/page.js"></script>
-<script src="/js/whatsapp-widget.js"></script>
+  <script src="/js/skeleton.js"></script>
+  <script src="/js/page.js"></script>
+  <script src="/js/whatsapp-widget.js"></script>
 </body>
 
 </html>
