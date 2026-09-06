@@ -1,172 +1,190 @@
 /* ═══════════════════════════════════════════════════════════
-   ONIX — Skeleton Loading Utility
-   window.Skeleton — show / hide / error / empty helpers
+   ONIX — YouTube-Style Progress Bar Loading System
+   Replaces the old skeleton placeholder system.
+   All existing Skeleton.show / hide / wrap calls continue
+   to work — they now drive a sleek top-of-page progress bar.
    ═══════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
 
+  // ─── Progress Bar State ──────────────────────────────────
+  let _activeLoaders = 0;     // How many parallel loads are in-flight
+  let _progress = 0;          // Current progress 0-100
+  let _raf = null;            // requestAnimationFrame handle
+  let _hideTimer = null;      // Timer to hide bar after complete
+  let _bar = null;            // The DOM bar element
+  let _glow = null;           // Glow blob element
+
+  // ─── Colour (matches gold/amber theme) ──────────────────
+  const COLOR = 'var(--accent, #c8a951)';
+
+  // ─── Create / Get Bar DOM ────────────────────────────────
+  function getBar() {
+    if (_bar) return _bar;
+
+    _bar = document.createElement('div');
+    _bar.id = 'yt-progress-bar';
+    _bar.setAttribute('role', 'progressbar');
+    _bar.setAttribute('aria-label', 'Loading');
+    _bar.setAttribute('aria-hidden', 'true');
+
+    _glow = document.createElement('div');
+    _glow.id = 'yt-progress-glow';
+    _bar.appendChild(_glow);
+
+    document.documentElement.appendChild(_bar);
+    return _bar;
+  }
+
+  // ─── Set bar width with smooth animation ─────────────────
+  function setProgress(pct) {
+    _progress = Math.min(pct, 99.4);
+    const bar = getBar();
+    bar.style.width = _progress + '%';
+  }
+
+  // ─── Trickling — slowly increment while loading ──────────
+  function trickle() {
+    if (_activeLoaders === 0) return;
+
+    let inc = 0;
+    if (_progress < 20)      inc = 6 + Math.random() * 6;
+    else if (_progress < 50) inc = 3 + Math.random() * 4;
+    else if (_progress < 70) inc = 1.5 + Math.random() * 2;
+    else if (_progress < 90) inc = 0.5 + Math.random() * 1;
+    else                     inc = 0.1 + Math.random() * 0.4;
+
+    setProgress(_progress + inc);
+    _raf = setTimeout(trickle, 200 + Math.random() * 200);
+  }
+
+  // ─── Start the bar ───────────────────────────────────────
+  function startBar() {
+    clearTimeout(_hideTimer);
+    clearTimeout(_raf);
+
+    const bar = getBar();
+    bar.setAttribute('aria-hidden', 'false');
+    bar.classList.remove('yt-bar-done', 'yt-bar-hidden');
+    bar.style.transition = 'none';
+    bar.style.opacity = '1';
+
+    // Reset to 0 if bar was hidden, otherwise keep position
+    if (_progress === 0 || _progress >= 100) {
+      bar.style.width = '0%';
+      _progress = 0;
+    }
+
+    // First jump to give immediate feedback
+    setTimeout(function () {
+      bar.style.transition = 'width 0.25s ease';
+      setProgress(Math.max(_progress, 8));
+      trickle();
+    }, 10);
+  }
+
+  // ─── Complete the bar ─────────────────────────────────────
+  function completeBar() {
+    clearTimeout(_raf);
+    const bar = getBar();
+    bar.style.transition = 'width 0.2s ease';
+    bar.style.width = '100%';
+    _progress = 100;
+
+    _hideTimer = setTimeout(function () {
+      bar.style.opacity = '0';
+      bar.style.transition = 'opacity 0.4s ease';
+      setTimeout(function () {
+        bar.style.width = '0%';
+        bar.style.opacity = '1';
+        bar.style.transition = 'none';
+        bar.setAttribute('aria-hidden', 'true');
+        _progress = 0;
+      }, 420);
+    }, 180);
+  }
+
+  // ─── Public API ──────────────────────────────────────────
+
   /**
-   * Show a skeleton container and optionally hide associated content.
-   * @param {string} skId   – id of the .sk-container element
-   * @param {string} [contentId] – id of the real content element to hide
+   * Show — called before a fetch begins.
+   * The skId / contentId params are accepted but ignored;
+   * the progress bar is the only visual feedback now.
    */
   function show(skId, contentId) {
-    const sk = document.getElementById(skId);
-    if (sk) {
-      sk.classList.remove('sk-hidden', 'sk-done');
-      sk.removeAttribute('aria-hidden');
-    }
-    if (contentId) {
-      const c = document.getElementById(contentId);
-      if (c) c.classList.remove('sk-visible');
-    }
+    _activeLoaders++;
+    if (_activeLoaders === 1) startBar();
   }
 
   /**
-   * Hide a skeleton container and reveal the real content.
-   * Uses a fade-out then display:none.
-   * @param {string} skId
-   * @param {string} [contentId]
+   * Hide — called after a fetch completes.
+   * When all parallel loaders finish, bar completes.
    */
   function hide(skId, contentId) {
-    const sk = document.getElementById(skId);
-    if (sk) {
-      sk.classList.add('sk-done');
-      sk.setAttribute('aria-hidden', 'true');
-      // After the CSS transition ends, fully remove from layout
-      setTimeout(function () {
-        sk.classList.add('sk-hidden');
-      }, 380);
-    }
-    if (contentId) {
-      const c = document.getElementById(contentId);
-      if (c) {
-        // Small delay so skeleton starts fading before content appears
-        setTimeout(function () {
-          c.classList.add('sk-visible');
-        }, 80);
-      }
-    }
+    _activeLoaders = Math.max(0, _activeLoaders - 1);
+    if (_activeLoaders === 0) completeBar();
   }
 
   /**
-   * Replace skeleton with a styled error state.
-   * @param {string} skId
-   * @param {string} [msg]
-   * @param {Function} [onRetry]  – optional retry callback
+   * showError — complete bar (error happened, stop loading).
    */
   function showError(skId, msg, onRetry) {
-    const sk = document.getElementById(skId);
-    if (!sk) return;
-
-    const retryHtml = onRetry
-      ? '<button class="sk-retry-btn" id="sk-retry-' + skId + '">Try Again</button>'
-      : '';
-
-    sk.innerHTML =
-      '<div class="sk-error-state" role="alert">' +
-        '<svg class="sk-state-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
-          '<circle cx="12" cy="12" r="10"/>' +
-          '<line x1="12" y1="8" x2="12" y2="12"/>' +
-          '<line x1="12" y1="16" x2="12.01" y2="16"/>' +
-        '</svg>' +
-        '<p>' + (msg || 'Something went wrong. Please try again.') + '</p>' +
-        retryHtml +
-      '</div>';
-
-    sk.classList.remove('sk-done', 'sk-hidden');
-    sk.removeAttribute('aria-hidden');
-
-    if (onRetry) {
-      const btn = document.getElementById('sk-retry-' + skId);
-      if (btn) btn.addEventListener('click', onRetry);
-    }
+    hide(skId);
   }
 
   /**
-   * Replace skeleton with a clean empty state.
-   * @param {string} skId
-   * @param {string} [msg]
+   * showEmpty — complete bar (empty state, stop loading).
    */
   function showEmpty(skId, msg) {
-    const sk = document.getElementById(skId);
-    if (!sk) return;
-
-    sk.innerHTML =
-      '<div class="sk-empty-state" role="status">' +
-        '<svg class="sk-state-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">' +
-          '<rect x="3" y="3" width="18" height="18" rx="1"/>' +
-          '<path d="M3 9h18"/>' +
-          '<path d="M9 21V9"/>' +
-        '</svg>' +
-        '<p>' + (msg || 'Nothing to show here yet.') + '</p>' +
-      '</div>';
-
-    sk.classList.remove('sk-done', 'sk-hidden');
-    sk.removeAttribute('aria-hidden');
+    hide(skId);
   }
 
   /**
-   * Helper to create a single skeleton line element.
-   * @param {Object} options { width, height, variant, className }
-   */
-  function createLine(options) {
-    options = options || {};
-    const span = document.createElement('span');
-    span.className = 'sk-line' +
-      (options.width ? ' ' + options.width : ' w-100') +
-      (options.height ? ' ' + options.height : ' h-md') +
-      (options.className ? ' ' + options.className : '');
-    span.setAttribute('aria-hidden', 'true');
-    return span;
-  }
-
-  /**
-   * Helper to create a multi-line realistic paragraph skeleton.
-   * Creates varied line widths (e.g. 100%, 92%, 68%) matching real text.
-   * @param {number} lineCount
-   * @param {string} [className]
-   */
-  function createParagraph(lineCount, className) {
-    lineCount = lineCount || 3;
-    const container = document.createElement('div');
-    container.className = 'sk-paragraph' + (className ? ' ' + className : '');
-    container.setAttribute('aria-hidden', 'true');
-
-    const defaultWidths = ['w-100', 'w-92', 'w-68', 'w-85', 'w-55'];
-    for (let i = 0; i < lineCount; i++) {
-      const w = i === lineCount - 1
-        ? 'w-60'
-        : (defaultWidths[i % defaultWidths.length] || 'w-90');
-      const line = createLine({ width: w, height: 'h-md' });
-      container.appendChild(line);
-    }
-    return container;
-  }
-
-  /**
-   * Convenience: show a skeleton before an async fn, hide after.
-   * Usage: Skeleton.wrap('sk-id', 'content-id', fetchFn)
+   * wrap — convenience async wrapper.
+   * Usage: Skeleton.wrap('sk-id', 'content-id', asyncFn)
    */
   async function wrap(skId, contentId, asyncFn) {
     show(skId, contentId);
     try {
       await asyncFn();
+    } finally {
       hide(skId, contentId);
-    } catch (e) {
-      throw e;
     }
   }
 
-  // Expose globally
+  /**
+   * createLine / createParagraph — legacy helpers kept for
+   * any code that still calls them (they now return empty divs).
+   */
+  function createLine(options) {
+    return document.createElement('span');
+  }
+
+  function createParagraph(lineCount, className) {
+    return document.createElement('div');
+  }
+
+  // ─── Expose globally ─────────────────────────────────────
   window.Skeleton = {
-    show: show,
-    hide: hide,
-    showError: showError,
-    showEmpty: showEmpty,
-    wrap: wrap,
-    createLine: createLine,
-    createParagraph: createParagraph
+    show:            show,
+    hide:            hide,
+    showError:       showError,
+    showEmpty:       showEmpty,
+    wrap:            wrap,
+    createLine:      createLine,
+    createParagraph: createParagraph,
+    // Direct access for power users
+    start:           startBar,
+    done:            completeBar,
   };
+
+  // ─── Auto-start on page navigation (SPA support) ─────────
+  // Trigger a quick bar flash on every page paint
+  document.addEventListener('DOMContentLoaded', function () {
+    // Tiny initial flash so first paint feels fast
+    show('__init__');
+    setTimeout(function () { hide('__init__'); }, 600);
+  });
+
 })();
