@@ -363,7 +363,7 @@ app.post('/api/admin/projects', requireAuth, requireDB, upload.single('image'), 
     const img = req.file ? req.file.path : '';
     const active = (dbType === 'mysql' ? 1 : true);
     
-    const sql = `
+    let sql = `
       INSERT INTO projects (
         title, category, description, image_path, display_order, target_page, is_active,
         location, client, project_type, project_status, area, budget,
@@ -373,6 +373,7 @@ app.post('/api/admin/projects', requireAuth, requireDB, upload.single('image'), 
         stat_floors, stat_height, stat_duration, stat_team
       ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     `;
+    if (dbType === 'postgres') sql += ' RETURNING id';
     
     const { 
       title, category, description, display_order, target_page,
@@ -393,7 +394,7 @@ app.post('/api/admin/projects', requireAuth, requireDB, upload.single('image'), 
     ];
 
     const [reslt] = await query(sql, params);
-    const newId = dbType === 'mysql' ? reslt.insertId : reslt[0].id;
+    const newId = dbType === 'mysql' ? reslt.insertId : (reslt && reslt[0] ? reslt[0].id : null);
     res.status(201).json({ success: true, id: newId });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

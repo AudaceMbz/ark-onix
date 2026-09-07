@@ -95,11 +95,18 @@
   // ─── Router ─────────────────────────────────────────────
   const ROUTES = {
     '/': 'home',
+    '/index.html': 'home',
+    '/home.html': 'home',
     '/about': 'about',
+    '/about.html': 'about',
     '/services': 'services',
+    '/services.html': 'services',
     '/training': 'training',
+    '/training.html': 'training',
     '/work': 'work',
+    '/work.html': 'work',
     '/contact': 'contact',
+    '/contact.html': 'contact',
   };
 
   function initRouter() {
