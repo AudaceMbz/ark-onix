@@ -240,24 +240,27 @@
         });
       }
 
-      // Hero
-      if (s.hero_title) {
-        document.getElementById('hero-title').textContent = s.hero_title;
+      // Hero Settings from Admin
+      const hEyebrow = document.getElementById('hero-eyebrow');
+      if (s.hero_eyebrow && hEyebrow) {
+        hEyebrow.textContent = s.hero_eyebrow;
       }
-      if (s.hero_subtitle) {
-        const sub = s.hero_subtitle;
-        if (sub.includes('|')) {
-          const parts = sub.split('|');
-          const pNum = document.querySelector('.project-number');
-          const pLoc = document.getElementById('hero-location');
-          const pSub = document.getElementById('hero-sub');
-          if (pNum) pNum.textContent = parts[0].trim();
-          if (pLoc) pLoc.textContent = parts[1].trim();
-          if (pSub) pSub.textContent = parts[2] ? parts[2].trim() : parts[1].trim();
-        } else {
-          const pSub = document.getElementById('hero-sub');
-          if (pSub) pSub.textContent = sub;
-        }
+      const hTitle = document.getElementById('hero-title');
+      if (s.hero_title && hTitle) {
+        hTitle.innerHTML = s.hero_title.replace(/\n/g, '<br/>');
+      }
+      const hSub = document.getElementById('hero-sub');
+      if (s.hero_subtitle && hSub) {
+        hSub.innerHTML = s.hero_subtitle.replace(/\n/g, '<br/>');
+      }
+      const hCtaText = document.getElementById('hero-cta-text');
+      if (s.hero_cta_text && hCtaText) {
+        hCtaText.textContent = s.hero_cta_text;
+      }
+      const hCtaBtn = document.getElementById('hero-cta-btn');
+      if (s.hero_cta_url && hCtaBtn) {
+        hCtaBtn.setAttribute('href', s.hero_cta_url);
+        hCtaBtn.setAttribute('data-page', s.hero_cta_url.replace(/^\//, ''));
       }
       const footerTextEl = document.getElementById('footer-text');
       if (s.footer_text && footerTextEl) footerTextEl.textContent = s.footer_text;
@@ -457,23 +460,22 @@
         const s = slides[index];
         if (!s) return;
 
-        if (titleEl) {
+        // If the slide has custom title/description, dynamically update with subtle transition
+        if (s.title && titleEl) {
           titleEl.style.opacity = '0';
-          titleEl.style.transform = 'translateY(10px)';
           setTimeout(() => {
-            titleEl.textContent = s.title || 'Minimal Architecture';
+            titleEl.innerHTML = s.title.replace(/\n/g, '<br/>');
             titleEl.style.opacity = '1';
-            titleEl.style.transform = 'translateY(0)';
           }, 200);
         }
-        if (subEl) {
+        if ((s.description || s.subtitle) && subEl) {
           subEl.style.opacity = '0';
           setTimeout(() => {
-            subEl.textContent = s.description || s.subtitle || 'We craft spaces that transcend the ordinary — balancing material, light, and proportion into living art.';
+            subEl.innerHTML = (s.description || s.subtitle).replace(/\n/g, '<br/>');
             subEl.style.opacity = '1';
           }, 200);
         }
-        if (locationEl) locationEl.textContent = s.location || 'Kigali';
+        if (s.location && locationEl) locationEl.textContent = s.location;
         if (currentSlideEl) currentSlideEl.textContent = (index + 1).toString().padStart(2, '0');
 
         if (progressBar && slides.length) {
@@ -841,11 +843,7 @@
     const loadMoreContainer = document.getElementById('load-more-container');
     if (reset) {
       el.innerHTML = '';
-      if (filteredProjects.length > 0) {
-        const headerBlock = createArchHeaderBlock();
-        el.appendChild(headerBlock);
-        if (revealObserver) revealObserver.observe(headerBlock);
-      } else {
+      if (!filteredProjects.length) {
         el.innerHTML = '<div style="padding:60px;color:var(--text-3);text-align:center;grid-column:1/-1">No projects found in this category.</div>';
         if (loadMoreContainer) loadMoreContainer.style.display = 'none';
         return;
@@ -909,72 +907,18 @@
       return div;
     }
 
-    // ── Work page: exact 11-slot editorial arch blueprint ──────────────────
-    // IMPORTANT: This markup must stay in sync with the identical function in page.js.
-    // The site has two rendering paths for /work:
-    //   • SPA navigation  → index.html + app.js  (this path)
-    //   • Hard refresh    → work.html  + page.js  (reference implementation)
-    // Both paths must produce identical arch-project-item DOM.
-    //
-    // Slot map (14-column grid, rows auto-sized at minmax(75px, auto)):
-    //   0 = arch-slot-1   (top centre-left, tall portrait)
-    //   1 = arch-slot-2   (top centre-right, landscape)
-    //   2 = arch-slot-3   (top right, landscape)
-    //   3 = arch-slot-4   (middle left, wide landscape)
-    //   4 = arch-slot-hero arch-slot-5  (CENTRAL DOMINANT HERO)
-    //   5 = arch-slot-6   (middle right upper, wide)
-    //   6 = arch-slot-7   (middle right lower, compact)
-    //   7 = arch-slot-8   (bottom left, portrait)
-    //   8 = arch-slot-9   (bottom centre-left, tall portrait)
-    //   9 = arch-slot-10  (bottom centre-right, wide)
-    //  10 = arch-slot-11  (bottom right, square/portrait)
-    // Items beyond slot 11 cycle through a secondary balanced pattern.
-    const ARCH_SLOTS = [
-      'arch-slot-1',
-      'arch-slot-2',
-      'arch-slot-3',
-      'arch-slot-4',
-      'arch-slot-hero arch-slot-5',
-      'arch-slot-6',
-      'arch-slot-7',
-      'arch-slot-8',
-      'arch-slot-9',
-      'arch-slot-10',
-      'arch-slot-11'
-    ];
-    const EXTRA_SLOTS = [
-      'arch-extra-wide',
-      'arch-extra-slim',
-      'arch-extra-mid',
-      'arch-extra-slim',
-      'arch-extra-wide',
-      'arch-extra-mid'
-    ];
-
-    let slotClass;
-    if (i < ARCH_SLOTS.length) {
-      slotClass = ARCH_SLOTS[i];
-    } else {
-      slotClass = EXTRA_SLOTS[(i - ARCH_SLOTS.length) % EXTRA_SLOTS.length];
-    }
-
-    div.className = `arch-project-item ${slotClass} reveal`;
-    div.style.transitionDelay = `${(i % 5) * 70}ms`;
+    // ── Work page: clean minimal 3-column architectural portfolio (matches reference) ─────────
+    div.className = `work-project-card reveal`;
+    div.style.transitionDelay = `${(i % 3) * 80}ms`;
     div.dataset.index = i;
 
-    const numStr = String(i + 1).padStart(2, '0');
-
     div.innerHTML = `
-      <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
-      <div class="arch-project-overlay">
-        <div class="arch-overlay-top">
-          <span class="arch-project-num">${numStr}</span>
-        </div>
-        <div class="arch-overlay-bottom">
-          <span class="arch-project-cat">${category}</span>
-          <h3 class="arch-project-title">${p.title}</h3>
-          <span class="arch-project-loc">${location}</span>
-        </div>
+      <div class="work-project-image-wrap">
+        <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
+      </div>
+      <div class="work-project-caption">
+        <h3 class="work-project-name">${p.title}</h3>
+        <p class="work-project-location">${location}</p>
       </div>`;
 
     div.addEventListener('click', () => {
@@ -1439,19 +1383,8 @@
 
     if (ctaBtn) {
       ctaBtn.addEventListener('click', (e) => {
-        const customUrl = ctaWrap?.dataset?.ctaUrl;
-        if (customUrl && customUrl.trim() !== '' && customUrl.trim() !== '#') {
-          // Administrator configured external payment or custom donation page URL
-          window.location.href = customUrl;
-          return;
-        }
-
-        // Open integrated payment checkout modal
-        if (modalBackdrop) {
-          modalBackdrop.classList.add('open');
-          modalBackdrop.setAttribute('aria-hidden', 'false');
-          document.body.style.overflow = 'hidden';
-        }
+        e.preventDefault();
+        window.location.href = '/donate.html';
       });
     }
 

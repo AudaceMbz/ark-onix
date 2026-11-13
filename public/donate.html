@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donate — ONIX ARCHITECTURE STUDIO</title>
+  <meta name="description"
+    content="Support ONIX Architecture Studio's mission: sustainable architecture, community development, research, and lasting ecological impact." />
+
+  <!-- Google Fonts: Cormorant Garamond & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Base styling & Donate Page CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/responsive.css" />
+  <link rel="stylesheet" href="/css/skeleton.css" />
+  <link rel="stylesheet" href="/css/donate.css" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+</head>
+
+<body data-page="donate">
+
+  <!-- ─── NAV ─────────────────────────────────────────────────────────────── -->
+  <header class="nav-header" id="nav-header">
+    <nav class="nav-container">
+      <div class="logo-wrapper">
+        <a href="/" class="nav-logo">
+          <div class="logo-brand">
+            <img src="" alt="Logo" class="logo-img" style="display:none;" />
+            <div class="logo-text" id="logo-text">
+              <span class="logo-onix">ONIX</span>
+              <span class="logo-studio">STUDIO</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" style="display:none">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Fullscreen Navigation Overlay -->
+  <div class="fullscreen-menu" id="fullscreen-menu">
+    <div class="menu-overlay"></div>
+    <div class="menu-content">
+      <div class="menu-left">
+        <ul class="menu-links">
+          <li>
+            <a href="/" class="menu-link">
+              <span class="link-num">01</span>
+              <span class="link-text">Home</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/about.html" class="menu-link">
+              <span class="link-num">02</span>
+              <span class="link-text">About Us</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4" />
+                <path d="M12 8h.01" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/work.html" class="menu-link">
+              <span class="link-num">03</span>
+              <span class="link-text">Projects</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/services.html" class="menu-link">
+              <span class="link-num">04</span>
+              <span class="link-text">Services</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 7h-9" />
+                <path d="M14 17H5" />
+                <circle cx="17" cy="17" r="3" />
+                <circle cx="7" cy="7" r="3" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/training.html" class="menu-link">
+              <span class="link-num">05</span>
+              <span class="link-text">Training</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/contact.html" class="menu-link">
+              <span class="link-num">06</span>
+              <span class="link-text">Contact</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m22 2-7 20-4-9-9-4Z" />
+                <path d="M22 2 11 13" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="/donate.html" class="menu-link active">
+              <span class="link-num">07</span>
+              <span class="link-text">Donate</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="menu-right">
+        <div class="menu-contact-info">
+          <div class="menu-info-item">
+            <span class="info-label">Email</span>
+            <a href="mailto:kwizeraodilla@gmail.com" class="info-value">kwizeraodilla@gmail.com</a>
+          </div>
+          <div class="menu-info-item">
+            <span class="info-label">Phone</span>
+            <a href="tel:+250790128174" class="info-value">+250 790 128 174</a>
+          </div>
+          <div class="menu-info-item">
+            <span class="info-label">Location</span>
+            <span class="info-value">KN 75 St, Kigali, Rwanda</span>
+          </div>
+        </div>
+        <div class="menu-socials">
+          <a href="https://www.instagram.com/onix_studio26/" target="_blank" class="menu-social-link" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="#" target="_blank" class="menu-social-link" aria-label="Twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+            </svg>
+          </a>
+          <a href="https://wa.me/250790128174" target="_blank" class="menu-social-link" aria-label="WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+              <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- Page Hero Banner (Studio Signature Header) -->
+    <div class="page-hero donate-hero">
+      <div class="page-hero-content">
+        <div class="hero-eyebrow">Support Our Mission</div>
+        <h1 class="page-title">Together, we build<br /><em>lasting change.</em></h1>
+      </div>
+    </div>
+
+    <!-- ══ 2. MAIN DONATION PAGE LAYOUT (Two-Column Architecture Layout) ══ -->
+    <div class="donate-main-container">
+      <div class="donate-grid-layout">
+
+      <!-- ── LEFT SECTION: Hero Mission & Editorial Section ── -->
+      <section class="donate-left-column">
+
+        <!-- Architectural Hero Card with Sunset Villa Photograph -->
+        <div class="donate-hero-card">
+          <img src="/images/donation/donation_hero.jpg" alt="Contemporary Sustainable Architecture at Sunset" class="donate-hero-bg" id="donate-hero-img" />
+          <div class="donate-hero-overlay"></div>
+
+          <div class="donate-hero-top">
+            <div class="donate-hero-eyebrow-wrap">
+              <span class="donate-hero-eyebrow" id="donate-eyebrow">SUPPORT OUR MISSION</span>
+              <span class="donate-hero-eyebrow-line"></span>
+            </div>
+            <h1 class="donate-hero-heading" id="donate-main-heading">
+              Your Support Builds<br />a Better Tomorrow
+            </h1>
+            <p class="donate-hero-desc" id="donate-main-desc">
+              Your donation helps us continue creating sustainable architecture, supporting communities, and inspiring a brighter future through design.
+            </p>
+          </div>
+
+          <!-- 4 Impact Pillars with Orange Line Icons -->
+          <div class="donate-impact-row">
+            <div class="donate-impact-item">
+              <div class="donate-impact-icon">
+                <!-- Leaf / Sustainable icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                  <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                </svg>
+              </div>
+              <h4 id="impact-title-1">Sustainable Projects</h4>
+              <p id="impact-desc-1">Support green and climate-friendly design.</p>
+            </div>
+
+            <div class="donate-impact-item">
+              <div class="donate-impact-icon">
+                <!-- Community / People icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <h4 id="impact-title-2">Community Development</h4>
+              <p id="impact-desc-2">Help us build spaces for people and families.</p>
+            </div>
+
+            <div class="donate-impact-item">
+              <div class="donate-impact-icon">
+                <!-- Lightbulb / Education icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+                  <path d="M9 18h6"></path>
+                  <path d="M10 22h4"></path>
+                </svg>
+              </div>
+              <h4 id="impact-title-3">Education & Research</h4>
+              <p id="impact-desc-3">Fund innovation and next-generation talent.</p>
+            </div>
+
+            <div class="donate-impact-item">
+              <div class="donate-impact-icon">
+                <!-- Heart / Lasting Impact icon -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                </svg>
+              </div>
+              <h4 id="impact-title-4">Lasting Impact</h4>
+              <p id="impact-desc-4">Be part of a more beautiful and sustainable world.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary Mission Section: Architecture for People and the Planet -->
+        <div class="donate-secondary-section">
+          <div class="donate-secondary-img-wrap">
+            <img src="/images/donation/donation_secondary.jpg" alt="Architecture for People and Planet" id="donate-secondary-img" />
+          </div>
+          <div class="donate-secondary-content">
+            <div class="donate-sec-eyebrow">
+              <span class="donate-sec-line"></span>
+              <span class="donate-sec-tag" id="donate-sec-tag">TOGETHER WE CAN</span>
+            </div>
+            <h3 class="donate-secondary-heading" id="donate-sec-heading">
+              Architecture for<br />People and the Planet
+            </h3>
+            <p class="donate-secondary-desc" id="donate-sec-desc">
+              Your support allows us to keep designing spaces that respect nature, empower communities, and create a lasting legacy for future generations.
+            </p>
+            <a href="/about.html" class="donate-secondary-link" id="donate-sec-link">
+              <span>Learn more about our mission</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── RIGHT SECTION: Functional Donation Form Card ── -->
+      <aside class="donate-right-column">
+        <div class="donate-form-card">
+
+          <!-- Card Heading -->
+          <div class="donate-card-eyebrow">MAKE A DONATION</div>
+          <h2 class="donate-card-title">Together We Build Lasting Change</h2>
+          <p class="donate-card-subtitle">
+            Choose an amount, select your preferred payment method, and make a secure donation. Every contribution matters.
+          </p>
+
+          <form id="active-donation-form" onsubmit="return false;">
+
+            <!-- 3 Selectable Preset Amounts (Rwandan Francs) -->
+            <div class="donate-presets-grid" id="donate-presets-container">
+              <button type="button" class="donate-preset-btn selected" data-amount="5000">
+                <span class="preset-value">5,000 RWF</span>
+                <span class="preset-label">Support our work</span>
+              </button>
+              <button type="button" class="donate-preset-btn" data-amount="10000">
+                <span class="preset-value">10,000 RWF</span>
+                <span class="preset-label">Make a bigger impact</span>
+              </button>
+              <button type="button" class="donate-preset-btn" data-amount="25000">
+                <span class="preset-value">25,000 RWF</span>
+                <span class="preset-label">Fund a project</span>
+              </button>
+            </div>
+
+            <!-- Other Custom Amount Field (Rwandan Francs) -->
+            <div class="donate-custom-group">
+              <label for="donate-custom-amount" class="donate-custom-label">Other amount</label>
+              <div class="donate-custom-input-wrap">
+                <span class="donate-custom-symbol">RWF</span>
+                <input type="number" id="donate-custom-amount" class="donate-custom-input" placeholder="Enter amount (e.g. 50000)" min="100" step="100" />
+              </div>
+            </div>
+
+            <!-- Payment Method Selection -->
+            <div class="donate-methods-header">Payment Method</div>
+            <div class="donate-methods-list" id="payment-methods-list">
+
+              <!-- Method 1: Credit / Debit Card -->
+              <div class="donate-method-card active" data-method="card">
+                <div class="donate-method-left">
+                  <div class="donate-radio-indicator">
+                    <span class="donate-radio-dot"></span>
+                  </div>
+                  <div class="donate-method-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                      <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                  </div>
+                  <div class="donate-method-text">
+                    <h4>Credit / Debit Card</h4>
+                    <p>Visa, Mastercard, American Express</p>
+                  </div>
+                </div>
+                <div class="donate-method-badges">
+                  <span class="donate-brand-badge badge-visa">VISA</span>
+                  <span class="donate-brand-badge badge-mastercard">●●</span>
+                  <span class="donate-brand-badge badge-amex">AMEX</span>
+                </div>
+              </div>
+
+              <!-- Method 2: MTN Mobile Money (MoMo) -->
+              <div class="donate-method-card" data-method="momo">
+                <div class="donate-method-left">
+                  <div class="donate-radio-indicator">
+                    <span class="donate-radio-dot"></span>
+                  </div>
+                  <div class="donate-method-icon-box">
+                    <!-- Phone / Mobile wallet icon -->
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                      <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                  </div>
+                  <div class="donate-method-text">
+                    <h4>MTN Mobile Money</h4>
+                    <p>Pay with your MTN MoMo wallet</p>
+                  </div>
+                </div>
+                <div class="donate-method-badges">
+                  <span class="badge-momo-pill">MTN</span>
+                </div>
+              </div>
+
+              <!-- Method 3: Direct Bank Transfer -->
+              <div class="donate-method-card" data-method="bank">
+                <div class="donate-method-left">
+                  <div class="donate-radio-indicator">
+                    <span class="donate-radio-dot"></span>
+                  </div>
+                  <div class="donate-method-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="3" y1="21" x2="21" y2="21"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                      <polyline points="5 6 12 3 19 6"></polyline>
+                      <line x1="4" y1="10" x2="4" y2="21"></line>
+                      <line x1="20" y1="10" x2="20" y2="21"></line>
+                      <line x1="8" y1="14" x2="8" y2="17"></line>
+                      <line x1="12" y1="14" x2="12" y2="17"></line>
+                      <line x1="16" y1="14" x2="16" y2="17"></line>
+                    </svg>
+                  </div>
+                  <div class="donate-method-text">
+                    <h4>Bank Transfer</h4>
+                    <p>Direct bank transfer</p>
+                  </div>
+                </div>
+                <div class="donate-method-badges">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="badge-bank-icon">
+                    <polygon points="12 2 2 7 22 7 12 2"></polygon>
+                    <rect x="4" y="10" width="16" height="10"></rect>
+                  </svg>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Dynamic Input Fields based on Payment Method -->
+            <div class="donate-dynamic-fields" id="donate-dynamic-fields">
+              <div class="donate-form-group">
+                <label for="donor-name">Your Full Name (Optional)</label>
+                <input type="text" id="donor-name" placeholder="e.g. Jean Paul Habimana" />
+              </div>
+              <div class="donate-form-group">
+                <label for="donor-email">Email for Receipt (Optional)</label>
+                <input type="email" id="donor-email" placeholder="e.g. info@client.com" />
+              </div>
+
+              <!-- MTN MoMo Phone Number (Appears when MoMo is chosen) -->
+              <div class="donate-form-group" id="group-momo-phone" style="display:none;">
+                <label for="donor-phone">MTN Mobile Money Number <span class="donate-required-mark">*</span></label>
+                <input type="tel" id="donor-phone" placeholder="+250 788 123 456" />
+                <small style="font-size:0.72rem;color:#7A7E85;margin-top:4px;display:block;">You will receive an instant approval prompt on your phone.</small>
+              </div>
+
+              <!-- Bank Transfer Reference details (Appears when Bank is chosen) -->
+              <div class="donate-bank-info-box" id="group-bank-info" style="display:none;">
+                <strong>Bank Account Details:</strong><br />
+                Bank Name: Bank of Kigali (BK)<br />
+                Account Name: ONIX ARCHITECTURE STUDIO LTD<br />
+                Account No: 00040-0694821-25 (USD / RWF)<br />
+                Swift Code: BKIWRWRW
+              </div>
+            </div>
+
+            <!-- Security Message Box -->
+            <div class="donate-security-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="donate-sec-icon">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <div class="donate-sec-texts">
+                <h5>Your donation is secure</h5>
+                <p>We use appropriate security measures to protect your information.</p>
+              </div>
+            </div>
+
+            <!-- Main Full-Width Orange Button -->
+            <button type="submit" class="donate-submit-btn" id="btn-donate-submit">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+              <span id="donate-btn-text">Donate 5,000 RWF</span>
+            </button>
+
+            <!-- Inline Feedback Message -->
+            <div class="donate-feedback-msg" id="donate-feedback-msg"></div>
+
+            <!-- Contact and Support Row -->
+            <div class="donate-support-row">
+              <span class="donate-support-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                </svg>
+                <span>Need help? Contact us at</span>
+              </span>
+              <span class="donate-support-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <a href="mailto:support@onixstudio.com" id="donate-support-email">support@onixstudio.com</a>
+              </span>
+              <span class="donate-support-sep">|</span>
+              <span class="donate-support-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <a href="tel:+250788123456" id="donate-support-phone">+250 788 123 456</a>
+              </span>
+            </div>
+
+          </form>
+
+        </div>
+      </aside>
+
+    </div>
+  </div>
+  </main>
+
+  <!-- ══ 3. CONFIRMATION / VERIFICATION MODAL ══ -->
+  <div class="donate-modal-overlay" id="donate-modal" aria-hidden="true">
+    <div class="donate-modal-card">
+      <button type="button" class="donate-modal-close" id="donate-modal-close-btn" aria-label="Close dialog">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="donate-modal-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+
+      <h3 class="donate-modal-title" id="donate-modal-heading">Donation Initiated</h3>
+      <div class="donate-modal-ref-pill" id="donate-modal-ref">REF: ONX-DON-XXXX</div>
+      <p class="donate-modal-body" id="donate-modal-msg">
+        Thank you for supporting sustainable architecture. Please check your phone or follow instructions to complete payment.
+      </p>
+
+      <div style="display:flex;gap:12px;justify-content:center;">
+        <button type="button" class="donate-modal-btn" id="donate-modal-done-btn">Done</button>
+        <button type="button" class="donate-modal-btn" id="donate-modal-sandbox-btn" style="background:#202329;display:none;">Simulate Success (Sandbox)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 4. FULL SITE FOOTER (matching index.html) ══ -->
+  <footer class="footer-v2-wrapper">
+    <div class="footer-v2-container">
+      <div class="footer-v2-grid">
+        <!-- Brand Column -->
+        <div class="footer-v2-brand-col">
+          <a href="/" class="footer-v2-logo">
+            <img src="" alt="Logo" class="footer-logo-img"
+              style="display:none; height: 60px; width: auto; object-fit: contain;" />
+          </a>
+          <p class="footer-v2-desc">
+            The modern digital benchmark for luxury acquisitions, verified private sales, and prestige design
+            marketplaces.
+          </p>
+          <div class="footer-v2-socials">
+            <a href="https://www.instagram.com/onix_studio26/" target="_blank" rel="noopener noreferrer"
+              class="footer-v2-social-btn" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a href="https://wa.me/250790128174" target="_blank" rel="noopener noreferrer" class="footer-v2-social-btn"
+              aria-label="WhatsApp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                <path
+                  d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+              </svg>
+            </a>
+            <a href="#" class="footer-v2-social-btn" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+            <a href="#" class="footer-v2-social-btn" aria-label="X Twitter">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- MARKETPLACE Column -->
+        <div class="footer-v2-col">
+          <h4 class="footer-v2-heading">MARKETPLACE</h4>
+          <ul class="footer-v2-nav-list">
+            <li><a href="/work.html" class="footer-v2-nav-link">Browse All Projects</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">New Architecture</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">Prestige Interiors</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">Marques &amp; Brands</a></li>
+            <li><a href="/contact.html" class="footer-v2-nav-link">Sell Your Property</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">Design Comparison</a></li>
+          </ul>
+        </div>
+
+        <!-- SERVICES Column -->
+        <div class="footer-v2-col">
+          <h4 class="footer-v2-heading">SERVICES</h4>
+          <ul class="footer-v2-nav-list">
+            <li><a href="/services.html" class="footer-v2-nav-link">Financing Calculator</a></li>
+            <li><a href="/services.html" class="footer-v2-nav-link">Nationwide Delivery</a></li>
+            <li><a href="/training.html" class="footer-v2-nav-link">Academy &amp; Workshops</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">Help Center &amp; FAQ</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">About ONIX</a></li>
+            <li><a href="/contact.html" class="footer-v2-nav-link">Contact Concierge</a></li>
+          </ul>
+        </div>
+
+        <!-- COMPANY Column -->
+        <div class="footer-v2-col">
+          <h4 class="footer-v2-heading">COMPANY</h4>
+          <ul class="footer-v2-nav-list">
+            <li><a href="/contact.html" class="footer-v2-nav-link">Showrooms</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">Journal &amp; News</a></li>
+            <li><a href="/admin.html" class="footer-v2-nav-link">Admin CMS</a></li>
+            <li><a href="/about.html" class="footer-v2-nav-link">Privacy &amp; Terms</a></li>
+            <li><a href="/work.html" class="footer-v2-nav-link">My Garage / Saved</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-v2-divider"></div>
+
+      <!-- Bottom Row -->
+      <div class="footer-v2-bottom-row">
+        <span>© 2026 ONIX STUDIO LLC. All Rights Reserved.</span>
+        <div class="footer-v2-legal-links">
+          <a href="/about.html" class="footer-v2-legal-link">Privacy Policy</a>
+          <a href="/about.html" class="footer-v2-legal-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-v2-legal-link">Support</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative Large Subtle Background Brand Text -->
+    <div class="footer-v2-watermark">ONIX STUDIO</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/skeleton.js"></script>
+  <script src="/js/page.js"></script>
+  <script src="/js/donate.js"></script>
+  <script src="/js/whatsapp-widget.js"></script>
+</body>
+
+</html>

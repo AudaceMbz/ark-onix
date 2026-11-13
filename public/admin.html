@@ -445,12 +445,24 @@
                 <input type="text" id="set-site-name" value="Onix" />
               </div>
               <div class="admin-field">
-                <label>Hero Title</label>
-                <input type="text" id="set-hero-title" value="Architecture is Experience" />
+                <label>Hero Eyebrow (Small Intro Text)</label>
+                <input type="text" id="set-hero-eyebrow" value="START A CONVERSATION" placeholder="START A CONVERSATION" />
               </div>
               <div class="admin-field">
-                <label>Hero Subtitle</label>
-                <textarea id="set-hero-sub" rows="2">We craft spaces that transcend the ordinary — balancing material, light, and proportion into living art.</textarea>
+                <label>Hero Title (Main Heading)</label>
+                <input type="text" id="set-hero-title" value="HAVE A VISION?" />
+              </div>
+              <div class="admin-field">
+                <label>Hero Subtitle (Description)</label>
+                <textarea id="set-hero-sub" rows="2">We craft architectural and interior spaces with intention.&#10;Let's bring yours to life.</textarea>
+              </div>
+              <div class="admin-field">
+                <label>Hero Button Text</label>
+                <input type="text" id="set-hero-btn-text" value="GET IN TOUCH" />
+              </div>
+              <div class="admin-field">
+                <label>Hero Button Link / Target Page</label>
+                <input type="text" id="set-hero-btn-link" value="/contact" placeholder="/contact" />
               </div>
               <div class="admin-field">
                 <label>Footer Text</label>
@@ -894,16 +906,120 @@
                 </div>
               </div>
             </div>
-            <button class="btn-save" style="margin-top:16px" id="btn-save-donation-testi">
-              <span class="btn-text">Save Testimonial Text</span>
+          <!-- ══ DONATION SECTION REBUILT (MATCHING REFERENCE SPEC) ══ -->
+          <!-- 1. Headline, Mission & Impact Pillars -->
+          <div class="admin-form-section">
+            <h3>Mission & Impact Editorial Content</h3>
+            <div class="form-grid">
+              <div class="admin-field">
+                <label>Eyebrow Label (e.g., SUPPORT OUR MISSION)</label>
+                <input type="text" id="set-donation-eyebrow" placeholder="SUPPORT OUR MISSION" />
+              </div>
+              <div class="admin-field">
+                <label>Default Currency (USD / RWF / EUR)</label>
+                <input type="text" id="set-donation-currency" placeholder="USD" />
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Hero Main Heading</label>
+                <textarea id="set-donation-main-heading" rows="2" placeholder="Your Support Builds&#10;a Better Tomorrow"></textarea>
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Hero Mission Description</label>
+                <textarea id="set-donation-main-desc" rows="2" placeholder="Your donation helps us continue creating sustainable architecture, supporting communities, and inspiring a brighter future through design."></textarea>
+              </div>
+
+              <!-- 4 Impact Pillars -->
+              <div class="admin-field">
+                <label>Impact Pillar 1: Title</label>
+                <input type="text" id="set-donation-impact-t1" placeholder="Sustainable Projects" />
+              </div>
+              <div class="admin-field">
+                <label>Impact Pillar 1: Short Desc</label>
+                <input type="text" id="set-donation-impact-d1" placeholder="Support green and climate-friendly design." />
+              </div>
+
+              <div class="admin-field">
+                <label>Impact Pillar 2: Title</label>
+                <input type="text" id="set-donation-impact-t2" placeholder="Community Development" />
+              </div>
+              <div class="admin-field">
+                <label>Impact Pillar 2: Short Desc</label>
+                <input type="text" id="set-donation-impact-d2" placeholder="Help us build spaces for people and families." />
+              </div>
+
+              <div class="admin-field">
+                <label>Impact Pillar 3: Title</label>
+                <input type="text" id="set-donation-impact-t3" placeholder="Education & Research" />
+              </div>
+              <div class="admin-field">
+                <label>Impact Pillar 3: Short Desc</label>
+                <input type="text" id="set-donation-impact-d3" placeholder="Fund innovation and next-generation talent." />
+              </div>
+
+              <div class="admin-field">
+                <label>Impact Pillar 4: Title</label>
+                <input type="text" id="set-donation-impact-t4" placeholder="Lasting Impact" />
+              </div>
+              <div class="admin-field">
+                <label>Impact Pillar 4: Short Desc</label>
+                <input type="text" id="set-donation-impact-d4" placeholder="Be part of a more beautiful and sustainable world." />
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Secondary Editorial Mission Section -->
+          <div class="admin-form-section">
+            <h3>Secondary Architecture Section (Below Hero)</h3>
+            <div class="form-grid">
+              <div class="admin-field">
+                <label>Secondary Section Tag (e.g., TOGETHER WE CAN)</label>
+                <input type="text" id="set-donation-sec-tag" placeholder="TOGETHER WE CAN" />
+              </div>
+              <div class="admin-field">
+                <label>Secondary Link URL</label>
+                <input type="text" id="set-donation-sec-url" placeholder="/about.html" />
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Secondary Heading</label>
+                <input type="text" id="set-donation-sec-heading" placeholder="Architecture for People and the Planet" />
+              </div>
+              <div class="admin-field" style="grid-column: 1 / -1;">
+                <label>Secondary Description</label>
+                <textarea id="set-donation-sec-desc" rows="2" placeholder="Your support allows us to keep designing spaces that respect nature, empower communities, and create a lasting legacy for future generations."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Contact & Support Details -->
+          <div class="admin-form-section">
+            <h3>Support & Contact Details</h3>
+            <div class="form-grid">
+              <div class="admin-field">
+                <label>Support Email</label>
+                <input type="email" id="set-donation-support-email" placeholder="support@onixstudio.com" />
+              </div>
+              <div class="admin-field">
+                <label>Support Phone</label>
+                <input type="text" id="set-donation-support-phone" placeholder="+250 788 123 456" />
+              </div>
+            </div>
+            <button class="btn-save" style="margin-top:16px" id="btn-save-donation-ref-content">
+              <span class="btn-text">Save All Donation Content</span>
               <span class="btn-loader" style="display:none">
                 <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
               </span>
             </button>
-            <div class="admin-feedback" id="fb-donation-testi"></div>
+            <div class="admin-feedback" id="fb-donation-ref-content"></div>
           </div>
 
-        </div>
+          <!-- 4. Real Donation Records & Transactions List -->
+          <div class="admin-form-section">
+            <h3>Recent Received Donations & Pledges</h3>
+            <p style="font-size:0.82rem;color:var(--text-3);margin-bottom:14px">Real-time records from PostgreSQL / MySQL database with verified payment statuses.</p>
+            <div id="admin-donations-table-wrap" style="overflow-x:auto;">
+              <div style="color:var(--text-3);padding:14px;">Loading donations...</div>
+            </div>
+          </div>
         <div class="admin-panel" id="panel-whatsapp">
           <div class="panel-title">WhatsApp Widget</div>
           <div class="panel-desc">Manage the floating WhatsApp support popup team members.</div>

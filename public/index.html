@@ -11,12 +11,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@100;200;300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@100;200;300;400;500;600;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/responsive.css" />
   <link rel="stylesheet" href="/css/skeleton.css" />
+  <link rel="stylesheet" href="/css/hero-cinematic.css" />
+  <link rel="stylesheet" href="/css/work-gallery-minimal.css" />
 </head>
 
 <body>
@@ -138,6 +140,19 @@
               </svg>
             </a>
           </li>
+          <li>
+            <a href="/donate.html" data-page="donate" class="menu-link">
+              <span class="link-num">07</span>
+              <span class="link-text">Donate</span>
+              <svg class="link-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z">
+                </path>
+              </svg>
+            </a>
+          </li>
+
         </ul>
       </div>
       <div class="menu-right">
@@ -177,8 +192,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
-              <path
-                d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+              <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
             </svg>
           </a>
         </div>
@@ -199,63 +213,53 @@
             class="hero-img-main" />
         </div>
 
-        <!-- Subtle Luxury Vignette / Editorial Backdrop Overlay -->
+        <!-- Subtle Luxury Dark Vignette / Cinematic Backdrop Overlay -->
         <div class="hero-backdrop-overlay"></div>
 
-        <!-- Foreground Editorial Content Wrapper -->
-        <div class="hero-container">
-          <div class="hero-left reveal">
-            <div class="hero-content-wrapper">
-              <!-- Eyebrow label -->
-              <div class="hero-eyebrow">
-                <span class="eyebrow-text">Architectural Studio &bull; Design Excellence</span>
-              </div>
+        <!-- Centered Cinematic Hero Content Wrapper -->
+        <div class="hero-cinematic-container">
+          <div class="hero-cinematic-content reveal">
+            <!-- 2. Small introductory text -->
+            <p class="hero-cinematic-eyebrow" id="hero-eyebrow">START A CONVERSATION</p>
 
-              <!-- Main Architectural Headline -->
-              <h1 class="hero-title" id="hero-title">Minimal<br />Architecture</h1>
+            <!-- 3. Main heading -->
+            <h1 class="hero-cinematic-title" id="hero-title">HAVE A VISION?</h1>
 
-              <!-- Architectural Description Block -->
-              <div class="hero-description-block">
-                <p class="hero-description" id="hero-sub">We craft spaces that transcend the ordinary — balancing
-                  material, light, and proportion into living art.</p>
-              </div>
+            <!-- 4. Description -->
+            <p class="hero-cinematic-desc" id="hero-sub">We craft architectural and interior spaces with intention.<br />Let's bring yours to life.</p>
 
-              <!-- Premium Hero Action CTAs -->
-              <div class="hero-actions">
-                <a href="/work" data-page="work" class="hero-btn-primary">
-                  <span>Explore Portfolio</span>
-                  <span class="btn-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-                <a href="/contact" data-page="contact" class="hero-btn-secondary">
-                  <span>Start Consultation</span>
-                </a>
-              </div>
-
-              <!-- Slide Controls & Indicator -->
-              <div class="hero-selectors" id="hero-navigation-controls">
-                <button id="hero-prev" class="hero-nav-btn" aria-label="Previous Slide">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                </button>
-                <div class="slide-numbers-wrap">
-                  <span class="current-slide" id="hero-current-slide">01</span>
-                  <span class="slide-sep">/</span>
-                  <span class="total-slides" id="hero-total-slides">03</span>
-                </div>
-                <div class="slide-track-line" id="hero-progress-container">
-                  <div class="progress-bar" id="hero-progress-bar"></div>
-                </div>
-                <button id="hero-next" class="hero-nav-btn" aria-label="Next Slide">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </button>
-              </div>
+            <!-- 5. GET IN TOUCH BUTTON -->
+            <div class="hero-cinematic-action">
+              <a href="/contact" data-page="contact" class="hero-touch-btn" id="hero-cta-btn">
+                <span id="hero-cta-text">GET IN TOUCH</span>
+                <span class="touch-btn-arrow" aria-hidden="true">&#x2197;</span>
+              </a>
             </div>
           </div>
+        </div>
+
+        <!-- Slide Controls & Indicator -->
+        <div class="hero-selectors" id="hero-navigation-controls">
+          <button id="hero-prev" class="hero-nav-btn" aria-label="Previous Slide">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <div class="slide-numbers-wrap">
+            <span class="current-slide" id="hero-current-slide">01</span>
+            <span class="slide-sep">/</span>
+            <span class="total-slides" id="hero-total-slides">03</span>
+          </div>
+          <div class="slide-track-line" id="hero-progress-container">
+            <div class="progress-bar" id="hero-progress-bar"></div>
+          </div>
+          <button id="hero-next" class="hero-nav-btn" aria-label="Next Slide">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
         </div>
 
         <!-- Social Sidebar Overlay -->
@@ -578,17 +582,16 @@
               Because every small act of kindness waters the seeds of change
             </p>
             <div class="donation-ref-cta-wrap" id="donation-cta-wrap">
-              <button type="button" class="donation-ref-cta-btn" id="donation-cta-btn">
+              <a href="/donate.html" class="donation-ref-cta-btn" id="donation-cta-btn">
                 <span id="donation-cta-text">Donate Now</span>
                 <span class="donation-cta-arrow">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 26 19" style="display:none"></polyline>
                     <path d="M13 6l6 6-6 6" />
                   </svg>
                 </span>
-              </button>
+              </a>
             </div>
           </div>
 
@@ -724,9 +727,13 @@
               <label class="donation-method-option">
                 <input type="radio" name="donation-method" value="paypal" />
                 <span class="method-box">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.82.875 4.966-.78 3.902-3.14 6.046-7.018 6.046H9.72l-1.408 8.082a.641.641 0 0 1-.633.533h-.603z" opacity="0.88"/>
-                    <path d="M10.272 17.502h-3.23a.641.641 0 0 1-.633-.532l1.625-9.333a.641.641 0 0 1 .633-.533h4.942c2.476 0 4.298.53 5.12 1.705.748 1.07.822 2.585.22 4.507-.723 2.308-2.316 4.186-4.664 4.186h-4.013z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path
+                      d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.82.875 4.966-.78 3.902-3.14 6.046-7.018 6.046H9.72l-1.408 8.082a.641.641 0 0 1-.633.533h-.603z"
+                      opacity="0.88" />
+                    <path
+                      d="M10.272 17.502h-3.23a.641.641 0 0 1-.633-.532l1.625-9.333a.641.641 0 0 1 .633-.533h4.942c2.476 0 4.298.53 5.12 1.705.748 1.07.822 2.585.22 4.507-.723 2.308-2.316 4.186-4.664 4.186h-4.013z" />
                   </svg>
                   <span>PayPal</span>
                 </span>
@@ -835,7 +842,7 @@
           <h2 class="section-heading">The Onix Story<br /><em>In Motion</em></h2>
         </div>
         <div class="brand-film-container">
-          <video id="about-brand-video" loop playsinline controls poster="images/hero_bg.jpg" class="brand-video">
+          <video id="about-brand-video" loop playsinline controls preload="none" poster="images/hero_bg.jpg" class="brand-video">
             <source src="" id="about-brand-video-src" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
@@ -1452,8 +1459,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
-                <path
-                  d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+                <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
               </svg>
             </a>
             <a href="#" class="footer-v2-social-btn" aria-label="LinkedIn">

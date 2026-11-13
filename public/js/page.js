@@ -23,6 +23,7 @@
   const API = '';
 
   document.addEventListener('DOMContentLoaded', () => {
+    window.__onixPageLoaded = true;
     initTheme();
     initNav();
     initScrollReveal();
@@ -857,11 +858,7 @@
     const loader = document.getElementById('load-more-container');
     if (reset) {
       el.innerHTML = '';
-      if (filteredProjects.length > 0) {
-        const headerBlock = createArchHeaderBlock();
-        el.appendChild(headerBlock);
-        if (revealObserver) revealObserver.observe(headerBlock);
-      } else {
+      if (!filteredProjects.length) {
         el.innerHTML = '<div style="padding:60px;color:var(--text-3);text-align:center;grid-column:1/-1">No projects found in this category.</div>';
         if (loader) loader.style.display = 'none';
         return;
@@ -919,72 +916,18 @@
       return div;
     }
 
-    // ── Work page: exact 11-slot editorial arch blueprint ──────────────────
-    // IMPORTANT: This markup must stay in sync with the identical function in app.js.
-    // The site has two rendering paths for /work:
-    //   • SPA navigation  → index.html + app.js  (reference implementation)
-    //   • Hard refresh    → work.html  + page.js  (this path)
-    // Both paths must produce identical arch-project-item DOM.
-    //
-    // Slot map (14-column grid, rows auto-sized at minmax(75px, auto)):
-    //   0 = arch-slot-1   (top centre-left, tall portrait)
-    //   1 = arch-slot-2   (top centre-right, landscape)
-    //   2 = arch-slot-3   (top right, landscape)
-    //   3 = arch-slot-4   (middle left, wide landscape)
-    //   4 = arch-slot-hero arch-slot-5  (CENTRAL DOMINANT HERO)
-    //   5 = arch-slot-6   (middle right upper, wide)
-    //   6 = arch-slot-7   (middle right lower, compact)
-    //   7 = arch-slot-8   (bottom left, portrait)
-    //   8 = arch-slot-9   (bottom centre-left, tall portrait)
-    //   9 = arch-slot-10  (bottom centre-right, wide)
-    //  10 = arch-slot-11  (bottom right, square/portrait)
-    // Items beyond slot 11 cycle through a secondary balanced pattern.
-    const ARCH_SLOTS = [
-      'arch-slot-1',
-      'arch-slot-2',
-      'arch-slot-3',
-      'arch-slot-4',
-      'arch-slot-hero arch-slot-5',
-      'arch-slot-6',
-      'arch-slot-7',
-      'arch-slot-8',
-      'arch-slot-9',
-      'arch-slot-10',
-      'arch-slot-11'
-    ];
-    const EXTRA_SLOTS = [
-      'arch-extra-wide',
-      'arch-extra-slim',
-      'arch-extra-mid',
-      'arch-extra-slim',
-      'arch-extra-wide',
-      'arch-extra-mid'
-    ];
-
-    let slotClass;
-    if (i < ARCH_SLOTS.length) {
-      slotClass = ARCH_SLOTS[i];
-    } else {
-      slotClass = EXTRA_SLOTS[(i - ARCH_SLOTS.length) % EXTRA_SLOTS.length];
-    }
-
-    div.className = `arch-project-item ${slotClass} reveal`;
-    div.style.transitionDelay = `${(i % 5) * 70}ms`;
+    // ── Work page: clean minimal 3-column architectural portfolio (matches reference) ─────────
+    div.className = `work-project-card reveal`;
+    div.style.transitionDelay = `${(i % 3) * 80}ms`;
     div.dataset.index = i;
 
-    const numStr = String(i + 1).padStart(2, '0');
-
     div.innerHTML = `
-      <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
-      <div class="arch-project-overlay">
-        <div class="arch-overlay-top">
-          <span class="arch-project-num">${numStr}</span>
-        </div>
-        <div class="arch-overlay-bottom">
-          <span class="arch-project-cat">${category}</span>
-          <h3 class="arch-project-title">${p.title}</h3>
-          <span class="arch-project-loc">${location}</span>
-        </div>
+      <div class="work-project-image-wrap">
+        <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
+      </div>
+      <div class="work-project-caption">
+        <h3 class="work-project-name">${p.title}</h3>
+        <p class="work-project-location">${location}</p>
       </div>`;
 
     div.addEventListener('click', () => {

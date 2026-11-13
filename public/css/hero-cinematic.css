@@ -1,0 +1,275 @@
+
+/* =========================================================================
+   CINEMATIC ARCHITECTURAL HERO SECTION (REPLICATING REFERENCE SCREENSHOT)
+   Pure centered alignment, Anton/Bebas Neue high-impact display font,
+   cinematic dark overlay, crisp minimal white rectangular CTA.
+   ========================================================================= */
+
+.hero-premium.hero-fullbleed {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  width: 100% !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0a0a0a !important;
+}
+
+/* 1. Background image & overlay */
+.hero-premium .hero-bg-container {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+.hero-premium .hero-bg-container img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  filter: brightness(0.65) contrast(1.1) !important;
+}
+
+.hero-premium .hero-backdrop-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  background: rgba(0, 0, 0, 0.62) !important;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.72) 100%),
+              linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 40%, rgba(0, 0, 0, 0.65) 100%) !important;
+}
+
+/* 2. Hero Center Container */
+.hero-cinematic-container {
+  position: relative !important;
+  z-index: 5 !important;
+  width: 100% !important;
+  max-width: 1300px !important;
+  margin: 0 auto !important;
+  padding: calc(var(--nav-h, 80px) + 30px) 24px 60px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+.hero-cinematic-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  max-width: 1100px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}
+
+/* 3. Small Introductory Text */
+.hero-cinematic-eyebrow {
+  font-family: var(--font-sans, 'Inter', -apple-system, sans-serif) !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.38em !important;
+  text-transform: uppercase !important;
+  color: #a3a3a3 !important;
+  margin: 0 0 20px 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  line-height: 1.4 !important;
+  opacity: 0.9 !important;
+}
+
+/* 4. Main Heading: HAVE A VISION? */
+.hero-cinematic-title {
+  font-family: 'Anton', 'Bebas Neue', 'Impact', sans-serif !important;
+  font-size: clamp(4.5rem, 11.5vw, 10.8rem) !important;
+  font-weight: 900 !important;
+  font-stretch: condensed !important;
+  color: #FFFFFF !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  line-height: 0.92 !important;
+  letter-spacing: 0.015em !important;
+  margin: 0 0 28px 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 5. Description Block */
+.hero-cinematic-desc {
+  font-family: var(--font-sans, 'Inter', -apple-system, sans-serif) !important;
+  font-size: clamp(1rem, 1.35vw, 1.25rem) !important;
+  font-weight: 300 !important;
+  line-height: 1.65 !important;
+  color: #BDBDBD !important;
+  max-width: 680px !important;
+  margin: 0 auto 38px auto !important;
+  text-align: center !important;
+  letter-spacing: 0.01em !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 6. GET IN TOUCH BUTTON (Exact replication of reference) */
+.hero-cinematic-action {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 6px !important;
+}
+
+.hero-touch-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: 220px !important;
+  height: 49px !important;
+  background: #FFFFFF !important;
+  color: #111111 !important;
+  font-family: var(--font-sans, 'Inter', -apple-system, sans-serif) !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  border-radius: 0px !important; /* Strict rectangular, no pill */
+  border: 1px solid #FFFFFF !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45) !important;
+}
+
+.hero-touch-btn span {
+  color: #111111 !important;
+  line-height: 1 !important;
+}
+
+.hero-touch-btn .touch-btn-arrow {
+  display: inline-block !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: #111111 !important;
+  transform: translate(0, 0) !important;
+  transition: transform 0.22s ease !important;
+}
+
+.hero-touch-btn:hover {
+  background: #f0f0f0 !important;
+  color: #000000 !important;
+  border-color: #f0f0f0 !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+  transform: translateY(-2px) !important;
+}
+
+.hero-touch-btn:hover .touch-btn-arrow {
+  transform: translate(3px, -3px) !important;
+}
+
+/* Mobile & Tablet adjustments */
+@media (max-width: 860px) {
+  .hero-cinematic-title {
+    font-size: clamp(3.2rem, 13vw, 5.8rem) !important;
+    white-space: normal !important;
+    line-height: 0.95 !important;
+    margin-bottom: 22px !important;
+  }
+
+  .hero-cinematic-desc {
+    font-size: 0.95rem !important;
+    padding: 0 15px !important;
+    margin-bottom: 30px !important;
+  }
+
+  .hero-cinematic-eyebrow {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.28em !important;
+    margin-bottom: 16px !important;
+  }
+
+  .hero-touch-btn {
+    width: 200px !important;
+    height: 46px !important;
+  }
+}
+
+/* 7. Slide Controls & Progress Bar (Centered at Bottom) */
+.hero-selectors {
+  position: absolute !important;
+  bottom: 35px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  z-index: 10 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.hero-nav-btn {
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.hero-nav-btn:hover {
+  background: #FFFFFF !important;
+  color: #111111 !important;
+  border-color: #FFFFFF !important;
+}
+
+.slide-numbers-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: var(--font-sans, 'Inter', sans-serif) !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  color: #FFFFFF !important;
+  letter-spacing: 0.1em !important;
+}
+
+.slide-numbers-wrap .slide-sep {
+  opacity: 0.5 !important;
+}
+
+.slide-track-line {
+  width: 90px !important;
+  height: 2px !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.slide-track-line .progress-bar {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  background: #FFFFFF !important;
+  width: 33.33%;
+  transition: width 0.4s ease !important;
+}
+
+

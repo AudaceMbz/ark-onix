@@ -8195,3 +8195,4 @@ h4 {
 
 /* Master responsive overrides import */
 @import url("responsive.css");
+@import url("work-gallery-minimal.css");

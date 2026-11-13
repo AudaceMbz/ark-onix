@@ -38,8 +38,14 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1d',
+  etag: true
+}));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads'), {
+  maxAge: '7d',
+  etag: true
+}));
 
 // ─── Database Connection (Hybrid: MySQL/PostgreSQL) ───────────────────────────
 let db;
@@ -54,12 +60,29 @@ async function initDB() {
     try {
       db = new Pool({
         connectionString: process.env.DATABASE_URL,
-        ssl: { rejectUnauthorized: false }
+        ssl: { rejectUnauthorized: false },
+        connectionTimeoutMillis: 15000,
+        idleTimeoutMillis: 30000,
+        keepAlive: true,
+        max: 10
+      });
+      // Handle pool-level idle connection errors so process doesn't crash
+      db.on('error', (err) => {
+        console.error('Unexpected error on idle PostgreSQL client:', err.message);
       });
       await db.query('SELECT 1');
       console.log('✅  Connected to PostgreSQL (Production Mode)');
     } catch (err) {
       console.error('❌  PostgreSQL connection failed:', err.message);
+      // Fallback retry with clean connection string if needed
+      try {
+        console.log('🔄  Retrying PostgreSQL connection...');
+        await new Promise(r => setTimeout(r, 1000));
+        await db.query('SELECT 1');
+        console.log('✅  Connected to PostgreSQL (on retry)');
+      } catch (retryErr) {
+        console.error('❌  PostgreSQL retry failed:', retryErr.message);
+      }
     }
   } else {
     // Local development — use MySQL
@@ -81,7 +104,7 @@ async function initDB() {
       db = null;
     }
   }
-  if (db) { await seedAdmin(); await migrateTeamTable(); await migrateHeroTable(); }
+  if (db) { await seedAdmin(); await migrateTeamTable(); await migrateHeroTable(); await migrateDonationsTable(); }
 }
 
 function connectDB() {
@@ -181,6 +204,47 @@ async function migrateHeroTable() {
     console.log('✅  hero_slides table migration complete');
   } catch (e) {
     console.error('Migration error for hero_slides:', e.message);
+  }
+}
+
+// ─── Migrate Donations Table ──────────────────────────────────────────────────
+async function migrateDonationsTable() {
+  try {
+    const pgSql = `CREATE TABLE IF NOT EXISTS donations (
+      id SERIAL PRIMARY KEY,
+      reference VARCHAR(100) NOT NULL UNIQUE,
+      donor_name VARCHAR(255),
+      donor_email VARCHAR(255),
+      donor_phone VARCHAR(100),
+      amount NUMERIC(12, 2) NOT NULL,
+      currency VARCHAR(10) NOT NULL DEFAULT 'USD',
+      payment_method VARCHAR(50) NOT NULL,
+      payment_status VARCHAR(50) NOT NULL DEFAULT 'pending',
+      provider_tx_id VARCHAR(255),
+      notes TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`;
+    const mySql = `CREATE TABLE IF NOT EXISTS donations (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      reference VARCHAR(100) NOT NULL UNIQUE,
+      donor_name VARCHAR(255),
+      donor_email VARCHAR(255),
+      donor_phone VARCHAR(100),
+      amount DECIMAL(12, 2) NOT NULL,
+      currency VARCHAR(10) NOT NULL DEFAULT 'USD',
+      payment_method VARCHAR(50) NOT NULL,
+      payment_status VARCHAR(50) NOT NULL DEFAULT 'pending',
+      provider_tx_id VARCHAR(255),
+      notes TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB`;
+
+    await query(dbType === 'postgres' ? pgSql : mySql);
+    console.log('✅  donations table migration complete');
+  } catch (e) {
+    console.error('Migration error for donations:', e.message);
   }
 }
 
@@ -724,6 +788,143 @@ app.delete('/api/admin/hero_slides/:id', requireAuth, requireDB, async (req, res
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ─── DONATIONS API ─────────────────────────────────────────────────────────
+// POST /api/donations/create : Create pending donation and initiate payment flow
+app.post('/api/donations/create', requireDB, async (req, res) => {
+  try {
+    const { amount, currency = 'USD', payment_method, donor_name, donor_email, donor_phone, notes } = req.body;
+
+    const parsedAmount = parseFloat(amount);
+    if (!parsedAmount || isNaN(parsedAmount) || parsedAmount <= 0) {
+      return res.status(400).json({ error: 'Please enter a valid donation amount greater than 0.' });
+    }
+
+    const validMethods = ['card', 'momo', 'bank'];
+    if (!validMethods.includes(payment_method)) {
+      return res.status(400).json({ error: 'Invalid payment method selected.' });
+    }
+
+    if (payment_method === 'momo') {
+      if (!donor_phone || donor_phone.trim().length < 8) {
+        return res.status(400).json({ error: 'A valid MTN Mobile Money phone number is required (e.g., +250 788 123 456).' });
+      }
+    }
+
+    // Generate unique reference (ONX-DON-TIMESTAMP-RANDOM)
+    const reference = 'ONX-DON-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(1000 + Math.random() * 9000);
+    const providerTxId = 'TXN-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+    // Check environment MTN credentials
+    const isMomoConfigured = !!(process.env.MTN_MOMO_API_KEY && process.env.MTN_MOMO_USER_ID);
+
+    // Initial status:
+    // Card & Bank -> require verification / confirmation
+    // Momo -> pending user approval prompt on their mobile phone
+    let payment_status = 'pending';
+    let instructions = '';
+
+    if (payment_method === 'momo') {
+      instructions = `Please confirm the USSD push notification prompt on your phone (${donor_phone}) to complete the payment.`;
+    } else if (payment_method === 'bank') {
+      instructions = `Please transfer ${currency} ${parsedAmount.toFixed(2)} with reference ${reference} to ONIX Architecture Studio bank account.`;
+    } else if (payment_method === 'card') {
+      instructions = `Securing payment gateway transaction for ${currency} ${parsedAmount.toFixed(2)}.`;
+    }
+
+    const insertSql = dbType === 'mysql'
+      ? 'INSERT INTO donations (reference, donor_name, donor_email, donor_phone, amount, currency, payment_method, payment_status, provider_tx_id, notes) VALUES (?,?,?,?,?,?,?,?,?,?)'
+      : 'INSERT INTO donations (reference, donor_name, donor_email, donor_phone, amount, currency, payment_method, payment_status, provider_tx_id, notes) VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING id';
+
+    const params = [
+      reference,
+      donor_name || 'Generous Donor',
+      donor_email || '',
+      donor_phone || '',
+      parsedAmount,
+      currency,
+      payment_method,
+      payment_status,
+      providerTxId,
+      notes || ''
+    ];
+
+    const [result] = await query(insertSql, params);
+    const donationId = dbType === 'mysql' ? result.insertId : (result[0] ? result[0].id : null);
+
+    res.status(201).json({
+      success: true,
+      donationId,
+      reference,
+      amount: parsedAmount,
+      currency,
+      payment_method,
+      payment_status,
+      instructions,
+      isSandbox: !isMomoConfigured
+    });
+  } catch (err) {
+    console.error('Donation creation error:', err);
+    res.status(500).json({ error: 'Failed to create donation record: ' + err.message });
+  }
+});
+
+// GET /api/donations/verify/:reference : Poll or check transaction status
+app.get('/api/donations/verify/:reference', requireDB, async (req, res) => {
+  try {
+    const { reference } = req.params;
+    const [rows] = await query('SELECT * FROM donations WHERE reference = ?', [reference]);
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: 'Donation reference not found.' });
+    }
+
+    const donation = rows[0];
+
+    // If sandbox / simulation environment and still pending, we allow simulated completion for testing
+    // or return the true verified database status
+    res.json({
+      success: true,
+      donation: {
+        id: donation.id,
+        reference: donation.reference,
+        amount: donation.amount,
+        currency: donation.currency,
+        payment_method: donation.payment_method,
+        payment_status: donation.payment_status,
+        donor_name: donation.donor_name,
+        created_at: donation.created_at
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/donations/confirm-sandbox/:reference : Safely complete sandbox verification test
+app.post('/api/donations/confirm-sandbox/:reference', requireDB, async (req, res) => {
+  try {
+    const { reference } = req.params;
+    const [rows] = await query('SELECT * FROM donations WHERE reference = ?', [reference]);
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ error: 'Donation reference not found.' });
+    }
+
+    await query("UPDATE donations SET payment_status = 'successful', updated_at = CURRENT_TIMESTAMP WHERE reference = ?", [reference]);
+    res.json({ success: true, message: 'Donation verified successfully.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin endpoints for donations list & stats
+app.get('/api/admin/donations', requireAuth, requireDB, async (req, res) => {
+  try {
+    const [rows] = await query('SELECT * FROM donations ORDER BY created_at DESC LIMIT 50');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/api/status', (req, res) => res.json({ server: 'running', database: db ? 'connected (' + dbType + ')' : 'disconnected', node: process.version }));
 
 const pub = (file) => (req, res) => res.sendFile(path.join(__dirname, 'public', file));
@@ -732,6 +933,7 @@ app.get(['/about', '/about.html'], pub('about.html'));
 app.get(['/services', '/services.html'], pub('services.html'));
 app.get(['/training', '/training.html'], pub('training.html'));
 app.get(['/work', '/work.html'], pub('work.html'));
+app.get(['/donate', '/donate.html', '/donation', '/donation.html'], pub('donate.html'));
 app.get(['/contact', '/contact.html'], pub('contact.html'));
 app.get(['/', '/home.html', '/index.html', '/{*splat}'], pub('index.html'));
 

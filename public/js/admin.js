@@ -190,8 +190,11 @@
     try {
       const s = await api('GET', '/api/settings');
       setValue('set-site-name', s.site_name || 'Onix');
-      setValue('set-hero-title', s.hero_title || '');
-      setValue('set-hero-sub', s.hero_subtitle || '');
+      setValue('set-hero-eyebrow', s.hero_eyebrow || 'START A CONVERSATION');
+      setValue('set-hero-title', s.hero_title || 'HAVE A VISION?');
+      setValue('set-hero-sub', s.hero_subtitle || "We craft architectural and interior spaces with intention.\nLet's bring yours to life.");
+      setValue('set-hero-btn-text', s.hero_cta_text || 'GET IN TOUCH');
+      setValue('set-hero-btn-link', s.hero_cta_url || '/contact');
       setValue('set-footer-text', s.footer_text || '');
       setValue('set-home-projects-limit', s.home_projects_limit || '8');
 
@@ -338,8 +341,11 @@
       try {
         await Promise.all([
           api('POST', '/api/admin/settings', { setting_key: 'site_name', setting_value: getValue('set-site-name') }),
+          api('POST', '/api/admin/settings', { setting_key: 'hero_eyebrow', setting_value: getValue('set-hero-eyebrow') }),
           api('POST', '/api/admin/settings', { setting_key: 'hero_title', setting_value: getValue('set-hero-title') }),
           api('POST', '/api/admin/settings', { setting_key: 'hero_subtitle', setting_value: getValue('set-hero-sub') }),
+          api('POST', '/api/admin/settings', { setting_key: 'hero_cta_text', setting_value: getValue('set-hero-btn-text') }),
+          api('POST', '/api/admin/settings', { setting_key: 'hero_cta_url', setting_value: getValue('set-hero-btn-link') }),
           api('POST', '/api/admin/settings', { setting_key: 'footer_text', setting_value: getValue('set-footer-text') }),
           api('POST', '/api/admin/settings', { setting_key: 'home_projects_limit', setting_value: getValue('set-home-projects-limit') }),
         ]);
@@ -683,56 +689,126 @@
         document.getElementById('don-img-text-avatar').innerHTML = 'Click to upload Avatar';
       }
 
+      // Reference Design Fields
+      setValue('set-donation-eyebrow', s.donation_eyebrow || 'SUPPORT OUR MISSION');
+      setValue('set-donation-currency', s.donation_currency || 'USD');
+      setValue('set-donation-main-heading', s.donation_main_heading || 'Your Support Builds\na Better Tomorrow');
+      setValue('set-donation-main-desc', s.donation_main_desc || 'Your donation helps us continue creating sustainable architecture, supporting communities, and inspiring a brighter future through design.');
+
+      // 4 Impact Pillars
+      setValue('set-donation-impact-t1', s.donation_impact_title_1 || 'Sustainable Projects');
+      setValue('set-donation-impact-d1', s.donation_impact_desc_1 || 'Support green and climate-friendly design.');
+      setValue('set-donation-impact-t2', s.donation_impact_title_2 || 'Community Development');
+      setValue('set-donation-impact-d2', s.donation_impact_desc_2 || 'Help us build spaces for people and families.');
+      setValue('set-donation-impact-t3', s.donation_impact_title_3 || 'Education & Research');
+      setValue('set-donation-impact-d3', s.donation_impact_desc_3 || 'Fund innovation and next-generation talent.');
+      setValue('set-donation-impact-t4', s.donation_impact_title_4 || 'Lasting Impact');
+      setValue('set-donation-impact-d4', s.donation_impact_desc_4 || 'Be part of a more beautiful and sustainable world.');
+
+      // Secondary Section
+      setValue('set-donation-sec-tag', s.donation_sec_tag || 'TOGETHER WE CAN');
+      setValue('set-donation-sec-url', s.donation_sec_link_url || '/about.html');
+      setValue('set-donation-sec-heading', s.donation_sec_heading || 'Architecture for People and the Planet');
+      setValue('set-donation-sec-desc', s.donation_sec_desc || 'Your support allows us to keep designing spaces that respect nature, empower communities, and create a lasting legacy for future generations.');
+
+      // Support & Contact
+      setValue('set-donation-support-email', s.donation_support_email || 'support@onixstudio.com');
+      setValue('set-donation-support-phone', s.donation_support_phone || '+250 788 123 456');
+
+      // Load Recent Donations Table
+      loadRecentDonationsList();
+
     } catch (e) {
       console.error('Failed to load donation admin settings:', e);
     }
 
-    // Save Text, CTA & Visibility
-    const saveTextBtn = document.getElementById('btn-save-donation-text');
-    if (saveTextBtn) {
-      saveTextBtn.onclick = async () => {
-        setBtnLoader('btn-save-donation-text', true, 'Saving...');
+    // Save All Reference Design Content
+    const saveRefContentBtn = document.getElementById('btn-save-donation-ref-content');
+    if (saveRefContentBtn) {
+      saveRefContentBtn.onclick = async () => {
+        setBtnLoader('btn-save-donation-ref-content', true, 'Saving...');
         try {
-          const chkSection = document.getElementById('set-donation-enable-section')?.checked ? '1' : '0';
-          const chkTesti = document.getElementById('set-donation-enable-testi')?.checked ? '1' : '0';
-          const chkDoodles = document.getElementById('set-donation-enable-doodles')?.checked ? '1' : '0';
-
           await Promise.all([
-            api('POST', '/api/admin/settings', { setting_key: 'donation_enable_section', setting_value: chkSection }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_enable_testi', setting_value: chkTesti }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_enable_doodles', setting_value: chkDoodles }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_headline', setting_value: getValue('set-donation-headline') }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_description', setting_value: getValue('set-donation-desc') }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_cta_text', setting_value: getValue('set-donation-cta-text') }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_cta_url', setting_value: getValue('set-donation-cta-url') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_eyebrow', setting_value: getValue('set-donation-eyebrow') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_currency', setting_value: getValue('set-donation-currency') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_main_heading', setting_value: getValue('set-donation-main-heading') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_main_desc', setting_value: getValue('set-donation-main-desc') }),
+
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_title_1', setting_value: getValue('set-donation-impact-t1') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_desc_1', setting_value: getValue('set-donation-impact-d1') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_title_2', setting_value: getValue('set-donation-impact-t2') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_desc_2', setting_value: getValue('set-donation-impact-d2') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_title_3', setting_value: getValue('set-donation-impact-t3') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_desc_3', setting_value: getValue('set-donation-impact-d3') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_title_4', setting_value: getValue('set-donation-impact-t4') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_impact_desc_4', setting_value: getValue('set-donation-impact-d4') }),
+
+            api('POST', '/api/admin/settings', { setting_key: 'donation_sec_tag', setting_value: getValue('set-donation-sec-tag') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_sec_link_url', setting_value: getValue('set-donation-sec-url') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_sec_heading', setting_value: getValue('set-donation-sec-heading') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_sec_desc', setting_value: getValue('set-donation-sec-desc') }),
+
+            api('POST', '/api/admin/settings', { setting_key: 'donation_support_email', setting_value: getValue('set-donation-support-email') }),
+            api('POST', '/api/admin/settings', { setting_key: 'donation_support_phone', setting_value: getValue('set-donation-support-phone') }),
           ]);
-          showFeedback('fb-donation-text', '✓ Donation headline, CTA & visibility saved.', 'success');
+          showFeedback('fb-donation-ref-content', '✓ All Donation Page Content saved successfully!', 'success');
         } catch (e) {
-          showFeedback('fb-donation-text', 'Save failed: ' + e.message, 'error');
+          showFeedback('fb-donation-ref-content', 'Save failed: ' + e.message, 'error');
         } finally {
-          setBtnLoader('btn-save-donation-text', false, 'Save Donation Text & CTA');
+          setBtnLoader('btn-save-donation-ref-content', false, 'Save All Donation Content');
         }
       };
     }
 
-    // Save Testimonial Text
-    const saveTestiBtn = document.getElementById('btn-save-donation-testi');
-    if (saveTestiBtn) {
-      saveTestiBtn.onclick = async () => {
-        setBtnLoader('btn-save-donation-testi', true, 'Saving...');
-        try {
-          await Promise.all([
-            api('POST', '/api/admin/settings', { setting_key: 'donation_testi_quote', setting_value: getValue('set-donation-testi-quote') }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_testi_name', setting_value: getValue('set-donation-testi-name') }),
-            api('POST', '/api/admin/settings', { setting_key: 'donation_testi_role', setting_value: getValue('set-donation-testi-role') }),
-          ]);
-          showFeedback('fb-donation-testi', '✓ Testimonial content saved.', 'success');
-        } catch (e) {
-          showFeedback('fb-donation-testi', 'Save failed: ' + e.message, 'error');
-        } finally {
-          setBtnLoader('btn-save-donation-testi', false, 'Save Testimonial Text');
+    async function loadRecentDonationsList() {
+      const wrap = document.getElementById('admin-donations-table-wrap');
+      if (!wrap) return;
+      try {
+        const donations = await api('GET', '/api/admin/donations');
+        if (!donations || donations.length === 0) {
+          wrap.innerHTML = '<div style="color:var(--text-3);padding:14px;">No donation records found yet.</div>';
+          return;
         }
-      };
+
+        let html = `
+          <table style="width:100%;border-collapse:collapse;font-size:0.84rem;text-align:left;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);color:var(--text-3);">
+                <th style="padding:10px 8px;">Date</th>
+                <th style="padding:10px 8px;">Reference</th>
+                <th style="padding:10px 8px;">Donor</th>
+                <th style="padding:10px 8px;">Method</th>
+                <th style="padding:10px 8px;">Amount</th>
+                <th style="padding:10px 8px;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        donations.forEach(d => {
+          const dateStr = d.created_at ? new Date(d.created_at).toLocaleDateString() : '—';
+          const isSuccess = d.payment_status === 'successful';
+          const statusBadge = isSuccess
+            ? '<span style="color:#10B981;font-weight:600;">✓ Successful</span>'
+            : '<span style="color:#FF780F;font-weight:600;">Pending</span>';
+
+          html += `
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:10px 8px;">${dateStr}</td>
+              <td style="padding:10px 8px;font-family:monospace;font-size:0.8rem;">${d.reference}</td>
+              <td style="padding:10px 8px;">${d.donor_name || 'Anonymous'}<br/><small style="color:var(--text-3);">${d.donor_phone || d.donor_email || ''}</small></td>
+              <td style="padding:10px 8px;text-transform:uppercase;">${d.payment_method}</td>
+              <td style="padding:10px 8px;font-weight:600;">${d.currency} ${Number(d.amount).toFixed(2)}</td>
+              <td style="padding:10px 8px;">${statusBadge}</td>
+            </tr>
+          `;
+        });
+
+        html += `</tbody></table>`;
+        wrap.innerHTML = html;
+      } catch (err) {
+        wrap.innerHTML = `<div style="color:var(--danger);padding:14px;">Failed to load donations: ${err.message}</div>`;
+      }
     }
 
     // Donation Image Upload & Reset Helper
@@ -903,7 +979,8 @@
       } else if (f.type === 'file') {
         input = `<input type="file" id="${f.id}" name="${f.key}" accept="image/*" />`;
         if (data.image_path) {
-          input += `<img src="${data.image_path}" style="height:60px;object-fit:cover;margin-top:8px;border:1px solid var(--border)" alt="" />`;
+          const previewSrc = data.image_path.startsWith('http') ? data.image_path : `/${data.image_path.replace(/\\/g, '/')}`;
+          input += `<img src="${previewSrc}" style="height:60px;object-fit:cover;margin-top:8px;border:1px solid var(--border)" alt="" />`;
         }
       } else {
         input = `<input type="${f.type}" id="${f.id}" name="${f.key}" value="${data[f.key] || ''}" placeholder="${f.placeholder || ''}" ${f.required ? 'required' : ''} />`;
@@ -1039,23 +1116,44 @@
 
   // ─── Global edit/delete (called from inline onclick) ────
   window.adminEdit = async (entity, id) => {
-    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates' };
+    const endpointMap = {
+      project: 'projects',
+      service: 'services',
+      team: 'team',
+      workshop: 'workshops',
+      whatsapp_teammates: 'whatsapp_teammates',
+      hero_slides: 'hero_slides'
+    };
     const ep = endpointMap[entity];
     try {
-      const url = entity === 'project' ? `/api/projects?id=${id}` : `/api/${ep}`;
+      let url = `/api/${ep}`;
+      if (entity === 'project') {
+        url = `/api/projects?id=${id}`;
+      } else if (entity === 'hero_slides') {
+        url = `/api/admin/hero_slides`;
+      }
       const items = await api('GET', url);
-      const item = entity === 'project' ? items : items.find(i => i.id === id);
+      const item = entity === 'project' ? items : items.find(i => Number(i.id) === Number(id));
       if (item) openModal('edit', entity, item);
     } catch (e) { console.error('Edit error:', e); }
   };
 
   window.adminDel = async (entity, id) => {
-    if (!confirm(`Delete this ${entity}? This cannot be undone.`)) return;
-    const endpointMap = { project: 'projects', service: 'services', team: 'team', workshop: 'workshops', whatsapp_teammates: 'whatsapp_teammates' };
+    const label = entity === 'hero_slides' ? 'slide' : entity;
+    if (!confirm(`Delete this ${label}? This cannot be undone.`)) return;
+    const endpointMap = {
+      project: 'projects',
+      service: 'services',
+      team: 'team',
+      workshop: 'workshops',
+      whatsapp_teammates: 'whatsapp_teammates',
+      hero_slides: 'hero_slides'
+    };
     const ep = endpointMap[entity];
     try {
       const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') };
-      await fetch(`/api/admin/${ep}/${id}`, { method: 'DELETE', headers });
+      const res = await fetch(`/api/admin/${ep}/${id}`, { method: 'DELETE', headers });
+      if (!res.ok) throw new Error('Delete request failed');
       loadPanel(currentPanel);
       loadDashboard();
     } catch (e) { alert('Delete failed.'); }
