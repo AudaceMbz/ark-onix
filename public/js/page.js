@@ -15,7 +15,7 @@
   let projects = [];
   let lightboxImages = [];
   let lightboxIdx = 0;
-  let workPageSize = 12;
+  let workPageSize = 500;
   let workVisibleCount = 0;
   let filteredProjects = [];
   let scrollObserver = null;

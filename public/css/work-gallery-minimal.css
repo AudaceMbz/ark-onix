@@ -171,7 +171,10 @@
 .work-project-card .btn-view-project,
 .work-project-card .gallery-item-status,
 .work-project-card .arch-project-cat,
-.work-project-card .gallery-item-info {
+.work-project-card .gallery-item-info,
+.load-more-container,
+#load-more-container,
+.btn-load-more {
   display: none !important;
 }
 

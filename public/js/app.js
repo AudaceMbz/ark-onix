@@ -751,7 +751,7 @@
   }
 
   // ─── Work Gallery ────────────────────────────────────────
-  let workPageSize = 12;
+  let workPageSize = 500;
   let workVisibleCount = 0;
   let filteredProjects = [];
 
