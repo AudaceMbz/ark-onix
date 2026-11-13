@@ -1,11 +1,12 @@
 
 /* =========================================================================
-   WORK PAGE — CLEAN MINIMAL 3-COLUMN ARCHITECTURAL GALLERY
-   Exact replication of reference:
-   - 3 equal columns on desktop, 2 on tablet, 1 on mobile
-   - Uniform landscape aspect ratio (16:9), object-fit: cover
-   - Only Project Name + Project Location below image
-   - Clean minimal typography, no extra badges/buttons/shadows
+   ARCHITECTURAL PROJECT CARD REDESIGN — EXACT REFERENCE MATCH
+   - 4:3 Aspect Ratio (100% card width, square corners, no overlay)
+   - Project Name (left, dark charcoal/white, 15-16px, medium weight)
+   - Project Year (right, light grey, 11-12px)
+   - Location Row (uppercase, 10-11px, muted grey, 0.5px letter-spacing)
+   - Subtle thin horizontal divider below card
+   - Clean 3 columns (desktop) / 2 columns (tablet) / 1 column (mobile)
    ========================================================================= */
 
 #work-gallery.gallery-grid.full-gallery.arch-gallery-grid,
@@ -18,22 +19,13 @@
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   grid-auto-flow: row !important;
   grid-auto-rows: auto !important;
-  gap: 36px 30px !important;
+  column-gap: 36px !important;
+  row-gap: 52px !important;
   max-width: 1440px !important;
   margin: 0 auto !important;
-  padding: 40px 4% 100px !important;
+  padding: 40px 4% 120px !important;
   width: 100% !important;
   box-sizing: border-box !important;
-}
-
-/* Force every item to be exactly span 1 column, auto row */
-#work-gallery .work-project-card,
-#page-work #work-gallery .work-project-card,
-.gallery-grid.full-gallery #work-gallery .work-project-card {
-  grid-column: span 1 !important;
-  grid-row: auto !important;
-  min-height: unset !important;
-  height: auto !important;
 }
 
 /* Individual Project Card */
@@ -48,23 +40,37 @@
   margin: 0 !important;
   cursor: pointer !important;
   text-decoration: none !important;
+  position: relative !important;
+  border-radius: 0px !important;
   transition: opacity 0.25s ease, transform 0.25s ease !important;
 }
 
 .work-project-card:hover {
-  opacity: 0.92;
+  opacity: 0.94;
   transform: translateY(-2px);
 }
 
-/* Uniform Landscape Image Container (16:9) */
+/* Force every item to be exactly span 1 column, auto row */
+#work-gallery .work-project-card,
+#page-work #work-gallery .work-project-card,
+.gallery-grid.full-gallery #work-gallery .work-project-card {
+  grid-column: span 1 !important;
+  grid-row: auto !important;
+  min-height: unset !important;
+  height: auto !important;
+}
+
+/* A. Project Image — 4:3 Aspect Ratio, 100% width, sharp square corners */
 .work-project-image-wrap {
   width: 100% !important;
-  aspect-ratio: 16 / 9 !important;
+  aspect-ratio: 4 / 3 !important;
   position: relative !important;
   overflow: hidden !important;
-  background: #111111 !important;
+  background: #18191b !important;
   border-radius: 0px !important;
-  margin-bottom: 14px !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 0 16px 0 !important;
 }
 
 .work-project-image-wrap img {
@@ -75,66 +81,101 @@
   object-position: center !important;
   display: block !important;
   border-radius: 0px !important;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 .work-project-card:hover .work-project-image-wrap img {
-  transform: scale(1.03);
+  transform: scale(1.025);
 }
 
-/* Minimal Caption: Only Project Name & Location */
-.work-project-caption {
+/* B. Project Information Row (Name left, Year right) */
+.work-project-info-row {
   display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-  gap: 4px !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  gap: 12px !important;
+  margin: 0 0 6px 0 !important;
   padding: 0 !important;
-  margin: 0 !important;
-  text-align: left !important;
 }
 
 .work-project-name {
-  font-family: var(--font-sans, 'Inter', -apple-system, sans-serif) !important;
-  font-size: 1.05rem !important;
+  font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 15.5px !important;
   font-weight: 500 !important;
-  line-height: 1.35 !important;
-  color: var(--text, #ffffff) !important;
+  line-height: 1.3 !important;
+  color: #111111 !important;
   margin: 0 !important;
   padding: 0 !important;
   letter-spacing: -0.01em !important;
-  text-transform: none !important;
+  text-transform: capitalize !important;
+  flex: 1 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
-[data-theme="light"] .work-project-name {
-  color: #111111 !important;
+[data-theme="dark"] .work-project-name {
+  color: #f2f2f2 !important;
+}
+
+.work-project-year {
+  font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 11.5px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  color: #9e9e9e !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  letter-spacing: 0.02em !important;
+}
+
+[data-theme="dark"] .work-project-year {
+  color: #888888 !important;
+}
+
+/* C. Location Row (Uppercase, subtle, muted grey, 10-11px) */
+.work-project-loc-row {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 0 14px 0 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="dark"] .work-project-loc-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .work-project-location {
-  font-family: var(--font-sans, 'Inter', -apple-system, sans-serif) !important;
-  font-size: 0.85rem !important;
-  font-weight: 400 !important;
+  font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif) !important;
+  font-size: 10.5px !important;
+  font-weight: 500 !important;
   line-height: 1.3 !important;
-  color: var(--text-3, #8a8a8a) !important;
+  color: #7d7d7d !important;
   margin: 0 !important;
   padding: 0 !important;
-  letter-spacing: 0.01em !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
 }
 
-[data-theme="light"] .work-project-location {
-  color: #666666 !important;
+[data-theme="dark"] .work-project-location {
+  color: #999999 !important;
 }
 
-/* Hide any legacy overlay elements on work page cards if generated */
+/* Hide legacy overlay / badge elements */
 .work-project-card .arch-project-overlay,
 .work-project-card .gallery-item-overlay,
 .work-project-card .btn-view-project,
 .work-project-card .gallery-item-status,
-.work-project-card .arch-project-cat {
+.work-project-card .arch-project-cat,
+.work-project-card .gallery-item-info {
   display: none !important;
 }
 
-/* Responsive: 2 Columns on Tablet */
+/* Tablet (2 Columns) */
 @media (max-width: 1024px) {
   #work-gallery.gallery-grid.full-gallery.arch-gallery-grid,
   #work-gallery.gallery-grid,
@@ -143,11 +184,12 @@
   #page-work .gallery-grid,
   .work-page-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 28px 20px !important;
+    column-gap: 24px !important;
+    row-gap: 40px !important;
   }
 }
 
-/* Responsive: 1 Column on Mobile */
+/* Mobile (1 Column) */
 @media (max-width: 640px) {
   #work-gallery.gallery-grid.full-gallery.arch-gallery-grid,
   #work-gallery.gallery-grid,
@@ -156,17 +198,11 @@
   #page-work .gallery-grid,
   .work-page-gallery {
     grid-template-columns: 1fr !important;
-    gap: 24px !important;
+    row-gap: 36px !important;
     padding: 30px 5% 60px !important;
   }
 
   .work-project-name {
-    font-size: 1rem !important;
-  }
-
-  .work-project-location {
-    font-size: 0.8rem !important;
+    font-size: 15px !important;
   }
 }
-
-

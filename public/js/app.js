@@ -907,19 +907,24 @@
       return div;
     }
 
-    // ── Work page: clean minimal 3-column architectural portfolio (matches reference) ─────────
+    const rawYear = p.completion_year || p.year || (p.created_at ? new Date(p.created_at).getFullYear() : '');
+    const year = rawYear ? String(rawYear).trim() : '';
+
+    // ── Work page: exact reference layout (Name left, Year right, uppercase Location below) ─────
     div.className = `work-project-card reveal`;
-    div.style.transitionDelay = `${(i % 3) * 80}ms`;
+    div.style.transitionDelay = `${(i % 3) * 70}ms`;
     div.dataset.index = i;
 
     div.innerHTML = `
       <div class="work-project-image-wrap">
         <img src="${imgSrc}" alt="${p.title}" loading="lazy" onerror="this.src='/images/projects/placeholder.jpg'" />
       </div>
-      <div class="work-project-caption">
+      <div class="work-project-info-row">
         <h3 class="work-project-name">${p.title}</h3>
-        <p class="work-project-location">${location}</p>
-      </div>`;
+        ${year ? `<span class="work-project-year">${year}</span>` : ''}
+      </div>
+      ${location ? `<div class="work-project-loc-row"><span class="work-project-location">${location}</span></div>` : ''}
+    `;
 
     div.addEventListener('click', () => {
       window.location.href = `project-detail.html?id=${p.id}`;
